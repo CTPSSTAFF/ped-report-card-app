@@ -1,8 +1,10 @@
 // This version reads data loaded from JSON files
 // BK -- 01/23/2019
 
+/*
 proj4.defs('EPSG:26986', '+proj=lcc +lat_1=42.68333333333333 +lat_2=41.71666666666667 +lat_0=41 +lon_0=-71.5 +x_0=200000 +y_0=750000 +ellps=GRS80 +datum=NAD83 +units=m +no_defs');
 proj4.defs('EPSG:4326', '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs');
+*/
 
 var serverRoot = 'http://localhost:8888/';
 // var serverRoot = location.protocol + '//' + location.hostname + ':8080/geoserver/';
@@ -154,11 +156,19 @@ function initMap(data) {
     var i, j, k;  
     for (i = 0; i < pointFeatures.length; i++) {
         pointFeature = pointFeatures[i];
+        /*
         marker = new google.maps.Marker({
                         position: new google.maps.LatLng(pointFeature.geometry.coordinates[1], 
                                                          pointFeature.geometry.coordinates[0]),
                         map: map,
-                    });                            
+                    });     
+        */
+        marker = new StyledMarker({
+                        styleIcon   : new StyledIcon(StyledIconTypes.MARKER,{color : '#ff8d62' }),
+                        position    : new google.maps.LatLng(pointFeature.geometry.coordinates[1], 
+                                                             pointFeature.geometry.coordinates[0]),
+                        map         : map
+                    });
         marker.CTPSprops = {};
         marker.CTPSprops.feature = pointFeature;     
         google.maps.event.addListener(marker, 'click', onClickHandler);
@@ -187,7 +197,7 @@ function initMap(data) {
                 } // for k in aFeatCoords[j]
                 gmPolyline = new google.maps.Polyline({ path            : aAllPoints,
                                                         map             : map,
-                                                        strokeColor     : '#e78ac3',
+                                                        strokeColor     : '#ff8d62',
                                                         strokeOpacity   : 1.0,
                                                         strokeWeight    : 6 });                                       
                 gmPolylines4Feature.push(gmPolyline);                                       
@@ -203,7 +213,7 @@ function initMap(data) {
             }
             gmPolyline = new google.maps.Polyline({ path            : aAllPoints,
                                                     map             : map,
-                                                    strokeColor     : '#e78ac3',
+                                                    strokeColor     : '#ff8d62',
                                                     strokeOpacity   : 1.0,
                                                     strokeWeight    : 6 });    
             gmPolylines4Feature.push(gmPolyline);

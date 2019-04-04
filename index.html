@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <head lang="en">
 <meta charset="utf-8">
-<title>Prototype of Pedestrian Report Card App version 0.2</title>
+<title>Prototype of Pedestrian Report Card App version 0.3</title>
 <link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.min.css"/>
 <link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.structure.min.css"/>
 <link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.theme.min.css"/>
 <link rel="stylesheet" href="pedReportCard.css"/>
 
 <script src="//maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBDKncJRheezxvvmheB8JLH4Dk7EHfdZEk"></script>
+<!-- 'StyledMarker' from Google Maps V3 Utility Library. See:  https://github.com/googlemaps/v3-utility-library -->
+<script src="libs/StyledMarker.js"></script>
 <!-- <script src="libs/jquery-2.2.4.min.js"></script> -->
 <script src="libs/jquery-2.2.4.js"></script>
 <script src="libs/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script src="libs/underscore-min.js"></script>
+<!-- No longer think we'll need the Proj4, turf, or simplify libraries:
 <script src="libs/proj4js-2.5.0/dist/proj4.js"></script>
 <script src="libs/turf.min.js"></script>
 <script src="libs/simplify.js"></script>
+-->
 </head>
 <body>
 <div class="ctpsHeader">
@@ -22,7 +26,7 @@
 	<div class="darkBlue"></div>
     <div id="banner"><a href="http://ctps.org/" target="_blank" title="Boston MPO"><img style="height:59px" src="./img/ctps_header.png" title="Opens Boston MPO website in a new window"></a></div>
 </div>
-<h1 class="pagetitle">Prototype of Pedestrian Report Card App version 0.2</h1>
+<h1 class="pagetitle">Prototype of Pedestrian Report Card App version 0.3</h1>
 <div id="wrapper">
     <div id="map_wrapper">
 <!-- DISABLE GEOCODING, AT LEAST FOR NOW 
@@ -52,8 +56,8 @@
                 <strong>Legend</strong>
             </p>
             <span>
-                <img src="img/red-marker.png">Intersection&nbsp;&nbsp;
-                <svg id="legend_svg_0" class="legend_svg_line"><line id="svg_line_in_legend_0" x1="0" y1="50" x2="100" y2="50" stroke="#e78ac3" stroke-width="6"></line></svg>&nbsp;&nbsp;Roadway Segment&nbsp;&nbsp;
+                <img src="img/roseMS-marker.png">Intersection&nbsp;&nbsp;
+                <svg id="legend_svg_0" class="legend_svg_line"><line id="svg_line_in_legend_0" x1="0" y1="50" x2="100" y2="50" stroke="#ff8d62" stroke-width="6"></line></svg>&nbsp;&nbsp;Roadway Segment&nbsp;&nbsp;
                 <svg id="legend_svg_1" class="legend_svg_line"><line id="svg_line_in_legend_1" x1="0" y1="50" x2="100" y2="50" stroke="#00a674" stroke-width="8"></line></svg>&nbsp;&nbsp;Boston Region MPO Boundary&nbsp;&nbsp;
                 <svg id="legend_svg_2" class="legend_svg_line"><line id="svg_line_in_legend_2" x1="0" y1="50" x2="100" y2="50" stroke="brown" stroke-width="1.5"></line></svg>&nbsp;&nbsp;MAPC Subregion Boundary&nbsp;&nbsp;
             </span>
