@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head lang="en">
 <meta charset="utf-8">
-<title>Prototype of Pedestrian Report Card App version 0.3</title>
+<title>Prototype of Pedestrian Report Card App version 0.4</title>
 <link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.min.css"/>
 <link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.structure.min.css"/>
 <link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.theme.min.css"/>
@@ -26,17 +26,10 @@
 	<div class="darkBlue"></div>
     <div id="banner"><a href="http://ctps.org/" target="_blank" title="Boston MPO"><img style="height:59px" src="./img/ctps_header.png" title="Opens Boston MPO website in a new window"></a></div>
 </div>
-<h1 class="pagetitle">Prototype of Pedestrian Report Card App version 0.3</h1>
+<h1 class="pagetitle">Prototype of Pedestrian Report Card App version 0.4</h1>
 <div id="wrapper">
     <div id="map_wrapper">
-<!-- DISABLE GEOCODING, AT LEAST FOR NOW 
-        <form id="addressForm" role="search">
-            <label for="address">Address:</label>
-            <input type="text" name="address" id="address" />
-            <input type="submit" id="addressButton" value="Search" />
-        </form>
--->
-        <div id="map_options_div">
+        <div id="map_options_div" role="presentation">
             <label for="low_income_toggle">Low-income TAZes</label>
             <input type="checkbox" id="low_income_toggle" class="layer_toggle" name="low_income_toggle" value="low_income_toggle">  
             <label for="minority_toggle">Minority TAZes</label>
@@ -56,8 +49,8 @@
                 <strong>Legend</strong>
             </p>
             <span>
-                <img src="img/roseMS-marker.png">Intersection&nbsp;&nbsp;
-                <svg id="legend_svg_0" class="legend_svg_line"><line id="svg_line_in_legend_0" x1="0" y1="50" x2="100" y2="50" stroke="#ff8d62" stroke-width="6"></line></svg>&nbsp;&nbsp;Roadway Segment&nbsp;&nbsp;
+                <img src="img/darkorange-marker.png">Intersection&nbsp;&nbsp;
+                <svg id="legend_svg_0" class="legend_svg_line"><line id="svg_line_in_legend_0" x1="0" y1="50" x2="100" y2="50" stroke="#ff8c00" stroke-width="6"></line></svg>&nbsp;&nbsp;Roadway Segment&nbsp;&nbsp;
                 <svg id="legend_svg_1" class="legend_svg_line"><line id="svg_line_in_legend_1" x1="0" y1="50" x2="100" y2="50" stroke="#00a674" stroke-width="8"></line></svg>&nbsp;&nbsp;Boston Region MPO Boundary&nbsp;&nbsp;
                 <svg id="legend_svg_2" class="legend_svg_line"><line id="svg_line_in_legend_2" x1="0" y1="50" x2="100" y2="50" stroke="brown" stroke-width="1.5"></line></svg>&nbsp;&nbsp;MAPC Subregion Boundary&nbsp;&nbsp;
             </span>
@@ -103,7 +96,13 @@
             </span>
         </div>
     
-        <div id="output_div" class="output_div_class">
+        <!-- Since there is currently no way to query for recport card locations other than using the mouse on the map,
+             the accessible output simply lists the report card data for all intersections (6) and road segments (ca. 20)
+        -->
+        <div id="output_div_accessible"  class="element-invisible">
+        </div> <!-- output_div_accessible -->
+        
+        <div id="output_div" class="output_div_class" role="presentation" aria-hidden="true">
             <table id="intersection_location_table" class="intersection_data_table">
                 <tr>
                     <td class="table_pseudo_caption">Intersection Location</td>
@@ -126,7 +125,7 @@
                     <li><a href="#summary_tab">Summary</a></li>
                     <li><a href="#safety_tab">Safety</a></li>
                     <li><a href="#sys_preservation_tab">System Preservation</a></li>
-                     <li><a href="#cmm_tab">Capacity Management and Mobility</a></li>      
+                    <li><a href="#cmm_tab">Capacity Management and Mobility</a></li>      
                     <li><a href="#econ_tab">Economic Vitality</a></li>                    
                     <li><a href="#te_tab">Transportation Equity Priority</a></li>
                 </ul>  

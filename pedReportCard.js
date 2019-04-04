@@ -1,17 +1,11 @@
 // This version reads data loaded from JSON files
 // BK -- 01/23/2019
 
-/*
-proj4.defs('EPSG:26986', '+proj=lcc +lat_1=42.68333333333333 +lat_2=41.71666666666667 +lat_0=41 +lon_0=-71.5 +x_0=200000 +y_0=750000 +ellps=GRS80 +datum=NAD83 +units=m +no_defs');
-proj4.defs('EPSG:4326', '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs');
-*/
-
 var serverRoot = 'http://localhost:8888/';
 // var serverRoot = location.protocol + '//' + location.hostname + ':8080/geoserver/';
 
-// Global Google Maps map object and geocoder object
+// Global Google Maps map object
 var map = {};
-var geocoder;
 // All Google Maps markers on the map
 var aMarkers = [];
 // All Google Maps polyline features on the map
@@ -36,48 +30,39 @@ var DATA = { 'points'   : null,
              }
 }; // DATA {}
 // N.B. overlays are not visible on app start-up
-var overlayStyles = {   'low_income'    : { fillColor: '#66c2a5', fillOpacity: 0.8, strokeColor : '#66c2a5', strokeOpacity: 0.9, strokeWeight: 1.0, visible: false },
-                        'minority'      : { fillColor: '#fc8d62', fillOpacity: 0.8, strokeColor : '#fc8d62', strokeOpacity: 0.9, strokeWeight: 1.0, visible: false },
-                        'elderly'       : { fillColor: '#8da0cb', fillOpacity: 0.8, strokeColor : '#8da0cb', strokeOpacity: 0.9, strokeWeight: 1.0, visible: false },
-                        'zvhh'          : { fillColor: '#e78ac3', fillOpacity: 0.8, strokeColor : '#e78ac3', strokeOpacity: 0.9, strokeWeight: 1.0, visible: false },
+var overlayStyles = {   'low_income'    : { fillColor: '#66c2a5', fillOpacity: 0.5, strokeColor : '#66c2a5', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
+                        'minority'      : { fillColor: '#fc8d62', fillOpacity: 0.5, strokeColor : '#fc8d62', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
+                        'elderly'       : { fillColor: '#8da0cb', fillOpacity: 0.5, strokeColor : '#8da0cb', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
+                        'zvhh'          : { fillColor: '#e78ac3', fillOpacity: 0.5, strokeColor : '#e78ac3', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
                         'school_buf'    : { fillColor: '#a6d854', fillOpacity: 0.8, strokeColor : '#a6d854', strokeOpacity: 0.9, strokeWeight: 1.0, visible: false }
 }; // overlayStyles {}
 // Previous color palette for the above layers: '#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3'
+
+var pointsURL = 'app_data/intersections_fc.geojson';
+var linesURL  = 'app_data/roadseg_fc.geojson';  
+var low_incomeURL = 'app_data/low_income_TAZ.geojson';
+var minorityURL = 'app_data/minority_TAZ.geojson';
+var elderlyURL = 'app_data/elderly_TAZ.geojson';
+var zvhhURL = 'app_data/zero_vehicle_hh_TAZ.geojson';
+var schoolURL = 'app_data/school_college_buffer.geojson';
+var mpo_boundaryURL = 'app_data/ctps_boston_region_mpo_97_land_arc.geojson';
+var mapc_subregionsURL = 'app_data/ctps_mapc_subregions_97_land_arc.geojson';
+
+var getJson = function(url) {
+    return $.get(url, null, 'json');
+};
 
 $(document).ready(function() {
     $('#output_div').hide();
     // Enable jQueryUI tabs
     $('#tabs_div').tabs();
     
-    var pointsURL = 'app_data/intersections_fc.geojson';
-    var linesURL  = 'app_data/roadseg_fc.geojson';  
-    var low_incomeURL = 'app_data/low_income_TAZ.geojson';
-    var minorityURL = 'app_data/minority_TAZ.geojson';
-    var elderlyURL = 'app_data/elderly_TAZ.geojson';
-    var zvhhURL = 'app_data/zero_vehicle_hh_TAZ.geojson';
-    var schoolURL = 'app_data/school_college_buffer.geojson';
-    var mpo_boundaryURL = 'app_data/ctps_boston_region_mpo_97_land_arc.geojson';
-    var mapc_subregionsURL = 'app_data/ctps_mapc_subregions_97_land_arc.geojson';
-    
-    var getJson = function(url) {
-        return $.get(url, null, 'json');
-    };    
     $.when(getJson(pointsURL),   
            getJson(linesURL),
-           getJson(low_incomeURL),
-           getJson(minorityURL),
-           getJson(elderlyURL),
-           getJson(zvhhURL),
-           getJson(schoolURL),
            getJson(mpo_boundaryURL),
            getJson(mapc_subregionsURL)
     ).done(function(points, 
                     lines,
-                    low_income,
-                    minority,
-                    elderly,
-                    zvhh,
-                    school_buf,
                     mpo_boundary,
                     mapc_subregions) {
         var ok = _.every(arguments, function(arg) { return arg[1] === "success"; });
@@ -87,11 +72,6 @@ $(document).ready(function() {
         }
         DATA.points = JSON.parse(points[0]);
         DATA.lines = JSON.parse(lines[0]);
-        DATA.low_income = JSON.parse(low_income[0]);
-        DATA.minority = JSON.parse(minority[0]);
-        DATA.elderly = JSON.parse(elderly[0]);
-        DATA.zvhh = JSON.parse(zvhh[0]);
-        DATA.school_buf = JSON.parse(school_buf[0]);
         DATA.mpo_boundary = JSON.parse(mpo_boundary[0]);
         DATA.mapc_subregions = JSON.parse(mapc_subregions[0]);
         initMap(DATA);
@@ -137,17 +117,7 @@ function initMap(data) {
     // Draw MPO boundary on Google Map - this FC consists of a single feature
     var lineFeature = data.mpo_boundary.features[0];
     drawPolylineFeature(lineFeature, map, { strokeColor : mpoBoundaryColor, strokeOpacity : 0.7, strokeWeight: 8 });
-    
-
-    // Add toggle-able overlay layers to the GoogleMap
-    ['low_income', 'minority', 'elderly', 'zvhh', 'school_buf'].forEach(
-        function addMapOverlay(overlayName) {
-            DATA.overlays[overlayName] = new google.maps.Data();
-            DATA.overlays[overlayName].addGeoJson(data[overlayName]);
-            DATA.overlays[overlayName].setStyle(overlayStyles[overlayName]);
-            DATA.overlays[overlayName].setMap(map);           
-        });
-      
+  
     // Add point data to the GoogleMap
     var pointFeatures = data.points.features;
     var pointFeature;
@@ -156,15 +126,8 @@ function initMap(data) {
     var i, j, k;  
     for (i = 0; i < pointFeatures.length; i++) {
         pointFeature = pointFeatures[i];
-        /*
-        marker = new google.maps.Marker({
-                        position: new google.maps.LatLng(pointFeature.geometry.coordinates[1], 
-                                                         pointFeature.geometry.coordinates[0]),
-                        map: map,
-                    });     
-        */
         marker = new StyledMarker({
-                        styleIcon   : new StyledIcon(StyledIconTypes.MARKER,{color : '#ff8d62' }),
+                        styleIcon   : new StyledIcon(StyledIconTypes.MARKER,{color : '#ff8c00'}),
                         position    : new google.maps.LatLng(pointFeature.geometry.coordinates[1], 
                                                              pointFeature.geometry.coordinates[0]),
                         map         : map
@@ -197,7 +160,7 @@ function initMap(data) {
                 } // for k in aFeatCoords[j]
                 gmPolyline = new google.maps.Polyline({ path            : aAllPoints,
                                                         map             : map,
-                                                        strokeColor     : '#ff8d62',
+                                                        strokeColor     : '#ff8c00',
                                                         strokeOpacity   : 1.0,
                                                         strokeWeight    : 6 });                                       
                 gmPolylines4Feature.push(gmPolyline);                                       
@@ -213,14 +176,14 @@ function initMap(data) {
             }
             gmPolyline = new google.maps.Polyline({ path            : aAllPoints,
                                                     map             : map,
-                                                    strokeColor     : '#ff8d62',
+                                                    strokeColor     : '#ff8c00',
                                                     strokeOpacity   : 1.0,
                                                     strokeWeight    : 6 });    
             gmPolylines4Feature.push(gmPolyline);
         } // if/else on lineFeature.geometry.type
         
         // Each GIS feature may be rendered as 1 or more than one GoogleMaps polyline feature.
-        // Here we "attach" the relevant GIS feature to each GM Polyline, and set the on-clck
+        // Here we "attach" the relevant GIS feature to each GM Polyline, and set the on-click
         // event handler to each GM Polyline to behave identically.
         // Decorate each GoogleMaps Polyline feature for the GIS feature with CTPS attribute for the feature
         for (j = 0; j < gmPolylines4Feature.length; j++) {
@@ -230,6 +193,37 @@ function initMap(data) {
 		} // For loop over GM Polyline features for the i-th GIS feature ("lineFeature")
     } // for loop over line features
     
+    // Add toggle-able overlay layers to the GoogleMap - AFTER the base map has loaded
+    // The JSON payload for these is large and delays map rendering at app start up
+    $.when(getJson(low_incomeURL),
+           getJson(minorityURL),
+           getJson(elderlyURL),
+           getJson(zvhhURL),
+           getJson(schoolURL)
+    ).done(function(low_income,
+                    minority,
+                    elderly,
+                    zvhh,
+                    school_buf) {
+        var ok = _.every(arguments, function(arg) { return arg[1] === "success"; });
+        if (ok === false) {
+            alert("One or more requests to load JSON data for map overlays failed. Exiting application.");
+            return;   
+        }
+        [{ data  : low_income,   name : 'low_income' },
+         { data  : minority,     name : 'minority'   },
+         { data  : elderly,      name : 'elderly'    }, 
+         { data  : zvhh,         name : 'zvhh'       },
+         { data  : school_buf,   name : 'school_buf' }
+        ].forEach(
+            function addMapOverlay(lyr) {
+                DATA.overlays[lyr.name] = new google.maps.Data();
+                DATA.overlays[lyr.name].addGeoJson(JSON.parse(lyr.data[0]));
+                DATA.overlays[lyr.name].setStyle(overlayStyles[lyr.name]);
+                DATA.overlays[lyr.name].setMap(map);           
+            });
+     }); // Logic to add map overlay layers
+        
     // On-click event hander for markers and polylines
     function onClickHandler(e) {
         var clickLocation = e.latLng;
@@ -269,42 +263,7 @@ function initMap(data) {
         style.visible = state;
         DATA.overlays[layer_name].setStyle(style);
     });
-    
-    // Code for handling the Geocoder form submit 
-    // Disable geocoding, for now
-/*
-    var form = document.getElementById('addressForm');
-    form.onsubmit = function() {
-        var address = document.getElementById('address').value;
-        getCoordinates(address);
-        // Preventing form from doing a page submit
-        return false;
-    };
-*/
 } // initMap()
-
-function getCoordinates(address) {
-    if (!geocoder) {
-        geocoder = new google.maps.Geocoder();
-    }
-    var geocoderRequest = {
-        address: address
-    };
-    geocoder.geocode(geocoderRequest, function(results, status) {
-       if (status == google.maps.GeocoderStatus.OK) {       
-           // Center the map on the returned location, and set the bounds
-           // of the map to the 'viewport' returned by the geocoder.
-           // These operations will trigger events that will cause the 
-           // boundsChanged handler to be invoked.
-           map.setCenter(results[0].geometry.location);
-           var bounds = new google.maps.LatLngBounds();
-           bounds.union(results[0].geometry.viewport);
-           map.fitBounds(bounds);
-       } else {
-            alert('Search failed. Status = ' + status);
-       }
-    });
-} // getCoordinates()
 
 function displayLocationDetail(feature) {
     // Helper function to map a "rating" value encoded to an integer to the corresponding human-readable string
