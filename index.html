@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head lang="en">
 <meta charset="utf-8">
-<title>Prototype of Pedestrian Report Card App version 0.4</title>
+<title>Prototype of Pedestrian Report Card App version 0.5</title>
 <link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.min.css"/>
 <link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.structure.min.css"/>
 <link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.theme.min.css"/>
@@ -26,20 +26,28 @@
 	<div class="darkBlue"></div>
     <div id="banner"><a href="http://ctps.org/" target="_blank" title="Boston MPO"><img style="height:59px" src="./img/ctps_header.png" title="Opens Boston MPO website in a new window"></a></div>
 </div>
-<h1 class="pagetitle">Prototype of Pedestrian Report Card App version 0.4</h1>
+<h1 class="pagetitle">Prototype of Pedestrian Report Card App version 0.5</h1>
 <div id="wrapper">
     <div id="map_wrapper">
         <div id="map_options_div" role="presentation">
-            <label for="low_income_toggle">Low-income TAZes</label>
-            <input type="checkbox" id="low_income_toggle" class="layer_toggle" name="low_income_toggle" value="low_income_toggle">  
-            <label for="minority_toggle">Minority TAZes</label>
-            <input type="checkbox" id="minority_toggle" class="layer_toggle" name="minority_toggle" value="minority_toggle">
-            <label for="elderly_toggle">Elderly TAZes</label>
-            <input type="checkbox" id="elderly_toggle" class="layer_toggle" name="elderly_toggle" value="elderly_toggle">
-            <label for="zvhh_toggle">Zero-vehicle Households TAZes</label>
-            <input type="checkbox" id="zvhh_toggle" class="layer_toggle" name="zvhh_toggle" value="zvhh_toggle">  
-            <label for="school_buf_toggle">Quarter-mile buffer around schools and colleges</label>
-            <input type="checkbox" id="school_buf_toggle" class="layer_toggle" name="school_buf_toggle" value="school_buf_toggle">             
+            <input type="checkbox" id="low_income_toggle" class="layer_toggle" name="low_income_toggle" value="low_income_toggle"> 
+            <label for="low_income_toggle">Low-income TAZes &nbsp;&nbsp;</label>
+            
+            <input type="checkbox" id="minority_toggle" class="layer_toggle" name="minority_toggle" value="minority_toggle">           
+            <label for="minority_toggle">Minority TAZes &nbsp;&nbsp;</label>
+
+            <input type="checkbox" id="elderly_toggle" class="layer_toggle" name="elderly_toggle" value="elderly_toggle">            
+            <label for="elderly_toggle">Elderly TAZes &nbsp;&nbsp;</label>
+
+            <input type="checkbox" id="zvhh_toggle" class="layer_toggle" name="zvhh_toggle" value="zvhh_toggle">            
+            <label for="zvhh_toggle">Zero-vehicle Households TAZes &nbsp;&nbsp;</label>
+ 
+            <input type="checkbox" id="school_buf_toggle" class="layer_toggle" name="school_buf_toggle" value="school_buf_toggle"> 
+            <label for="school_buf_toggle">Quarter-mile buffer around schools and colleges &nbsp;&nbsp;</label>      
+
+            <input type="button" id="reset_button" value="Reset Map"/>
+            <input type="button" id="about_button" value="About"/>
+            <input type="button" id="help_button" value="Help"/>
         </div>
         <div id="map" role="presentation">
         </div>

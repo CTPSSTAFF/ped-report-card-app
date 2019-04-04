@@ -56,6 +56,17 @@ $(document).ready(function() {
     $('#output_div').hide();
     // Enable jQueryUI tabs
     $('#tabs_div').tabs();
+    $('#reset_button').click(function(e) {
+        location.reload();
+    });
+    $('#about_button').click(function(e) {
+        var url = 'About.html'
+        window.open(url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes')
+    });
+    $('#help_button').click(function(e) {
+        var url = 'Help.html'
+        window.open(url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes')
+    })
     
     $.when(getJson(pointsURL),   
            getJson(linesURL),
@@ -233,7 +244,14 @@ function initMap(data) {
         var feature = this.CTPSprops.feature;
         var geomType = feature.geometry.type;
         var props = feature.properties;
-        var loc_desc = props['Location_Description'] + ' - ' + props['Municipality'];
+        
+        // For road segment features (i.e., geomType is 'MultiLineString' or 'LineString'), the 'Location' (i.e., road name)
+        // should appear before the 'Location_Description' (i.e., the start- and end-locations of the road segment.
+        var loc_desc = '';
+        if (geomType == 'MultiLineString' || geomType == 'LineString') {
+            loc_desc = props['Location'] + '<br/>';
+        }
+        loc_desc += props['Location_Description'] + ' - ' + props['Municipality'];
         var src_abstract_prop = props['Source_Abstract_Link'];
         var src_pdf_prop = props['Source_PDF'];
         var mpo_calendar_pdf_prop = props['MPO_Calendar_Source_PDF'];
@@ -298,16 +316,23 @@ function displayLocationDetail(feature) {
     $('.roadseg_data').html('');
     
     // Location: intersection OR road segment
-    var tmpStr = props['Location_Description'] + ' - ' + props['Municipality'];
-    tmpStr += (props['Municipality_2'] != 'N/A') ? ' and ' + props['Municipality_2'] : '';
-    tmpStr += ', MA'; 
+    var tmpStr;
     if (featureKind == 'Point') {
+        tmpStr = props['Location_Description'] + ' - ' + props['Municipality'];
+        tmpStr += (props['Municipality_2'] != 'N/A') ? ' and ' + props['Municipality_2'] : '';
+        tmpStr += ', MA';
         // featureKind == 'Point' ==> intersection
         $('#intersection_location').html(tmpStr);
         $('.roadseg_data_table').hide();
         $('.intersection_data_table').show();
     } else {
         // featureKind == LineString || MultiLineString ==> road segment
+        // Note: for road segs we display the 'Location' (i.e., road name) before
+        //       the 'Location_Description' (i.e., start and end points of the segment)
+        tmpStr = props['Location'] + ': ';
+        tmpStr += props['Location_Description'] + ' - ' + props['Municipality'];
+        tmpStr += (props['Municipality_2'] != 'N/A') ? ' and ' + props['Municipality_2'] : '';
+        tmpStr += ', MA';        
         $('#roadseg_location').html(tmpStr);
         $('.intersection_data_table').hide();
         $('.roadseg_data_table').show();
