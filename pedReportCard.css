@@ -98,6 +98,13 @@ table, th, td {
     font-weight: bold;
 }
 
+td.intersection_data {
+    min-width: 25px;
+}
+td.roadseg_data {
+    min-width: 25px;
+}
+
 /* Rule to align the text in all cells of all tables in the output_div */
 #output_div table td {
     text-align: center;
