@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.min.css"/>
 <link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.structure.min.css"/>
 <link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.theme.min.css"/>
+<link rel="stylesheet" href="libs/SlickGrid-2.4.1/slick.grid.css"/>
 <link rel="stylesheet" href="pedReportCard.css"/>
 
 <script src="//maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBDKncJRheezxvvmheB8JLH4Dk7EHfdZEk"></script>
@@ -15,8 +16,8 @@
 <!-- <script src="libs/jquery-2.2.4.js"></script> -->
 <script src="libs/jquery-2.2.4.min.js"></script>
 <!-- The following two libs are required by Slick Grid -->
-<script src="libs/jquery.event.drag-2.3.0.js"></script>
-<script src="libs/jquery.event.drop-2.3.0.js"></script>
+<script src="libs/jquery.event.drag-2.2/jquery.event.drag-2.2.js"></script>
+<script src="libs/jquery.event.drop-2.2/jquery.event.drop-2.2.js"></script>
 <script src="libs/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script src="libs/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script src="libs/SlickGrid-2.4.1/slick.core.js"></script>
@@ -119,6 +120,32 @@
         -->
         <div id="output_div_accessible"  class="element-invisible">
         </div> <!-- output_div_accessible -->
+ 
+<!-- 
+        <div class="tabs" id="tabs_div">
+            <ul>
+                <li><a href="#background_tab">Background</a></li>
+                <li><a href="#search_tab">Report Card Locations</a></li>      
+            </ul>
+            <div class="tabbody" id="background_tab">
+                <h3>Background Information</h3>
+                <p>
+                    Blah, blah, blah.
+                </p>
+            </div> 
+            <div class="tabbody" id="search_tab">
+                <h2 class="location_list_caption">Locations</h2>  
+                <div id="location_list_contents_accessible"  class="element-invisible">
+                </div>
+                <div id="location_list_contents" role="presentation" aria-hidden="true">
+                </div>       
+            </div> 
+        </div> 
+ -->       
+        <div id="location_list_contents" role="presentation" aria-hidden="true">
+        </div>
+        
+<!-- COMMENTED OUT - THIS STUFF WILL GO INTO THE LOCATION DETAIL PAGE
         
         <div id="output_div" class="output_div_class" role="presentation" aria-hidden="true">
             <table id="intersection_location_table" class="intersection_data_table">
@@ -148,7 +175,7 @@
                     <li><a href="#te_tab">Transportation Equity Priority</a></li>
                 </ul>  
                 <div id="summary_tab" class="tabbody">
-                     <!-- Summary table, excluding TE stuff -->
+                     
                     <h3 class="table_pseudo_caption">Summary</h3>         
                     <table id="summary_table" class="location_data_table">
                         <thead>
@@ -181,7 +208,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <!-- Summary table for TE stuff -->
+                    
                     <h3 class="table_pseudo_caption">Transportation Equity</h3>
                     <table id="summary_te_table" class="location_data_table">
                         <tr>
@@ -197,14 +224,14 @@
                             <td id="te_not_priority" class="intersection_data roadseg_data"></td>
                         </tr>
                     </table>
-                </div> <!-- summary_tab -->
+                </div>
                 
-                <!-- Detail tables begin here -->
+
                 
                 <div id="safety_tab" class="tabbody">
-                    <!-- The tables for Safety data for intersections and road segments are DIFFERENT! --> 
+                   
                     <h3 class="table_pseudo_caption">Safety</h3>
-                    <!-- Safety data detail table for INTERSECTIONS -->
+                    
                     <table id="intersection_safety_table" class="location_data_table intersection_data_table">
                         <thead>
                             <tr>
@@ -215,7 +242,7 @@
                             </tr>   
                         </thead>
                         <tbody>
-                            <!-- N.B. The "weights" are hard-wired! -->
+                            
                             <tr>
                                 <td>Sufficient Crossing Time (Index)</td>
                                 <td id="intersection_suff_xing_time_weight">3</td>
@@ -247,7 +274,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <!-- Safety data detail table for ROAD SEGMENTS -->
+                    
                     <table id="roadseg_safety_table" class="location_data_table roadseg_data_table">
                         <thead>
                             <tr>
@@ -258,7 +285,7 @@
                             </tr>   
                         </thead>
                         <tbody>
-                            <!-- N.B. The "weights" are hard-wired! -->
+                            
                             <tr>
                                 <td>Pedestrian Crashes</td>
                                 <td id="roadseg_ped_crashes_weight">3</td>                        
@@ -285,10 +312,10 @@
                             </tr>
                         </tbody>
                     </table> 
-                </div> <!-- safety_tab -->
+                </div> 
       
                 <div id="sys_preservation_tab" class="tabbody">           
-                    <!-- System Preservation data table - SINGLE table for intersections and road segs -->
+                    
                     <h3 class="table_pseudo_caption">System Preservation</h3>
                     <table id="system_preservation_table" class="location_data_table intersection_data_table roadseg_data_table">
                         <thead>
@@ -304,12 +331,12 @@
                             </tr>
                         </tbody>
                     </table>
-                </div> <!-- sys_preservation_tab -->
+                </div> 
                  
                 <div id="cmm_tab" class="tabbody">
-                    <!-- The tables for CMM data for intersections and road segments are DIFFERENT! -->             
+                               
                     <h3 class="table_pseudo_caption">Capacity Management and Mobility</h3>
-                    <!-- CMM data detail table for intersections -->
+                    
                     <table id="intersection_cmm_table" class="location_data_table intersection_data_table">
                         <thead>
                             <tr>
@@ -320,7 +347,7 @@
                             <tr>
                         </thead>
                         <tbody>
-                            <!-- N.B. The "weights" are hard-wired! -->
+                            
                             <tr>
                                 <td>Pedestrian Delay</td>
                                 <td id="intersection_pedestrian_delay_weight">3</td>   
@@ -353,7 +380,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <!-- CMM data detail table for intersections -->
+                    
                     <table id="roadseg_cmm_table" class="location_data_table roadseg_data_table">
                         <thead>
                             <tr>
@@ -364,7 +391,7 @@
                             <tr>
                         </thead>
                         <tbody>
-                            <!-- N.B. The "weights" are hard-wired! -->
+                            
                             <tr>
                                 <td>Sidewalk Presence</td>
                                 <td id="roadseg_sidewalk_presence_weight">3</td>
@@ -392,12 +419,12 @@
                             </tr>
                         </tbody>
                     </table> 
-                </div> <!-- cmm_tab -->
+                </div> 
 
                 <div id="econ_tab" class="tabbody">
-                    <!-- The tables for Economic Vitality data for intersections and road segments are DIFFERENT! -->
+                    
                     <h3 class="table_pseudo_caption">Economic Vitality</h3>
-                    <!-- Economic Vitality detail table for intersections -->
+                   
                     <table id="intersection_economic_vitality_table" class="location_data_table intersection_data_table">
                         <thead>
                             <tr>
@@ -412,7 +439,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <!-- Economic Vitality detail table for road segments -->
+                    
                      <table id="roadseg_economic_vitality_table" class="location_data_table roadseg_data_table">
                         <thead>
                             <tr>
@@ -443,10 +470,10 @@
                             </tr>                   
                         </tbody>
                     </table> 
-                </div> <!-- econ_tab -->
+                </div> 
                 
                 <div id="te_tab" class="tabbody">
-                    <!-- Transportation Equtiy data table - SINGLE table for intersections and road segs -->
+                    
                     <h3 class="table_pseudo_caption">Transportation Equity Priority</h3>
                     <table id="te_table" class="location_data_table intersection_data_table roadseg_data_table">
                         <thead>
@@ -474,10 +501,13 @@
                             </tr>
                         </tbody>
                     </table>
-                </div> <!-- te_tab -->
-            </div> <!-- tabs_div -->
-        </div> <!-- output_div -->
-    </div> <!-- map_wrapper -->
+                </div> 
+            </div> 
+        </div> 
+        
+        *** END COMMENTED-OUT STUFF -->
+        
+    </div> 
 </div> 
 
 <script src="pedReportCard.js"></script>
