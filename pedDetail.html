@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<head lang="en">
+<meta charset="utf-8">
+<title>Main Page - Prototype of Pedestrian Report Card App version 0.5</title>
+<link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.min.css"/>
+<link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.structure.min.css"/>
+<link rel="stylesheet" href="libs/jquery-ui-1.12.1.custom/jquery-ui.theme.min.css"/>
+<link rel="stylesheet" href="libs/SlickGrid-2.4.1/slick.grid.css"/>
+<link rel="stylesheet" href="pedDetail.css"/>
+
+<script src="//maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBDKncJRheezxvvmheB8JLH4Dk7EHfdZEk"></script>
+<!-- 'StyledMarker' add-in from Google Maps V3 Utility Library. See:  https://github.com/googlemaps/v3-utility-library -->
+<script src="libs/StyledMarker.js"></script>
+<!-- 'Maplable' add-in from Google Maps V3 Utility Library: -->
+<script src="libs/maplabel.js"></script>
+<!-- <script src="libs/jquery-2.2.4.js"></script> -->
+<script src="libs/jquery-2.2.4.min.js"></script>
+<!-- The following two libs are required by Slick Grid -->
+<script src="libs/jquery.event.drag-2.2/jquery.event.drag-2.2.js"></script>
+<script src="libs/jquery.event.drop-2.2/jquery.event.drop-2.2.js"></script>
+<script src="libs/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+<script src="libs/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+<script src="libs/SlickGrid-2.4.1/slick.core.js"></script>
+<script src="libs/SlickGrid-2.4.1/slick.grid.js"></script>
+<script src="libs/SlickGrid-2.4.1/slick.dataview.js"></script>
+
+<script src="libs/underscore-min.js"></script>
+<!-- No longer think we'll need the Proj4, turf, or simplify libraries:
+<script src="libs/proj4js-2.5.0/dist/proj4.js"></script>
+<script src="libs/turf.min.js"></script>
+<script src="libs/simplify.js"></script>
+-->
+</head>
+<body>
+<div class="ctpsHeader">
+	<div class="lightBlue"></div>
+	<div class="darkBlue"></div>
+    <div id="banner"><a href="http://ctps.org/" target="_blank" title="Boston MPO"><img style="height:59px" src="./img/ctps_header.png" title="Opens Boston MPO website in a new window"></a></div>
+</div>
+<h1 class="pagetitle">Location Detail - Prototype of Pedestrian Report Card App version 0.6</h1>
+<div id="wrapper">
+    <div id="map_wrapper">
+        <div id="map_options_div" role="presentation">
+            <input type="checkbox" id="low_income_toggle" class="layer_toggle" name="low_income_toggle" value="low_income_toggle"> 
+            <label for="low_income_toggle">Low-income TAZes &nbsp;&nbsp;</label>
+            
+            <input type="checkbox" id="minority_toggle" class="layer_toggle" name="minority_toggle" value="minority_toggle">           
+            <label for="minority_toggle">Minority TAZes &nbsp;&nbsp;</label>
+
+            <input type="checkbox" id="elderly_toggle" class="layer_toggle" name="elderly_toggle" value="elderly_toggle">            
+            <label for="elderly_toggle">Elderly TAZes &nbsp;&nbsp;</label>
+
+            <input type="checkbox" id="zvhh_toggle" class="layer_toggle" name="zvhh_toggle" value="zvhh_toggle">            
+            <label for="zvhh_toggle">Zero-vehicle Households TAZes &nbsp;&nbsp;</label>
+ 
+            <input type="checkbox" id="school_buf_toggle" class="layer_toggle" name="school_buf_toggle" value="school_buf_toggle"> 
+            <label for="school_buf_toggle">Quarter-mile buffer around schools and colleges &nbsp;&nbsp;</label>      
+
+            <input type="button" id="reset_button" value="Reset Map"/>
+            <input type="button" id="about_button" value="About"/>
+            <input type="button" id="help_button" value="Help"/>
+        </div>
+        <div id="map" role="presentation">
+        </div>
+
+        <div id="legend" role="presentation">
+            <p id="legend_caption">
+                <strong>Legend</strong>
+            </p>
+            <span>
+                <img src="img/darkorange-marker.png">Intersection&nbsp;&nbsp;
+                <svg id="legend_svg_0" class="legend_svg_line"><line id="svg_line_in_legend_0" x1="0" y1="50" x2="100" y2="50" stroke="#ff8c00" stroke-width="6"></line></svg>&nbsp;&nbsp;Roadway Segment&nbsp;&nbsp;
+                <svg id="legend_svg_1" class="legend_svg_line"><line id="svg_line_in_legend_1" x1="0" y1="50" x2="100" y2="50" stroke="#00a674" stroke-width="8"></line></svg>&nbsp;&nbsp;Boston Region MPO Boundary&nbsp;&nbsp;
+                <svg id="legend_svg_2" class="legend_svg_line"><line id="svg_line_in_legend_2" x1="0" y1="50" x2="100" y2="50" stroke="brown" stroke-width="1.5"></line></svg>&nbsp;&nbsp;MAPC Subregion Boundary&nbsp;&nbsp;
+            </span>
+            <br/> 
+            <span>
+<!--    
+                <svg id="legend_svg_1" class="legend_svg">
+                    <rect id="svg_rect_in_legend_1" x="0" y=25" width="25" height="25" fill="#66c2a5" fill-opacity="0.5">
+                    </rect>
+                </svg>&nbsp;&nbsp;Low-income TAZes&nbsp;&nbsp;
+  
+
+                <svg id="legend_svg_2" class="legend_svg">
+                    <rect id="svg_rect_in_legend_2" x="0" y=25" width="25" height="25" fill="#fc8d62" fill-opacity="0.5">
+                    </rect>
+                </svg>&nbsp;&nbsp;Minority TAZes&nbsp;&nbsp;
+ -->    
+
+                 <svg id="legend_svg_3" class="legend_svg">
+                    <rect id="svg_rect_in_legend_1" x="0" y="5" width="25" height="25" fill="#66c2a5" fill-opacity="0.5">
+                    </rect>
+                </svg>&nbsp;&nbsp;Low-income TAZes&nbsp;&nbsp; 
+ 
+                 <svg id="legend_svg_4" class="legend_svg">
+                    <rect id="svg_rect_in_legend_2" x="0" y="5" width="25" height="25" fill="#fc8d62" fill-opacity="0.5">
+                    </rect>
+                </svg>&nbsp;&nbsp;Minority TAZes&nbsp;&nbsp;                
+                
+      
+                <svg id="legend_svg_5" class="legend_svg">
+                    <rect id="svg_rect_in_legend_3" x="0" y="5" width="25" height="25" fill="#8da0cb" fill-opacity="0.5">
+                    </rect>
+                </svg>&nbsp;&nbsp;Elderly TAZes&nbsp;&nbsp;  
+                
+                <svg id="legend_svg_6" class="legend_svg">
+                    <rect id="svg_rect_in_legend_4" x="0" y="5" width="25" height="25" fill="#e78ac3" fill-opacity="0.5">
+                    </rect>
+                </svg>&nbsp;&nbsp;Zero-vehicle Household TAZes&nbsp;&nbsp;    
+                <svg id="legend_svg_7" class="legend_svg">
+                    <rect id="svg_rect_in_legend_5" x="0" y="5" width="25" height="25" fill="#a6d854" fill-opacity="0.5">
+                    </rect>
+                </svg>&nbsp;&nbsp;Quarter-mile buffer around schools and colleges&nbsp;&nbsp;
+            </span>
+        </div> <!-- legend -->
+
+        
+        <div id="output_div" class="output_div_class" role="presentation" aria-hidden="true">
+        
+            <h3 class="table_pseudo_caption intersection_data_table">Intersection Segement Location</h3>
+            <table id="intersection_location_table" class="intersection_data_table">
+                <tr>
+                    <td id="intersection_location" class="intersection_data"></td>
+                </tr>
+            </table>
+            
+            <h3 class="table_pseudo_caption roadseg_data_table">Roadway Segement Location</h3> 
+            <table id="roadseg_location_table" class="roadseg_data_table">
+                <tr>
+                    <td id="roadseg_location" class="roadseg_data">
+                </tr>
+            </table>
+                     
+            <h3 class="table_pseudo_caption">Summary</h3>         
+            <table id="summary_table" class="location_data_table">
+                <thead>
+                    <tr>
+                        <th class="location_table_header">Grading Categories</th>
+                        <th class="location_table_header">Score</th>
+                        <th class="location_table_header">Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Safety</td>
+                        <td id="safety_score" class="intersection_data roadseg_data"></td>
+                        <td id="safety_rating" class="intersection_data roadseg_data"></td>
+                    </tr>
+                    <tr>
+                        <td>System Preservation</td>
+                        <td id="sys_preservation_score" class="intersection_data roadseg_data"></td>
+                        <td id="sys_preservation_rating" class="intersection_data roadseg_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Capacity Management and Mobility</td>
+                        <td id="cmm_score" class="intersection_data roadseg_data roadseg_data"></td>
+                        <td id="cmm_rating" class="intersection_data roadseg_data roadseg_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Economic Vitality</td>
+                        <td id="economic_vitality_score" class="intersection_data roadseg_data"></td>
+                        <td id="economic_vitality_rating" class="intersection_data roadseg_data"></td>
+                    </tr>
+                </tbody>
+            </table>
+                    
+            <h3 class="table_pseudo_caption">Transportation Equity</h3>
+            <table id="summary_te_table" class="location_data_table">
+                <tr>
+                    <td>High Priority Area</td>
+                    <td id="te_high_priority" class="intersection_data roadseg_data"></td>
+                </tr>
+                <tr>
+                    <td>Moderate Priority Area</td>
+                    <td id="te_moderate_priority" class="intersection_data roadseg_data"></td>
+                </tr>
+                <tr>
+                    <td>Not a Priority Area</td>
+                    <td id="te_not_priority" class="intersection_data roadseg_data"></td>
+                </tr>
+            </table>
+                         
+            <h3 class="table_pseudo_caption">Safety</h3>           
+            <table id="intersection_safety_table" class="location_data_table intersection_data_table">
+                <thead>
+                    <tr>
+                        <td class="location_table_detail_header">Performance Measure</td>
+                        <td class="location_table_detail_header">Weight</td>
+                        <td class="location_table_detail_header">Rating</td>
+                        <td class="location_table_detail_header">Weighted Score</td>
+                    </tr>   
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sufficient Crossing Time (Index)</td>
+                        <td id="intersection_suff_xing_time_weight">3</td>
+                        <td id="intersection_suff_xing_time_rating" class="intersection_data"></td>
+                        <td id="intersection_suff_xing_time_wscore" class="intersection_data"></td>
+                    <tr>
+                        <td>Pedestrian Crashes</td>
+                        <td id="intersection_ped_crashes_weight">3</td>                        
+                        <td id="intersection_ped_crashes_rating" class="intersection_data"></td>
+                        <td id="intersection_ped_crashes_wscore" class="intersection_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Pedestrian Signal Presence</td>
+                        <td id="intersection_ped_sig_presence_weight">1</td>
+                        <td id="intersection_ped_sig_presence_rating" class="intersection_data"></td>
+                        <td id="intersection_ped_sig_presence_wscore" class="intersection_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Vehicle Travel Speed</td>
+                        <td id="intersection_veh_travel_speed_weight">1</td>
+                        <td id="intersection_veh_travel_speed_rating" class="intersection_data"></td>
+                        <td id="intersection_veh_travel_speed_wscore" class="intersection_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td id="intersection_safety_total_weight">8</td>
+                        <td id="intersection_safety_total_rating" class="intersection_data"></td>
+                        <td id="intersection_safety_total_wscore" class="intersection_data"></td>                        
+                    </tr>
+                </tbody>
+            </table>
+                    
+            <table id="roadseg_safety_table" class="location_data_table roadseg_data_table">
+                <thead>
+                    <tr>
+                        <td class="location_table_detail_header">Performance Measure</td>
+                        <td class="location_table_detail_header">Weight</td>
+                        <td class="location_table_detail_header">Rating</td>
+                        <td class="location_table_detail_header">Weighted Score</td>
+                    </tr>   
+                </thead>
+                <tbody>                  
+                    <tr>
+                        <td>Pedestrian Crashes</td>
+                        <td id="roadseg_ped_crashes_weight">3</td>                        
+                        <td id="roadseg_ped_crashes_rating" class="roadseg_data"></td>
+                        <td id="roadseg_ped_crashes_wscore" class="roadseg_data"></td>
+                    </tr>    
+                    <tr>
+                        <td>Pedestrian-Vehicle Buffer</td>
+                        <td id="roadseg_ped_veh_buffer_weight">1</td>
+                        <td id="roadseg_ped_veh_buffer_rating" class="roadseg_data"></td>
+                        <td id="roadseg_ped_veh_buffer_wscore" class="roadseg_data"></td>
+                    </tr>                 
+                    <tr>
+                        <td>Vehicle Travel Speed</td>
+                        <td id="roadseg_veh_travel_speed_weight">1</td>
+                        <td id="roadseg_veh_travel_speed_rating" class="roadseg_data"></td>
+                        <td id="roadseg_veh_travel_speed_wscore" class="roadseg_data"></td>
+                    </tr>                   
+                    <tr>
+                        <td>Total</td>
+                        <td id="roadseg_safety_total_weight">5</td>
+                        <td id="roadseg_safety_total_rating" class="roadseg_data"></td>
+                        <td id="roadseg_safety_total_wscore" class="roadseg_data"></td>                        
+                    </tr>
+                </tbody>
+            </table> 
+                                
+            <h3 class="table_pseudo_caption">System Preservation</h3>
+            <table id="system_preservation_table" class="location_data_table intersection_data_table roadseg_data_table">
+                <thead>
+                     <tr>
+                        <td class="location_table_detail_header">Performance Measure</td>
+                        <td class="location_table_detail_header">Rating</td>
+                     </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sidewalk Condition</td>
+                        <td id="sidewalk_condition" class="intersection_data roadseg_data"></td>
+                    </tr>
+                </tbody>
+            </table>
+                               
+            <h3 class="table_pseudo_caption">Capacity Management and Mobility</h3>            
+            <table id="intersection_cmm_table" class="location_data_table intersection_data_table">
+                <thead>
+                    <tr>
+                        <td class="location_table_detail_header">Performance Measure</td>
+                        <td class="location_table_detail_header">Weight</td>
+                        <td class="location_table_detail_header">Rating</td>
+                        <td class="location_table_detail_header">Weighted Score</td>
+                    <tr>
+                </thead>
+                <tbody>                 
+                    <tr>
+                        <td>Pedestrian Delay</td>
+                        <td id="intersection_pedestrian_delay_weight">3</td>   
+                        <td id="intersection_pedestrian_delay_rating" class="intersection_data"></td>
+                        <td id="intersection_pedestrian_delay_wscore" class="intersection_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Sidewalk Presence</td>
+                        <td id="intersection_sidewalk_presence_weight">2</td>
+                        <td id="intersection_sidewalk_presence_rating" class="intersection_data"></td>
+                        <td id="intersection_sidewalk_presence_wscore" class="intersection_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Curb Ramps</td>
+                        <td id="intersection_curb_ramps_weight" >1</td>
+                        <td id="intersection_curb_ramps_rating" class="intersection_data"></td>
+                        <td id="intersection_curb_ramps_wscore" class="intersection_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Crossing Opportunities</td>
+                        <td id="intersection_crossing_opportunities_weight">1</td>
+                        <td id="intersection_crossing_opportunities_rating" class="intersection_data"></td>
+                        <td id="intersection_crossing_opportunities_wscore" class="intersection_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td id="intersection_cmm_total_weight">7</td>
+                        <td id="intersection_cmm_total_rating" class="intersection_data"></td>
+                        <td id="intersection_cmm_total_wscore" class="intersection_data"></td>
+                    </tr>
+                </tbody>
+            </table>
+                    
+            <table id="roadseg_cmm_table" class="location_data_table roadseg_data_table">
+                <thead>
+                    <tr>
+                        <td class="location_table_detail_header">Performance Measure</td>
+                        <td class="location_table_detail_header">Weight</td>
+                        <td class="location_table_detail_header">Rating</td>
+                        <td class="location_table_detail_header">Weighted Score</td>
+                    <tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td>Sidewalk Presence</td>
+                        <td id="roadseg_sidewalk_presence_weight">3</td>
+                        <td id="roadseg_sidewalk_presence_rating" class="roadseg_data"></td>
+                        <td id="roadseg_sidewalk_presence_wscore" class="roadseg_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Crossing Opportunities</td>
+                        <td id="roadseg_crossing_opportunities_weight">2</td>
+                        <td id="roadseg_crossing_opportunities_rating" class="roadseg_data"></td>
+                        <td id="roadseg_crossing_opportunities_wscore" class="roadseg_data"></td>
+                    </tr>
+                     <tr>
+                        <td>Walkway Width</td>
+                        <td id="roadseg_walkway_width_weight">1</td>
+                        <td id="roadseg_walkway_width_rating" class="roadseg_data"></td>
+                        <td id="roadseg_walkway_width_wscore" class="roadseg_data"></td>
+                    </tr>                   
+                    
+                    <tr>
+                        <td>Total</td>
+                        <td id="roadseg_cmm_total_weight">6</td>
+                        <td id="roadseg_cmm_total_rating" class="roadseg_data"></td>
+                        <td id="roadseg_cmm_total_wscore" class="roadseg_data"></td>
+                    </tr>
+                </tbody>
+            </table> 
+                    
+            <h3 class="table_pseudo_caption">Economic Vitality</h3>          
+            <table id="intersection_economic_vitality_table" class="location_data_table intersection_data_table">
+                <thead>
+                    <tr>
+                        <td class="location_table_detail_header">Performance Measure</td>
+                        <td class="location_table_detail_header">Rating</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Pedestrian Volumes</td>
+                        <td id="intersection_ped_volumes" class="intersection_data"></td>
+                    </tr>
+                </tbody>
+            </table>                   
+             <table id="roadseg_economic_vitality_table" class="location_data_table roadseg_data_table">
+                <thead>
+                    <tr>
+                        <td class="location_table_detail_header">Performance Measure</td>
+                        <td class="location_table_detail_header">Weight</td>
+                        <td class="location_table_detail_header">Rating</td>
+                        <td class="location_table_detail_header">Weighted Score</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Pedestrian Volumes</td>
+                        <td id="roadseg_ped_volumes_weight">1</td>
+                        <td id="roadseg_ped_volumes_rating" class="roadseg_data"></td>
+                        <td id="roadseg_ped_volumes_wscore" class="roadseg_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Ajdacent Bicycle Accommodations</td>
+                        <td id="roadseg_adj_bike_accommodations_weight">1</td>
+                        <td id="roadseg_adj_bike_accommodations_rating" class="roadseg_data"></td>
+                        <td id="roadseg_adj_bike_accommodations_wscore" class="roadseg_data"></td>                        
+                    </tr>  
+                    <tr>
+                        <td>Total</td>
+                        <td id="roadseg_econ_total_weight">2</td>
+                        <td id="roadseg_econ_total_rating" class="roadseg_data"></td>
+                        <td id="roadseg_econ_total_wscore" class="roadseg_data"></td>                        
+                    </tr>                   
+                </tbody>
+            </table> 
+               
+                                  
+            <h3 class="table_pseudo_caption">Transportation Equity Priority</h3>
+            <table id="te_table" class="location_data_table intersection_data_table roadseg_data_table">
+                <thead>
+                    <tr>
+                        <td class="location_table_detail_header">Area Condition</td>
+                        <td class="location_table_detail_header">Yes/No</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Environmental Justice Zone?</td>
+                        <td id="te_ej_zone" class="intersection_data roadseg_data"></td>
+                    </tr>
+                    <tr>
+                        <td>School or college within one-quarter mile?</td>
+                        <td id="school_quarter_mile" class="intersection_data roadseg_data"></td>
+                    </tr>
+                    <tr>
+                        <td>More than 8.9% of population older than 75 years?</td>
+                       <td id="over_75" class="intersection_data roadseg_data"></td>                     
+                    </tr>
+                    <tr>
+                        <td>More than 27.5% of households do not own a vehicle?</td>
+                        <td id="zero_vehicle_hhs" class="intersection_data roaseg_data"></td>
+                    </tr>
+                </tbody>
+            </table>              
+        </div> <!-- output_div -->  
+    </div> <!-- map_wrapper -->    
+</div>  <!-- wrapper -->
+
+<script src="pedDetail.js"></script>
+</body>
+</html>
