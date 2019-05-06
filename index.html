@@ -8,11 +8,21 @@
 <link rel="stylesheet" href="pedReportCard.css"/>
 
 <script src="//maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBDKncJRheezxvvmheB8JLH4Dk7EHfdZEk"></script>
-<!-- 'StyledMarker' from Google Maps V3 Utility Library. See:  https://github.com/googlemaps/v3-utility-library -->
+<!-- 'StyledMarker' add-in from Google Maps V3 Utility Library. See:  https://github.com/googlemaps/v3-utility-library -->
 <script src="libs/StyledMarker.js"></script>
-<!-- <script src="libs/jquery-2.2.4.min.js"></script> -->
-<script src="libs/jquery-2.2.4.js"></script>
+<!-- 'Maplable' add-in from Google Maps V3 Utility Library: -->
+<script src="libs/maplabel.js"></script>
+<!-- <script src="libs/jquery-2.2.4.js"></script> -->
+<script src="libs/jquery-2.2.4.min.js"></script>
+<!-- The following two libs are required by Slick Grid -->
+<script src="libs/jquery.event.drag-2.3.0.js"></script>
+<script src="libs/jquery.event.drop-2.3.0.js"></script>
 <script src="libs/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+<script src="libs/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+<script src="libs/SlickGrid-2.4.1/slick.core.js"></script>
+<script src="libs/SlickGrid-2.4.1/slick.grid.js"></script>
+<script src="libs/SlickGrid-2.4.1/slick.dataview.js"></script>
+
 <script src="libs/underscore-min.js"></script>
 <!-- No longer think we'll need the Proj4, turf, or simplify libraries:
 <script src="libs/proj4js-2.5.0/dist/proj4.js"></script>
@@ -26,7 +36,7 @@
 	<div class="darkBlue"></div>
     <div id="banner"><a href="http://ctps.org/" target="_blank" title="Boston MPO"><img style="height:59px" src="./img/ctps_header.png" title="Opens Boston MPO website in a new window"></a></div>
 </div>
-<h1 class="pagetitle">Prototype of Pedestrian Report Card App version 0.5</h1>
+<h1 class="pagetitle">Prototype of Pedestrian Report Card App version 0.6</h1>
 <div id="wrapper">
     <div id="map_wrapper">
         <div id="map_options_div" role="presentation">
