@@ -1,8 +1,18 @@
+// Pedestrian Report Card Application - main page
+// Author:  Ben Krepp
+// Date:    December and May 2019
+//
+// Data sources:
+// 
+//
+// Dependencies on external libraries:
+//
+//
+// General Comments
+// ================
 // This version reads data loaded from JSON files
-// BK -- 01/23/2019
+//
 
-var serverRoot = 'http://localhost:8888/';
-// var serverRoot = location.protocol + '//' + location.hostname + ':8080/geoserver/';
 
 // Global Google Maps map object
 var map = {};
@@ -47,8 +57,6 @@ var zvhhURL = 'app_data/zero_vehicle_hh_TAZ.geojson';
 var schoolURL = 'app_data/school_college_buffer.geojson';
 var mpo_boundaryURL = 'app_data/ctps_boston_region_mpo_97_land_arc.geojson';
 var mapc_subregionsURL = 'app_data/ctps_mapc_subregions_97_land_arc.geojson';
-
-
 
 // Stuff pertaining to the Slick Grid:
 //
