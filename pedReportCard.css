@@ -114,9 +114,11 @@ td.roadseg_data {
 .ui-widget {
     font-size:80% !important;
 }
+/*
 .tabbody {
     min-height: 250px;
 }
+*/
 #legend_caption {
     margin-top: 5px;
     margin-bottom: 5px;
@@ -133,4 +135,27 @@ td.roadseg_data {
 .legend_svg_line {
     height: 53px;
     width: 100px;
+}
+
+/* Rules added with introduction of Slick Grid control */
+#location_list_div {
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+#location_list_contents {
+    min-height: 200px;
+    min-width:  500px;
+}
+.loc_id_column_header {
+    text-align: left;
+}
+  text-align: right;
+}
+
+#tabs_div {
+    width:  100%;
+    height: fit-content;
+}
+.tabbody {
+    height: fit-content;
 }
