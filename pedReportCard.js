@@ -48,14 +48,39 @@ var schoolURL = 'app_data/school_college_buffer.geojson';
 var mpo_boundaryURL = 'app_data/ctps_boston_region_mpo_97_land_arc.geojson';
 var mapc_subregionsURL = 'app_data/ctps_mapc_subregions_97_land_arc.geojson';
 
+
+
+// Stuff pertaining to the Slick Grid:
+//
+// Slick Grid 'grid' object and grid options
+var grid = null;
+var gridOptions = { enableColumnReorder : false, autoHeight: true, forceFitColumns: true };
+// Stuff for grid columns
+// N.B. The width values reflect the jQueryUI font size being throttled-back to 80% of its default size in tipApp.css
+var gridColumns = [ { id : 'loc_id_col',    name : 'CTPS ID#',       field : 'loc_id', width : 100, sortable: true, toolTip: 'Click column header to sort this column.',
+                      headerCssClass : 'loc_id_column_header',
+                      formatter : function(row, cell, value, columnDef, dataContext) {
+                                      return '<a href=pedDetail.html?loc_id=' + value + ' target="_blank">' + value + '</a>';
+                                  } 
+                    },
+                    { id : 'type_col',      name : 'Type',             field : 'type',      width : 100, sortable : true, toolTip: 'Click column header to sort this column.' }, 
+                    { id : 'muni_col',      name : 'Municipality',     field : 'muni',      width : 100, sortable : true, toolTip: 'Click column header to sort this column.' },
+                    { id : 'muni2_col',     name : 'Municipality 2',   field : 'muni2',     width : 100, sortable : true, toolTip: 'Click column header to sort this column.' },
+                    { id : 'loc_col',       name : 'Location',         field : 'loc',       width : 150, sortable : true, toolTip: 'Click column header to sort this column.' },
+                    { id : 'loc_desc_col',  name : 'Description',      field : 'loc_desc',  width : 350, sortable : true, toolTip: 'Click column header to sort this column.'}
+                 ];
+// Slick Grid 'dataView' object
+var dataView = null;    
+
 var getJson = function(url) {
     return $.get(url, null, 'json');
 };
 
+// Hack to enable Google Map to be rendered when relevant tab is exposed for the first time only. Yeech.
+var searchTabExposed = false;
+
 $(document).ready(function() {
-    $('#output_div').hide();
-    // Enable jQueryUI tabs
-    $('#tabs_div').tabs();
+    // Arm event handlers for buttons
     $('#reset_button').click(function(e) {
         location.reload();
     });
@@ -66,8 +91,69 @@ $(document).ready(function() {
     $('#help_button').click(function(e) {
         var url = 'Help.html'
         window.open(url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes')
-    })
+    });    
     
+    // *** When the window resizes, resize the header row in the SlickGrid
+    //     N.B. This is an unabashed hack!
+    //     Also see the jQueryUI tabs constructor, abobve
+    $(window).resize(function(e) {
+        grid.resizeCanvas();
+        var sg_colhdrs = $('.ui-state-default.slick-header-column');
+        var i, totalLength = 0;
+        for (i = 0; i < sg_colhdrs.length; i++) {
+            totalLength += sg_colhdrs[i].clientWidth;
+        }
+        $('div.slick-pane.slick-pane-header.slick-pane-left').width(totalLength);      
+    });
+ 
+/* 
+    $('#tabs_div').tabs({
+        heightStyle : 'content',
+        activate    : function(event, ui) {
+            if (ui.newTab.index() == 1 && searchTabExposed == false) {
+                // *** TBD *** Expose the following call IF we decide to nest the map within the 'search' tab
+                // initializeMap();
+                searchTabExposed = true;
+                // *** Clean up the SlickGrid's header row
+                //     N.B. This is an unabashed hack!
+                //     Also see window.resize() handler, below
+                var sg_colhdrs = $('.ui-state-default.slick-header-column');
+                var i, totalLength = 0;
+                for (i = 0; i < sg_colhdrs.length; i++) {
+                    totalLength += sg_colhdrs[i].clientWidth;
+                }
+               $('div.slick-pane.slick-pane-header.slick-pane-left').width(totalLength);
+            }
+        }
+    });
+*/
+    
+    // Initialize the machinery for the Slick Grid
+    //
+    dataView = new Slick.Data.DataView();
+    grid = new Slick.Grid('#location_list_contents', dataView, gridColumns, gridOptions);
+    dataView.onRowCountChanged.subscribe(function(e, args) {
+        grid.updateRowCount();
+        grid.render();
+    });
+    dataView.onRowsChanged.subscribe(function(e, args) {
+        grid.invalidateRows(args.rows);
+        grid.render();
+    });
+    // Right now, we only support numeric sorting... more TBD
+    grid.onSort.subscribe(function(e, args) {
+        function NumericSorter(a, b) {
+            var x = a[sortcol], y = b[sortcol];
+            return sortdir * (x == y ? 0 : (x > y ? 1 : -1));
+        }
+        var sortdir = args.sortAsc ? 1 : -1;
+        var sortcol = args.sortCol.field;
+        dataView.sort(NumericSorter, sortdir);
+        args.grid.invalidateAllRows();
+        args.grid.render();
+    }); 
+    
+    // Load adata
     $.when(getJson(pointsURL),   
            getJson(linesURL),
            getJson(mpo_boundaryURL),
@@ -85,11 +171,53 @@ $(document).ready(function() {
         DATA.lines = JSON.parse(lines[0]);
         DATA.mpo_boundary = JSON.parse(mpo_boundary[0]);
         DATA.mapc_subregions = JSON.parse(mapc_subregions[0]);
-        initMap(DATA);
+        initializeMap(DATA);
+        initializeGrid(DATA);
     });       
 });	
 
-function initMap(data) {
+// initGrid - populate SlickGrid with data for scored locations
+// For the first version of the app, we display ALL scored locations
+function initializeGrid(data) {
+    var i, j;
+    var aData = []; // Array used to populate the SlickGrid
+    
+    for (i = 0; i < data.lines.features.length; i++) {
+        aData[i] = {    'id'        : 'id' + i,
+                        'loc_id'    : data.lines.features[i].properties['Id'],                       
+                        'type'      : 'Roadway Segment',
+                        'muni'      : data.lines.features[i].properties['Municipality'],                       
+                        'muni2'     : data.lines.features[i].properties['Municipality_2'] !== 'N/A' ? data.lines.features[i].properties['Municipality_2'] : '',
+                        'loc'       : data.lines.features[i].properties['Location'],
+                        'loc_desc'  : data.lines.features[i].properties['Location_Description']
+        };         
+    } // for each line (roadway segement)
+
+    for (j = 0; j < data.points.features.length; j++) {
+        aData[i] = {    'id'        : 'id' + i,
+                        'loc_id'    : data.points.features[j].properties['Id'],                       
+                        'type'      : 'Intersection',
+                        'muni'      : data.points.features[j].properties['Municipality'],                       
+                        'muni2'     : data.points.features[j].properties['Municipality_2'] !== 'N/A' ? data.points.features[i].properties['Municipality_2'] : '',
+                        'loc'       : data.points.features[j].properties['Location'],
+                        'loc_desc'  : data.points.features[j].properties['Location_Description']
+        };
+        i += 1;
+    } // for each point (intersection)
+
+    // Clear out the items currently in the dataView, load it with the new data, and render it in the grid
+    // 
+    var i, tmp, len = dataView.getLength();
+    dataView.beginUpdate();
+    for (i = 0; i < len; i++) {
+        tmp = dataView.getItem(i);
+        dataView.deleteItem(tmp.id);
+    }
+    dataView.endUpdate();
+    dataView.setItems(aData); // This call populates the SlickGrid
+} // initializeGrid()
+
+function initializeMap(data) {
     var regionCenterLat = 42.345111165; 
 	var regionCenterLng = -71.124736685;
     var zoomLev = 10;
@@ -111,7 +239,24 @@ function initMap(data) {
 	map = new google.maps.Map(document.getElementById("map"), mapOptions);
     google.maps.event.addListener(map, "bounds_changed", function boundsChangedHandler(e) { } );
     
-    // Un petit hacque to get the map's "bounds_changed" event to fire.
+    // START of petite hacque to set scale bar units to miles/imperial instead of km/metric:
+    // See: https://stackoverflow.com/questions/18067797/how-do-i-change-the-scale-displayed-in-google-maps-api-v3-to-imperial-miles-un
+    // and: https://issuetracker.google.com/issues/35825255
+    var intervalTimer = window.setInterval(function() {
+        var elements = document.getElementById("map").getElementsByClassName("gm-style-cc");
+        for (var i in elements) {
+            // look for 'km' or 'm' in innerText via regex https://regexr.com/3hiqa
+            if ((/\d\s?(km|(m\b))/g).test(elements[i].innerText)) {
+                // The following call effects the change of scale bar units
+                elements[i].click();
+                window.clearInterval(intervalTimer);
+            }
+        }
+    }, 500);
+    window.setTimeout(function() { window.clearInterval(intervalTimer) }, 20000 );
+    // END of peitie hacque to set scale bar units to miles/imperial instead of km/metric   
+    
+    // Deuxième petite hacque, this one to get the map's "bounds_changed" event to fire.
     // Believe it or not: When a Google Maps map object is created, its bounding
     // box is undefined (!!). Thus calling map.getBounds on a newly created map
     // will raise an error. We are compelled to force a "bounds_changed" event to fire.
@@ -248,10 +393,11 @@ function initMap(data) {
         // For road segment features (i.e., geomType is 'MultiLineString' or 'LineString'), the 'Location' (i.e., road name)
         // should appear before the 'Location_Description' (i.e., the start- and end-locations of the road segment.
         var loc_desc = '';
+        var heading = '';
         if (geomType == 'MultiLineString' || geomType == 'LineString') {
-            loc_desc = props['Location'] + '<br/>';
+            heading = props['Location'] + '<br/>';
         }
-        loc_desc += props['Location_Description'] + ' - ' + props['Municipality'];
+        loc_desc = props['Location_Description'] + ' - ' + props['Municipality'];
         var src_abstract_prop = props['Source_Abstract_Link'];
         var src_pdf_prop = props['Source_PDF'];
         var mpo_calendar_pdf_prop = props['MPO_Calendar_Source_PDF'];
@@ -260,7 +406,9 @@ function initMap(data) {
         var mpo_calendar_blurb = (mpo_calendar_pdf_prop) != null ? '<p><a href="' + mpo_calendar_pdf_prop + '"' + ' target="_blank">MPO CalendarSource PDF</a></p>' : '';
         var content = '<div id="info">';
         content += geomType == 'Point' ? '<h4>Intersection Location</h4>' : '<h4>Roadway Segment Location</h4>';
-        content += '<p>' + loc_desc + '</p>';
+        content += '<p>' + heading + '</p>';
+        var loc_desc_with_url = '<a href="pedDetail.html?loc_id=' + props['Id'] + '" target="_blank">' + loc_desc + '</a></p>';
+        content += '<p>' + loc_desc_with_url + '</p>';
         content += src_abstract_blurb;
         content += src_pdf_blurb;
         content += mpo_calendar_blurb;
@@ -281,7 +429,9 @@ function initMap(data) {
         style.visible = state;
         DATA.overlays[layer_name].setStyle(style);
     });
-} // initMap()
+} // initializeMap()
+
+
 
 function displayLocationDetail(feature) {
     // Helper function to map a "rating" value encoded to an integer to the corresponding human-readable string
