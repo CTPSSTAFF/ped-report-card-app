@@ -53,7 +53,7 @@ var DATA = { 'points'   : null,
                             'school_buf' : null
              }
 }; // DATA {}
-// N.B. overlays are not visible on app start-up
+// N.B. overlays are not visible when page loads
 var overlayStyles = {   'low_income'    : { fillColor: '#66c2a5', fillOpacity: 0.5, strokeColor : '#66c2a5', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
                         'minority'      : { fillColor: '#fc8d62', fillOpacity: 0.5, strokeColor : '#fc8d62', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
                         'elderly'       : { fillColor: '#8da0cb', fillOpacity: 0.5, strokeColor : '#8da0cb', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
@@ -226,6 +226,8 @@ function initializeGrid(data) {
         };
         i += 1;
     } // for each point (intersection)
+    
+    aData.sort(function(reca, recb) { return reca['loc_id'] - recb['loc_id']; });
 
     // Clear out the items currently in the dataView, load it with the new data, and render it in the grid
     // 
