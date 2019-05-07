@@ -13,6 +13,11 @@
 // Please see header comments in pedReportCard.js
 //
 
+// Google Maps map object
+var map = {};    
+ // Global "database" of JSON data read
+var DATA = {};    
+
 $(document).ready(function() {
     console.log('Hello from location detail page.');
     
@@ -26,16 +31,11 @@ $(document).ready(function() {
     var mpo_boundaryURL = 'app_data/ctps_boston_region_mpo_97_land_arc.geojson';
     var mapc_subregionsURL = 'app_data/ctps_mapc_subregions_97_land_arc.geojson';
 
-     // Global "database" of JSON data read
-    var DATA = {};    
- 
     // Enable jQueryUI tabs
    //  $('#tabs_div').tabs({ heightStyle : 'content' });
     
     // Stuff pertaining to the Google Map:
-    //
-    // Google Maps map object
-    var map = {};    
+    // 
     // Initialize the Google Map
     var regionCenterLat = 42.345111165; 
     var regionCenterLng = -71.124736685;
@@ -117,6 +117,73 @@ $(document).ready(function() {
     }); // handler for 'when loading of data is done' event   
 
     function displayLocationDetail(feature) {
+        
+        // Nested helper function to map a report card location
+        function mapLocation(feature) {
+            var gmPolyline = {},  aFeatCoords = [], point = {}, aAllPoints = [], bbox = [], googleBounds = {}, loc = {}, marker = {};
+            var i, j, aCoord;
+            var colour = '#ff8c00'; // Really, a 'const'
+            var featureKind = feature.geometry['type'];
+            if (featureKind === 'Point') {
+                console.log('Rendering Point feature with location ID  ' + feature.properties['Location_ID']);
+                loc = new google.maps.LatLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0])
+                marker = new StyledMarker({
+                        styleIcon   : new StyledIcon(StyledIconTypes.MARKER,{color : colour}),
+                        position    : loc,
+                        map         : map
+                    });  
+                map.setCenter(loc);
+                map.setZoom(17);
+            } else if (featureKind === 'MultiLineString' || featureKind === 'LineString') {
+                if (featureKind === 'MultiLineString') {
+                    console.log('Rendering MultiLintString feature with location ID  ' + feature.properties['Location_ID']);
+                    aFeatCoords = feature.geometry.coordinates;
+                    for (i = 0; i < aFeatCoords.length; i++) {
+                        aAllPoints = [];
+                        // Render each LineString in the MultiLineString individually
+                        for (j = 0; j < aFeatCoords[i].length; j++) {
+                            aCoord = aFeatCoords[i][j];
+                            point = new google.maps.LatLng({ 'lat': aCoord[1], 'lng': aCoord[0] });
+                            aAllPoints.push(point);
+                        } // for j in aFeatCoords[i]
+                        
+                         
+                        gmPolyline = new google.maps.Polyline({ path            : aAllPoints,
+                                                                map             : map,
+                                                                strokeColor     : colour,
+                                                                strokeOpacity   : 0.7,
+                                                                strokeWeight    : 6 });
+                    } // for i in aFeatureCoords.length
+                } else {
+                    // featureKind === 'LineString'
+                    console.log('Rendering LineString feature with location ID  ' + feature.properties['Location_ID']);
+                    aFeatCoords = feature.geometry.coordinates;
+                    for (i = 0; i < aFeatCoords.length; i++ ) {
+                        aCoord = aFeatCoords[i];
+                        point = new google.maps.LatLng({ 'lat': aCoord[1], 'lng': aCoord[0] });
+                        aAllPoints.push(point);
+                        gmPolyline = new google.maps.Polyline({ path            : aAllPoints,
+                                                                map             : map,
+                                                                strokeColor     : colour,
+                                                                strokeOpacity   : 0.7,
+                                                                strokeWeight    : 6 });
+                    } // for i in aFeatureCoords.length   
+                } // end-if-else MultiLineString / LineString
+                // Pan/zoom map to bounding box of LineString/MultiLineString feature
+                bbox = turf.bbox(feature);
+                // Return value of turf.bbox() has the form: [minX, minY, maxX, maxY]
+                // Morph this into a form Google Maps can digest
+                googleBounds = new google.maps.LatLngBounds();
+                googleBounds.extend({ lat : bbox[1], lng : bbox[0] });
+                googleBounds.extend({ lat : bbox[3], lng : bbox[2] });
+                map.fitBounds(googleBounds);                
+            } else {
+                console.log('Feature ' + feature.properties['Location_Id'] + ' has unrecognized geometry type: ' + featureKind + '.');
+                return;
+            }
+        } // mapLocation()
+        
+        
         // Nested helper function to map a "rating" value encoded to an integer to the corresponding human-readable string
         // These "ratings" appear in the Safety and Capacity Management and Mobility detail tables
         function ratingEncodingToString(encoding) {
@@ -141,6 +208,7 @@ $(document).ready(function() {
         // N.B. The data presented for intersections and road segments differs (but not completely)
         //      Please read comments in the code and take note of "if (featureKind == ...)" statements, below.
         //
+        mapLocation(feature);
         var featureKind = feature.geometry['type'];
         var props = feature.properties; 
         
