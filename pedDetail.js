@@ -2,12 +2,6 @@
 // Author:  Ben Krepp
 // Date:    May 2019
 //
-// Data sources:
-  
-//
-// Dependencies on external libraries:
-
-//
 // General Comments
 // ================
 // Please see header comments in pedReportCard.js
@@ -18,9 +12,7 @@ var map = {};
  // Global "database" of JSON data read
 var DATA = {};    
 
-$(document).ready(function() {
-    console.log('Hello from location detail page.');
-    
+$(document).ready(function() {    
     var pointsURL = 'app_data/intersections_fc.geojson';
     var linesURL  = 'app_data/roadseg_fc.geojson';  
     var low_incomeURL = 'app_data/low_income_TAZ.geojson';
@@ -116,8 +108,7 @@ $(document).ready(function() {
          displayLocationDetail(loc);
     }); // handler for 'when loading of data is done' event   
 
-    function displayLocationDetail(feature) {
-        
+    function displayLocationDetail(feature) {      
         // Nested helper function to map a report card location
         function mapLocation(feature) {
             var gmPolyline = {},  aFeatCoords = [], point = {}, aAllPoints = [], bbox = [], googleBounds = {}, loc = {}, marker = {};
@@ -182,8 +173,7 @@ $(document).ready(function() {
                 return;
             }
         } // mapLocation()
-        
-        
+               
         // Nested helper function to map a "rating" value encoded to an integer to the corresponding human-readable string
         // These "ratings" appear in the Safety and Capacity Management and Mobility detail tables
         function ratingEncodingToString(encoding) {
@@ -358,10 +348,5 @@ $(document).ready(function() {
         $('#zero_vehicle_hhs').html(props['High_Prop__of_Pop__without_Vehicle'] != null ? props['High_Prop__of_Pop__without_Vehicle'] : '');
         
         $('#output_div').show();
-    } // displayLocationDetail()
-
-
-
-    
-    
+    } // displayLocationDetail()    
 }); // end of document-ready event handler
