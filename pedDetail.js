@@ -9,59 +9,46 @@
 
 // Google Maps map object
 var map = {};    
- // Global "database" of JSON data read
-var DATA = {};    
 
-$(document).ready(function() {    
-    var pointsURL = 'app_data/intersections_fc.geojson';
-    var linesURL  = 'app_data/roadseg_fc.geojson';  
-    var low_incomeURL = 'app_data/low_income_TAZ.geojson';
-    var minorityURL = 'app_data/minority_TAZ.geojson';
-    var elderlyURL = 'app_data/elderly_TAZ.geojson';
-    var zvhhURL = 'app_data/zero_vehicle_hh_TAZ.geojson';
-    var schoolURL = 'app_data/school_college_buffer.geojson';
-    var mpo_boundaryURL = 'app_data/ctps_boston_region_mpo_97_land_arc.geojson';
-    var mapc_subregionsURL = 'app_data/ctps_mapc_subregions_97_land_arc.geojson';
+// Color codes for drawaing boundaries of MPO and MAPC subregions
+var subregionBoundaryColor = 'brown';
+var mpoBoundaryColor = '#00a674'; // "Medium Spring Green"
 
+// Global "database" of point, line, and polygon features read from GeoJSON data sources
+// Point features - intersection locations
+// Line features - road segment locations
+// Polygon features - overlay layers
+var DATA = { 'points'   : null, 
+             'lines'    : null,
+             'overlays' : { 'low_income' : null,
+                            'minority'   : null,
+                            'elderly'    : null,
+                            'zvhh'       : null,
+                            'school_buf' : null
+             }
+}; // DATA {}
+// N.B. overlays are not visible when page loads
+var overlayStyles = {   'low_income'    : { fillColor: '#66c2a5', fillOpacity: 0.5, strokeColor : '#66c2a5', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
+                        'minority'      : { fillColor: '#fc8d62', fillOpacity: 0.5, strokeColor : '#fc8d62', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
+                        'elderly'       : { fillColor: '#8da0cb', fillOpacity: 0.5, strokeColor : '#8da0cb', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
+                        'zvhh'          : { fillColor: '#e78ac3', fillOpacity: 0.5, strokeColor : '#e78ac3', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
+                        'school_buf'    : { fillColor: '#a6d854', fillOpacity: 0.8, strokeColor : '#a6d854', strokeOpacity: 0.9, strokeWeight: 1.0, visible: false }
+}; // overlayStyles {}
+
+var pointsURL = 'app_data/intersections_fc.geojson';
+var linesURL  = 'app_data/roadseg_fc.geojson';  
+var low_incomeURL = 'app_data/low_income_TAZ.geojson';
+var minorityURL = 'app_data/minority_TAZ.geojson';
+var elderlyURL = 'app_data/elderly_TAZ.geojson';
+var zvhhURL = 'app_data/zero_vehicle_hh_TAZ.geojson';
+var schoolURL = 'app_data/school_college_buffer.geojson';
+var mpo_boundaryURL = 'app_data/ctps_boston_region_mpo_97_land_arc.geojson';
+var mapc_subregionsURL = 'app_data/ctps_mapc_subregions_97_land_arc.geojson';
+
+$(document).ready(function() { 
     // Enable jQueryUI tabs
-   //  $('#tabs_div').tabs({ heightStyle : 'content' });
+    //  $('#tabs_div').tabs({ heightStyle : 'content' });
     
-    // Stuff pertaining to the Google Map:
-    // 
-    // Initialize the Google Map
-    var regionCenterLat = 42.345111165; 
-    var regionCenterLng = -71.124736685;
-    var initialZoomLev = 10;
-    var mapOptions = {
-        center: new google.maps.LatLng(regionCenterLat, regionCenterLng),
-        zoom: initialZoomLev,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        mapTypeControlOptions: {'style': google.maps.MapTypeControlStyle.DROPDOWN_MENU},
-        panControl: false,
-        streetViewControl: false,
-        zoomControlOptions: {'style': 'SMALL'},
-        scaleControl: true,
-        overviewMapControl: false
-    };   
-    map = new google.maps.Map(document.getElementById("map"), mapOptions);    
-
-    // START of petite hacque to set scale bar units to miles/imperial instead of km/metric:
-    // See: https://stackoverflow.com/questions/18067797/how-do-i-change-the-scale-displayed-in-google-maps-api-v3-to-imperial-miles-un
-    // and: https://issuetracker.google.com/issues/35825255
-    var intervalTimer = window.setInterval(function() {
-        var elements = document.getElementById("map").getElementsByClassName("gm-style-cc");
-        for (var i in elements) {
-            // look for 'km' or 'm' in innerText via regex https://regexr.com/3hiqa
-            if ((/\d\s?(km|(m\b))/g).test(elements[i].innerText)) {
-                // The following call effects the change of scale bar units
-                elements[i].click();
-                window.clearInterval(intervalTimer);
-            }
-        }
-    }, 500);
-    window.setTimeout(function() { window.clearInterval(intervalTimer) }, 20000 );
-    // END of peitie hacque to set scale bar units to miles/imperial instead of km/metric   
- 
     // Utility function to return the value of the parameter named 'sParam' from the window's URL
     function getURLParameter(sParam) {
         var sPageURL = window.location.search.substring(1);
@@ -83,16 +70,25 @@ $(document).ready(function() {
     };
 
     $.when(getJson(pointsURL), 
-           getJson(linesURL)
+           getJson(linesURL),
+           getJson(mpo_boundaryURL),
+           getJson(mapc_subregionsURL)
     ).done(function(points, 
-                    lines) {
+                    lines,
+                    mpo_boundary,
+                    mapc_subregions) {
         var ok = _.every(arguments, function(arg) { return arg[1] === "success"; });
         if (ok === false) {
-            alert("One or more WFS requests failed. Exiting application.");
+            alert("One or more requests to load JSON data failed. Exiting application.");
             return;         
         }
         DATA.points = JSON.parse(points[0]);;
         DATA.lines = JSON.parse(lines[0]);
+        DATA.mpo_boundary = JSON.parse(mpo_boundary[0]);
+        DATA.mapc_subregions = JSON.parse(mapc_subregions[0]);
+        
+        initializeMap(DATA);
+        
         var loc;
         var loc_id = +(getURLParameter('loc_id'));
         if (loc_id < 1000) {
@@ -106,7 +102,103 @@ $(document).ready(function() {
         }
          console.log('Rendering detail page for location ' + loc_id + '.');
          displayLocationDetail(loc);
-    }); // handler for 'when loading of data is done' event   
+    }); // handler for 'when loading of data is done' event  
+
+    function initializeMap(data) {
+        // Initialize the Google Map
+        var regionCenterLat = 42.345111165; 
+        var regionCenterLng = -71.124736685;
+        var initialZoomLev = 10;
+        var mapOptions = {
+            center: new google.maps.LatLng(regionCenterLat, regionCenterLng),
+            zoom: initialZoomLev,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControlOptions: {'style': google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+            panControl: false,
+            streetViewControl: false,
+            zoomControlOptions: {'style': 'SMALL'},
+            scaleControl: true,
+            overviewMapControl: false
+        };   
+        map = new google.maps.Map(document.getElementById("map"), mapOptions);    
+
+        // START of petite hacque to set scale bar units to miles/imperial instead of km/metric:
+        // See: https://stackoverflow.com/questions/18067797/how-do-i-change-the-scale-displayed-in-google-maps-api-v3-to-imperial-miles-un
+        // and: https://issuetracker.google.com/issues/35825255
+        var intervalTimer = window.setInterval(function() {
+            var elements = document.getElementById("map").getElementsByClassName("gm-style-cc");
+            for (var i in elements) {
+                // look for 'km' or 'm' in innerText via regex https://regexr.com/3hiqa
+                if ((/\d\s?(km|(m\b))/g).test(elements[i].innerText)) {
+                    // The following call effects the change of scale bar units
+                    elements[i].click();
+                    window.clearInterval(intervalTimer);
+                }
+            }
+        }, 500);
+        window.setTimeout(function() { window.clearInterval(intervalTimer) }, 20000 );
+        // END of peitie hacque to set scale bar units to miles/imperial instead of km/metric       
+
+        // Deuxième petite hacque, this one to get the map's "bounds_changed" event to fire.
+        // Believe it or not: When a Google Maps map object is created, its bounding
+        // box is undefined (!!). Thus calling map.getBounds on a newly created map
+        // will raise an error. We are compelled to force a "bounds_changed" event to fire.
+        // Larry and Sergey: How did you let this one through the cracks??
+        map.setCenter(new google.maps.LatLng(regionCenterLat + 0.000000001, regionCenterLng + 0.000000001));        
+        
+        // Add static (non-toggle-able) overlay layers to Google Map
+        // Draw MAPC subregions on Google Map - note: this FC consists of MULTIPLE features
+        var i, lineFeature;
+        for (i = 0; i < data.mapc_subregions.features.length; i++) {
+            lineFeature = data.mapc_subregions.features[i];
+            drawPolylineFeature(lineFeature, map, { strokeColor : subregionBoundaryColor, strokeOpacity : 1.0, strokeWeight: 1.5 });
+        }
+        // Draw MPO boundary on Google Map - this FC consists of a single feature
+        var lineFeature = data.mpo_boundary.features[0];
+        drawPolylineFeature(lineFeature, map, { strokeColor : mpoBoundaryColor, strokeOpacity : 0.7, strokeWeight: 8 });        
+ 
+        // Add toggle-able overlay layers to the GoogleMap - AFTER the base map has loaded
+        // The JSON payload for these is large and delays map rendering at app start up
+        $.when(getJson(low_incomeURL),
+               getJson(minorityURL),
+               getJson(elderlyURL),
+               getJson(zvhhURL),
+               getJson(schoolURL)
+        ).done(function(low_income,
+                        minority,
+                        elderly,
+                        zvhh,
+                        school_buf) {
+            var ok = _.every(arguments, function(arg) { return arg[1] === "success"; });
+            if (ok === false) {
+                alert("One or more requests to load JSON data for map overlays failed. Exiting application.");
+                return;   
+            }
+            [{ data  : low_income,   name : 'low_income' },
+             { data  : minority,     name : 'minority'   },
+             { data  : elderly,      name : 'elderly'    }, 
+             { data  : zvhh,         name : 'zvhh'       },
+             { data  : school_buf,   name : 'school_buf' }
+            ].forEach(
+                function addMapOverlay(lyr) {
+                    DATA.overlays[lyr.name] = new google.maps.Data();
+                    DATA.overlays[lyr.name].addGeoJson(JSON.parse(lyr.data[0]));
+                    DATA.overlays[lyr.name].setStyle(overlayStyles[lyr.name]);
+                    DATA.overlays[lyr.name].setMap(map);           
+                });
+         }); // Logic to add map overlay layers    
+         
+        // on-change handler for map overlay layer selection checkboxes
+        // Toggle visibility of indicated overlay layer
+        $('.layer_toggle').change(function(e) {
+            var target_id = e.target.id;
+            var layer_name = target_id.replace('_toggle','');
+            var state = $('#' + target_id).prop('checked');        
+            var style = DATA.overlays[layer_name].getStyle();
+            style.visible = state;
+            DATA.overlays[layer_name].setStyle(style);
+        });
+    } // initializeMap()
 
     function displayLocationDetail(feature) {      
         // Nested helper function to map a report card location
@@ -136,9 +228,7 @@ $(document).ready(function() {
                             aCoord = aFeatCoords[i][j];
                             point = new google.maps.LatLng({ 'lat': aCoord[1], 'lng': aCoord[0] });
                             aAllPoints.push(point);
-                        } // for j in aFeatCoords[i]
-                        
-                         
+                        } // for j in aFeatCoords[i]                       
                         gmPolyline = new google.maps.Polyline({ path            : aAllPoints,
                                                                 map             : map,
                                                                 strokeColor     : colour,
@@ -350,3 +440,43 @@ $(document).ready(function() {
         $('#output_div').show();
     } // displayLocationDetail()    
 }); // end of document-ready event handler
+
+// *** Temp home of utility function
+function drawPolylineFeature(lineFeature, gMap, style) {
+    var gmPolyline = {}, aFeatCoords = [], point = {}, aAllPoints = [];
+    var i, j;
+    if (lineFeature.geometry.type === 'MultiLineString') {
+        // console.log('Rendering MultiLintString feature.');
+        aFeatCoords = lineFeature.geometry.coordinates;
+        for (i = 0; i < aFeatCoords.length; i++) {
+            aAllPoints = [];
+            // Render each LineString in the MultiLineString individually
+            for (j = 0; j < aFeatCoords[i].length; j++) {
+                aCoord = aFeatCoords[i][j];
+                point = new google.maps.LatLng({ 'lat': aCoord[1], 'lng': aCoord[0] });
+                aAllPoints.push(point);
+            } // for j in aFeatCoords[i]
+            gmPolyline = new google.maps.Polyline({ path            : aAllPoints,
+                                                    map             : gMap,
+                                                    strokeColor     : style.strokeColor,
+                                                    strokeOpacity   : style.strokeOpacity,
+                                                    strokeWeight    : style.strokeWeight });
+        } // for i in aFeatureCoords.length
+    } else if (lineFeature.geometry.type === 'LineString') {
+        // console.log('Rendering LineString feature.');
+        aFeatCoords = lineFeature.geometry.coordinates;
+        for (i = 0; i < aFeatCoords.length; i++ ) {
+            aCoord = aFeatCoords[i];
+            point = new google.maps.LatLng({ 'lat': aCoord[1], 'lng': aCoord[0] });
+            aAllPoints.push(point);
+        } // for i in aFeatureCoords.length
+        gmPolyline = new google.maps.Polyline({ path            : aAllPoints,
+                                                map             : gMap,
+                                                strokeColor     : style.strokeColor,
+                                                strokeOpacity   : style.strokeOpacity,
+                                                strokeWeight    : style.strokeWeight });
+    } else {
+        console.log('Feature has unrecognized geometry type: ' + lineFeature.geometry.type);
+        return;
+    }
+} //drawPolylineFeature()
