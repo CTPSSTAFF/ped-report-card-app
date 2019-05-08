@@ -45,6 +45,23 @@ var schoolURL = 'app_data/school_college_buffer.geojson';
 var mpo_boundaryURL = 'app_data/ctps_boston_region_mpo_97_land_arc.geojson';
 var mapc_subregionsURL = 'app_data/ctps_mapc_subregions_97_land_arc.geojson';
 
+// Stuff to support labeling (centroids of) MAPC subregions
+var subregionCentroids = {
+    'ICC'       :  { name:  'ICC',      lng: -71.09714487, lat:	42.36485871 },
+    'ICC/TRIC-1':  { name:  'ICC/TRIC', lng: -71.0843212,  lat: 42.24126261 },  // Milton
+    'ICC/TRIC-2':  { name:  'ICC/TRIC', lng: -71.2410838,  lat: 42.28136977 },  // Needham
+    'MAGIC'     :  { name:  'MAGIC',    lng: -71.42223145, lat:	42.45586713 },
+    'MWRC'      :  { name:  'MWRC',     lng: -71.42305069, lat: 42.30381133 },
+    'NSPC'      :  { name:  'NSPC',     lng: -71.12358836, lat:	42.52346751 },
+    'NSTF'      :  { name:  'NSTF',     lng: -70.85369176, lat:	42.60673553 },
+    'SSC'       :  { name:  'SSC',      lng: -70.85128535, lat: 42.17717592 },
+    'SWAP'      :  { name:  'SWAP',     lng: -71.42819003, lat:	42.13804556 },
+    'TRIC'      :  { name:  'TRIC',     lng: -71.20413265, lat:	42.16445925 },
+    'TRIC/SWAP' :  { name:  'TRIC/SWAP',lng: -71.28420378, lat:	42.2366124  }
+}; 
+// Array of labels rendered using V3 Utility Library
+var mapLabels = [];
+
 $(document).ready(function() { 
     // Enable jQueryUI tabs
     //  $('#tabs_div').tabs({ heightStyle : 'content' });
@@ -155,7 +172,66 @@ $(document).ready(function() {
         }
         // Draw MPO boundary on Google Map - this FC consists of a single feature
         var lineFeature = data.mpo_boundary.features[0];
-        drawPolylineFeature(lineFeature, map, { strokeColor : mpoBoundaryColor, strokeOpacity : 0.7, strokeWeight: 8 });        
+        drawPolylineFeature(lineFeature, map, { strokeColor : mpoBoundaryColor, strokeOpacity : 0.7, strokeWeight: 8 });     
+
+    // Label the centroids of the MAPC subregions using the MapLabel class from the Google Maps v3 Utility Library
+    var mapLabel, latlng;
+    for (var subregion in subregionCentroids) {
+        latlng = new google.maps.LatLng(subregionCentroids[subregion].lat, subregionCentroids[subregion].lng);
+        mapLabel = new MapLabel( { text:       subregionCentroids[subregion].name,
+                                   position:   latlng,
+                                   map:        map,
+                                   fontSize:   10,
+                                   fontStyle:  'italic',
+                                   fontColor:  '#ff0000',
+                                   align:      'center'
+                   });
+        mapLabel.set('position', latlng);
+        mapLabels.push(mapLabel);
+    }
+    // Fiddle with the font size of the labels, so they appear to "zoom"
+    // Between zoom levels 10 and 16, it looks like the zoom level itself can be used pretty well as the font size!
+    google.maps.event.addListener(map, "zoom_changed", 
+        function zoomChangedHandler(e) { 
+            var i, zoomLev = map.getZoom();
+            // console.log('Zoom level is: ' + zoomLev);
+            for (i = 0; i < mapLabels.length; i++) {
+                if (zoomLev <= 10) { 
+                    mapLabels[i].setOptions({'fontSize' : 10});
+                } else if (zoomLev > 10 && zoomLev <= 16) {
+                    // Just in case (undocumented setOptions API requires literals for option values
+                    // Not sure if this is the case or not ...
+                    switch(zoomLev) {
+                    case 11:
+                        mapLabels[i].setOptions({'fontSize' : 11});
+                        break;
+                    case 12:
+                        mapLabels[i].setOptions({'fontSize' : 12});
+                        break;
+                    case 13:
+                        mapLabels[i].setOptions({'fontSize' : 13});
+                        break;
+                    case 14:
+                        mapLabels[i].setOptions({'fontSize' : 14});
+                        break;
+                    case 15:
+                        mapLabels[i].setOptions({'fontSize' : 15});
+                        break;
+                    case 16:
+                        mapLabels[i].setOptions({'fontSize' : 16});
+                        break;
+                    default:
+                        // Shouldn't get here - arbitrary choice of font size
+                        mapLabels[i].setOptions({'fontSize' : 16});
+                        break;
+                    }
+                } else {
+                    mapLabels[i].setOptions({'fontSize' : 16});
+                }
+            }
+        } );  
+
+        
  
         // Add toggle-able overlay layers to the GoogleMap - AFTER the base map has loaded
         // The JSON payload for these is large and delays map rendering at app start up
