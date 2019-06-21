@@ -1,6 +1,6 @@
 // Pedestrian Report Card Application - location detail page
 // Author:  Ben Krepp
-// Date:    May 2019
+// Date:    May, June 2019
 //
 // General Comments
 // ================
@@ -232,7 +232,6 @@ $(document).ready(function() {
         } );  
 
         
- 
         // Add toggle-able overlay layers to the GoogleMap - AFTER the base map has loaded
         // The JSON payload for these is large and delays map rendering at app start up
         $.when(getJson(low_incomeURL),
@@ -340,9 +339,9 @@ $(document).ready(function() {
             }
         } // mapLocation()
                
-        // Nested helper function to map a "rating" value encoded to an integer to the corresponding human-readable string
+        // Nested helper function to map a "score" value encoded to an integer to the corresponding human-readable string
         // These "ratings" appear in the Safety and Capacity Management and Mobility detail tables
-        function ratingEncodingToString(encoding) {
+        function scoreEncodingToString(encoding) {
             var retval;
             if (encoding != null) {
                 if (encoding >= 0 && encoding <= 1.7) {
@@ -358,7 +357,7 @@ $(document).ready(function() {
                 retval = '';
             }
             return retval;
-        } // ratingEncodingToString()
+        } // scoreEncodingToString()
         
         // Body of displayLocationDetail() begins here
         // N.B. The data presented for intersections and road segments differs (but not completely)
@@ -396,13 +395,13 @@ $(document).ready(function() {
         }
         
         // Overview summary table
-        $('#safety_score').html(props['Safety'] != null ? props['Safety'] : '');
+        $('#safety_score').html(props['Safety'] != null ? props['Safety'].toFixed(2)  : '');
         $('#safety_rating').html(props['Safety_Notes'] != null ? props['Safety_Notes'] : '');
-        $('#sys_preservation_score').html(props['System_Preservation'] != null ? props['System_Preservation'] : '');
+        $('#sys_preservation_score').html(props['System_Preservation'] != null ? props['System_Preservation'].toFixed(2)  : '');
         $('#sys_preservation_rating').html(props['System_Preservation_Notes'] != null ? props['System_Preservation_Notes'] : '');
-        $('#cmm_score').html(props['Capacity_Management_and_Mobility'] != null ? props['Capacity_Management_and_Mobility'] : '');
+        $('#cmm_score').html(props['Capacity_Management_and_Mobility'] != null ? (props['Capacity_Management_and_Mobility']).toFixed(2) : '');
         $('#cmm_rating').html(props['Capacity_Management_and_Mobility_Notes'] != null ? props['Capacity_Management_and_Mobility_Notes'] : '');
-        $('#economic_vitality_score').html(props['Economic_Vitality'] != null ? props['Economic_Vitality'] : '');
+        $('#economic_vitality_score').html(props['Economic_Vitality'] != null ? props['Economic_Vitality'].toFixed(2) : '');
         $('#economic_vitality_rating').html(props['Economic_Vitality_Notes'] != null ? props['Economic_Vitality_Notes'] : '');
         
         // Transportation Equity summary tables
@@ -419,24 +418,20 @@ $(document).ready(function() {
            // Leave all 3 cells blank
         }
         
-        // populateWRWS - helper/utility function to populate Weight, Rating and Weighted Score for a given scoring property;
-        //                the use of this function saves much repetitive code
-        // parameters:  1. propName - name of property to read from 'props' object
-        //              2. htmlPrefix - prefix of HTML elements from/to which values will be read/written;
-        //                              Value will be READ from <thmlPrefix>_weight
-        //                              Values will be WRTTEN to <htmlPrefix>_rating and <htmlPrefix>_wscore
-        //              3. precision - precision (number of digits to right of decimal point) in weighted score
-        function populateWRWS(propName, htmlPrefix, precision) {
-            var weight = +$('#' + htmlPrefix + '_weight').html();
-            var rating = props[propName];
-            $('#' + htmlPrefix + '_rating').html(ratingEncodingToString(rating));
-            var weightedScore = (weight != null && rating != null) ? weight * rating : '';
-            if (weightedScore != '') {
-                $('#' + htmlPrefix + '_wscore').html(weightedScore.toFixed(precision));
-            } else {
-                $('#' + htmlPrefix + '_wscore').html(weightedScore);
-            }
-        } // populateWRWS()
+        // populateScoreAndRating - helper/utility function to populate 'Score' and 'Rating' fields 
+        //                          (formerly 'Rating' and 'Weighted Score') for a given scoring property;
+        //                          the use of this function saves much repetitive code
+        // parameters:  1. propName - name of property to read from 'props' object for 'Score';
+        //                            the name of the property to read for 'Rating' is propName + '_Rating'
+        //              2. htmlPrefix - prefix of HTML elements /to which values will be written;
+        //                              Value will be WRTTEN to htmlPrefix = '_score' and htmlPrefix + '_rati      
+        //              3. score - number of digits of precision in which to render 'Score'
+        function populateScoreAndRating(propName, htmlPrefix, precsion) {
+            var score = parseFloat(props[propName]).toFixed(precsion);     
+            $('#' + htmlPrefix + '_score').html(score);        
+            var rating = props[propName + '_Rating'];
+            $('#' + htmlPrefix + '_rating').html(rating);
+        } // populateScoreAndRating()
         
         // Detail tables
         //
@@ -445,73 +440,79 @@ $(document).ready(function() {
         // Safety detail table - DIFFERENT structure for intersections and roadsegs!
         if (featureKind == 'Point') {
             // Intersection - Sufficient Crossing Time 
-            populateWRWS('Sufficient_Crossing_Time_Index', 'intersection_suff_xing_time', 0);
+            populateScoreAndRating('Sufficient_Crossing_Time_Index', 'intersection_suff_xing_time', 0);
             // Intersection - Pedestrian Crashes
-            populateWRWS('Pedestrian_Crashes', 'intersection_ped_crashes', 0);
+            populateScoreAndRating('Pedestrian_Crashes', 'intersection_ped_crashes', 0);
             // Intersection - Pedestrian Signal Presence
-            populateWRWS('Pedestrian_Signal_Presence', 'intersection_ped_sig_presence', 0);
+            populateScoreAndRating('Pedestrian_Signal_Presence', 'intersection_ped_sig_presence', 0);
             // Intersection - Vehicle Travel Speed
-            populateWRWS('Average_Vehicle_Travel_Speed', 'intersection_veh_travel_speed', 0);
+            populateScoreAndRating('Average_Vehicle_Travel_Speed', 'intersection_veh_travel_speed', 0);
             // Intersection - Safety Total
-            populateWRWS('Safety', 'intersection_safety_total', 0);
+            populateScoreAndRating('Safety', 'intersection_safety_total', 2);
         } else {
             // Roadseg - Pedestrian Crashes
-            populateWRWS('Pedestrian_Crashes', 'roadseg_ped_crashes', 0);
+            populateScoreAndRating('Pedestrian_Crashes', 'roadseg_ped_crashes', 0);
             // Roadseg - Pdestrian/vehicle Buffer
-            populateWRWS('Pedestrian_Vehicle_Buffer', 'roadseg_ped_veh_buffer', 0);
+            populateScoreAndRating('Pedestrian_Vehicle_Buffer', 'roadseg_ped_veh_buffer', 0);
             // Roadseg - Vehicle Travel Speed
-            populateWRWS('Vehicle_Travel_Speed', 'roadseg_veh_travel_speed', 0);
+            populateScoreAndRating('Vehicle_Travel_Speed', 'roadseg_veh_travel_speed', 0);
             // Roadseg - Safety Total
-            populateWRWS('Safety', 'roadseg_safety_total', 0);        
+            populateScoreAndRating('Safety', 'roadseg_safety_total', 2);    
         }
         
         // System Preservation detail table - SAME structure for intersections and roadsegs
-        rating = props['Sidewalk_Condition'];
-        $('#sidewalk_condition').html(ratingEncodingToString(rating));
+        $('#sidewalk_condition_percentage').html('100%');
+        populateScoreAndRating('Sidewalk_Condition', 'sidewalk_condition', 2);
+
           
         // Capacity Management and Mobility detail table - DIFFERENT structure for intersections and roadsegs!
         if (featureKind == 'Point') {   
             // Intersection - Pedestrian Delay
-            populateWRWS('Pedestrian_Delay', 'intersection_pedestrian_delay', 0);
+            populateScoreAndRating('Pedestrian_Delay', 'intersection_pedestrian_delay', 0);
             // Intersection - Sidewalk Presence
-            populateWRWS('Sidewalk_Presence', 'intersection_sidewalk_presence', 0);
-            // Intersection - Curb Ramps
-            populateWRWS('Curb_Ramp_Presence', 'intersection_curb_ramp', 0);
-            // Intersection - Crossing Opportunities
-            populateWRWS('Crossing_Opportunities', 'intersection_crossing_opportunities', 0);
+            populateScoreAndRating('Sidewalk_Presence', 'intersection_sidewalk_presence', 0);
+            // Intersection - Curb Ramp Presence
+            populateScoreAndRating('Curb_Ramp_Presence', 'intersection_curb_ramp_presence', 0);
+            // Intersection - Crosswalk Presence
+            // NOTE: Difference between property name in JSON and 'display name' - was this an oversight?
+            populateScoreAndRating('Crossing_Opportunities', 'intersection_crosswalk_presence', 0);
             // Intesection - Capacity Management and Mobility Total
-            populateWRWS('Capacity_Management_and_Mobility', 'intersection_cmm_total', 2);
+            // *** TBD: open question here
+            populateScoreAndRating('Capacity_Management_and_Mobility', 'intersection_cmm_total', 2);
         } else {
             // Roadseg - Sidewalk Presence
-            populateWRWS('Sidewalk_Presence', 'roadseg_sidewalk_presence', 0);
-            // Roadseg - Crossing Opportunities
-            populateWRWS('Crossing_Opportunities', 'roadseg_crossing_opportunities', 0);
+            populateScoreAndRating('Sidewalk_Presence', 'roadseg_sidewalk_presence', 0);
+            // Roadseg - Crosswalk Presence
+            // NOTE: Difference between property name in JSON and 'display name' - was this an oversight?
+            populateScoreAndRating('Crossing_Opportunities', 'roadseg_crosswalk_presence', 0);
             // Roadseg - Walkway Width
-            populateWRWS('Walkway_Width', 'roadseg_walkway_width', 0);
+            populateScoreAndRating('Walkway_Width', 'roadseg_walkway_width', 0);
             // Roadseg - Capacity Management and Mobility Total
-            populateWRWS('Capacity_Management_and_Mobility', 'roadseg_cmm_total', 2);
+            populateScoreAndRating('Capacity_Management_and_Mobility', 'roadseg_cmm_total', 2);
         }
        
-        // Economic Vitality detail table -  - DIFFERENT structure for intersections and roadsegs!
+        // Economic Vitality detail table -  - DIFFERENT structure for intersections and roadsegs!  
         if (featureKind == 'Point') {
             // Intersection - Pedestrian Volumes
-            rating = props['Pedestrian_Volumes'];
-            $('#inersection_ped_volumes').html(ratingEncodingToString(rating));
+             $('#intersection_ped_volumes_percentage').html('100%');
+            populateScoreAndRating('Pedestrian_Volumes', 'intersection_ped_volumes', 2);
         } else {
             // Roadseg - Pedestrian Volumes
-            populateWRWS('Pedestrian_Volumes', 'roadseg_ped_volumes', 0);
+            $('#roadseg_ped_volumes_percentage').html('100%');
+            populateScoreAndRating('Pedestrian_Volumes', 'roadseg_ped_volumes', 0);
             // Roadseg - Adjacent Bicycle Accommodations
-            populateWRWS('Adjacent_Bicycle_Accommodations', 'roadseg_adj_bike_accommodations', 0);
+            populateScoreAndRating('Adjacent_Bicycle_Accommodations', 'roadseg_adj_bike_accommodations', 0);
             // Roadseg - Economic Vitality Total
-            populateWRWS('Economic_Vitality', 'roadseg_econ_total', 0);
+            populateScoreAndRating('Economic_Vitality', 'roadseg_econ_total', 2);
         }
         
         // Transportation Equity detail table - SAME structure for intersections and roadsegs
         //
-        $('#te_ej_zone').html(props['Environmental_Justice_Zone'] != null ? props['Environmental_Justice_Zone'] : '');
-        $('#school_quarter_mile').html(props['Quarter_Mile_of_School_or_College'] != null ? props['Quarter_Mile_of_School_or_College'] : '');
+        $('#low_income_pop').html(props['Low_Income'] != null ? props['Low_Income'] : '');       
+        $('#minority_pop').html(props['Minority'] != null ? props['Minority'] : '');
         $('#over_75').html(props['High_Prop__of_Pop__Over_75_Years'] != null ? props['High_Prop__of_Pop__Over_75_Years'] : '');
-        $('#zero_vehicle_hhs').html(props['High_Prop__of_Pop__without_Vehicle'] != null ? props['High_Prop__of_Pop__without_Vehicle'] : '');
+        $('#zero_vehicle_hhs').html(props['High_Prop__of_Pop__without_Vehicle'] != null ? props['High_Prop__of_Pop__without_Vehicle'] : '');        
+        $('#school_quarter_mile').html(props['Quarter_Mile_of_School_or_College'] != null ? props['Quarter_Mile_of_School_or_College'] : '');
         
         $('#output_div').show();
     } // displayLocationDetail()    

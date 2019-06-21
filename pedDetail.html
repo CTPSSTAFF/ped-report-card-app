@@ -184,40 +184,40 @@
                 <thead>
                     <tr>
                         <td class="location_table_detail_header">Performance Measure</td>
-                        <td class="location_table_detail_header">Weight</td>
+                        <td class="location_table_detail_header">Percentage</td>
+                        <td class="location_table_detail_header">Score<br>(out of 3.0)</td>
                         <td class="location_table_detail_header">Rating</td>
-                        <td class="location_table_detail_header">Weighted Score</td>
                     </tr>   
                 </thead>
                 <tbody>
                     <tr>
                         <td>Sufficient Crossing Time (Index)</td>
-                        <td id="intersection_suff_xing_time_weight">3</td>
+                        <td id="intersection_suff_xing_time_percentage">38%</td>
+                        <td id="intersection_suff_xing_time_score" class="intersection_data"></td>
                         <td id="intersection_suff_xing_time_rating" class="intersection_data"></td>
-                        <td id="intersection_suff_xing_time_wscore" class="intersection_data"></td>
                     <tr>
                         <td>Pedestrian Crashes</td>
-                        <td id="intersection_ped_crashes_weight">3</td>                        
+                        <td id="intersection_ped_crashes_percentage">38%</td>                        
+                        <td id="intersection_ped_crashes_score" class="intersection_data"></td>
                         <td id="intersection_ped_crashes_rating" class="intersection_data"></td>
-                        <td id="intersection_ped_crashes_wscore" class="intersection_data"></td>
                     </tr>
                     <tr>
                         <td>Pedestrian Signal Presence</td>
-                        <td id="intersection_ped_sig_presence_weight">1</td>
+                        <td id="intersection_ped_sig_presence_percentage">13%</td>
+                        <td id="intersection_ped_sig_presence_score" class="intersection_data"></td>
                         <td id="intersection_ped_sig_presence_rating" class="intersection_data"></td>
-                        <td id="intersection_ped_sig_presence_wscore" class="intersection_data"></td>
                     </tr>
                     <tr>
                         <td>Vehicle Travel Speed</td>
-                        <td id="intersection_veh_travel_speed_weight">1</td>
+                        <td id="intersection_veh_travel_speed_percentage">13%</td>
+                        <td id="intersection_veh_travel_speed_score" class="intersection_data"></td>
                         <td id="intersection_veh_travel_speed_rating" class="intersection_data"></td>
-                        <td id="intersection_veh_travel_speed_wscore" class="intersection_data"></td>
                     </tr>
                     <tr>
                         <td>Total</td>
-                        <td id="intersection_safety_total_weight">8</td>
-                        <td id="intersection_safety_total_rating" class="intersection_data"></td>
-                        <td id="intersection_safety_total_wscore" class="intersection_data"></td>                        
+                        <td id="intersection_safety_total_percentage">100%</td>
+                        <td id="intersection_safety_total_score" class="intersection_data"></td>
+                        <td id="intersection_safety_total_rating" class="intersection_data"></td>                        
                     </tr>
                 </tbody>
             </table>
@@ -226,35 +226,35 @@
                 <thead>
                     <tr>
                         <td class="location_table_detail_header">Performance Measure</td>
-                        <td class="location_table_detail_header">Weight</td>
+                        <td class="location_table_detail_header">Percentage</td>
+                        <td class="location_table_detail_header">Score<br>(out of 3.0)</td>
                         <td class="location_table_detail_header">Rating</td>
-                        <td class="location_table_detail_header">Weighted Score</td>
                     </tr>   
                 </thead>
                 <tbody>                  
                     <tr>
                         <td>Pedestrian Crashes</td>
-                        <td id="roadseg_ped_crashes_weight">3</td>                        
+                        <td id="roadseg_ped_crashes_percentage">60%</td>                        
+                        <td id="roadseg_ped_crashes_score" class="roadseg_data"></td>
                         <td id="roadseg_ped_crashes_rating" class="roadseg_data"></td>
-                        <td id="roadseg_ped_crashes_wscore" class="roadseg_data"></td>
                     </tr>    
                     <tr>
                         <td>Pedestrian-Vehicle Buffer</td>
-                        <td id="roadseg_ped_veh_buffer_weight">1</td>
+                        <td id="roadseg_ped_veh_buffer_percentage">20%</td>
+                        <td id="roadseg_ped_veh_buffer_score" class="roadseg_data"></td>
                         <td id="roadseg_ped_veh_buffer_rating" class="roadseg_data"></td>
-                        <td id="roadseg_ped_veh_buffer_wscore" class="roadseg_data"></td>
                     </tr>                 
                     <tr>
                         <td>Vehicle Travel Speed</td>
-                        <td id="roadseg_veh_travel_speed_weight">1</td>
+                        <td id="roadseg_veh_travel_speed_percentage">20%</td>
+                        <td id="roadseg_veh_travel_speed_score" class="roadseg_data"></td>
                         <td id="roadseg_veh_travel_speed_rating" class="roadseg_data"></td>
-                        <td id="roadseg_veh_travel_speed_wscore" class="roadseg_data"></td>
                     </tr>                   
                     <tr>
                         <td>Total</td>
-                        <td id="roadseg_safety_total_weight">5</td>
-                        <td id="roadseg_safety_total_rating" class="roadseg_data"></td>
-                        <td id="roadseg_safety_total_wscore" class="roadseg_data"></td>                        
+                        <td id="roadseg_safety_total_percentage">100%</td>
+                        <td id="roadseg_safety_total_score" class="roadseg_data"></td>
+                        <td id="roadseg_safety_total_rating" class="roadseg_data"></td>                        
                     </tr>
                 </tbody>
             </table> 
@@ -264,13 +264,17 @@
                 <thead>
                      <tr>
                         <td class="location_table_detail_header">Performance Measure</td>
+                        <td class="location_table_detail_header">Percentage</td>
+                        <td class="location_table_detail_header">Score<br>(out of 3.0)</td>
                         <td class="location_table_detail_header">Rating</td>
                      </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Sidewalk Condition</td>
-                        <td id="sidewalk_condition" class="intersection_data roadseg_data"></td>
+                        <td id="sidewalk_condition_percentage" class="intersection_data roadseg_data">100%</td>
+                        <td id="sidewalk_condition_score" class="intersection_data roadseg_data"></td>
+                        <td id="sidewalk_condition_rating" class="intersection_data roadseg_data"></td>
                     </tr>
                 </tbody>
             </table>
@@ -280,41 +284,41 @@
                 <thead>
                     <tr>
                         <td class="location_table_detail_header">Performance Measure</td>
-                        <td class="location_table_detail_header">Weight</td>
+                        <td class="location_table_detail_header">Percentage</td>
+                        <td class="location_table_detail_header">Score<br>(out of 3.0)</td>
                         <td class="location_table_detail_header">Rating</td>
-                        <td class="location_table_detail_header">Weighted Score</td>
                     <tr>
                 </thead>
                 <tbody>                 
                     <tr>
                         <td>Pedestrian Delay</td>
-                        <td id="intersection_pedestrian_delay_weight">3</td>   
+                        <td id="intersection_pedestrian_delay_percentage">43%</td>   
+                        <td id="intersection_pedestrian_delay_score" class="intersection_data"></td>
                         <td id="intersection_pedestrian_delay_rating" class="intersection_data"></td>
-                        <td id="intersection_pedestrian_delay_wscore" class="intersection_data"></td>
                     </tr>
                     <tr>
                         <td>Sidewalk Presence</td>
-                        <td id="intersection_sidewalk_presence_weight">2</td>
+                        <td id="intersection_sidewalk_presence_percentage">29%</td>
+                        <td id="intersection_sidewalk_presence_score" class="intersection_data"></td>
                         <td id="intersection_sidewalk_presence_rating" class="intersection_data"></td>
-                        <td id="intersection_sidewalk_presence_wscore" class="intersection_data"></td>
                     </tr>
                     <tr>
-                        <td>Curb Ramps</td>
-                        <td id="intersection_curb_ramps_weight" >1</td>
-                        <td id="intersection_curb_ramps_rating" class="intersection_data"></td>
-                        <td id="intersection_curb_ramps_wscore" class="intersection_data"></td>
-                    </tr>
+                        <td>Curb Ramp Presence</td>
+                        <td id="intersection_curb_ramp_presence_percentage">14%</td>
+                        <td id="intersection_curb_ramp_presence_score" class="intersection_data"></td>
+                        <td id="intersection_curb_ramp_presence_rating" class="intersection_data"></td>
+                    </tr> 
                     <tr>
-                        <td>Crossing Opportunities</td>
-                        <td id="intersection_crossing_opportunities_weight">1</td>
-                        <td id="intersection_crossing_opportunities_rating" class="intersection_data"></td>
-                        <td id="intersection_crossing_opportunities_wscore" class="intersection_data"></td>
+                        <td>Crosswalk Presence</td>
+                        <td id="intersection_crosswalk_presence_percentage" >14%</td>
+                        <td id="intersection_crosswalk_presence_score" class="intersection_data"></td>
+                        <td id="intersection_crosswalk_presence_rating" class="intersection_data"></td>
                     </tr>
                     <tr>
                         <td>Total</td>
-                        <td id="intersection_cmm_total_weight">7</td>
+                        <td id="intersection_cmm_total_percentage">100%</td>
+                        <td id="intersection_cmm_total_score" class="intersection_data"></td>
                         <td id="intersection_cmm_total_rating" class="intersection_data"></td>
-                        <td id="intersection_cmm_total_wscore" class="intersection_data"></td>
                     </tr>
                 </tbody>
             </table>
@@ -323,37 +327,36 @@
                 <thead>
                     <tr>
                         <td class="location_table_detail_header">Performance Measure</td>
-                        <td class="location_table_detail_header">Weight</td>
+                        <td class="location_table_detail_header">Percentage</td>
+                        <td class="location_table_detail_header">Score<br>(out of 3.0)</td>
                         <td class="location_table_detail_header">Rating</td>
-                        <td class="location_table_detail_header">Weighted Score</td>
                     <tr>
                 </thead>
                 <tbody>
-                    
                     <tr>
                         <td>Sidewalk Presence</td>
-                        <td id="roadseg_sidewalk_presence_weight">3</td>
+                        <td id="roadseg_sidewalk_presence_percentage">50%</td>
+                        <td id="roadseg_sidewalk_presence_score" class="roadseg_data"></td>
                         <td id="roadseg_sidewalk_presence_rating" class="roadseg_data"></td>
-                        <td id="roadseg_sidewalk_presence_wscore" class="roadseg_data"></td>
                     </tr>
                     <tr>
-                        <td>Crossing Opportunities</td>
-                        <td id="roadseg_crossing_opportunities_weight">2</td>
-                        <td id="roadseg_crossing_opportunities_rating" class="roadseg_data"></td>
-                        <td id="roadseg_crossing_opportunities_wscore" class="roadseg_data"></td>
+                        <td>Crosswalk Presence</td>
+                        <td id="roadseg_crosswalk_presence_percentage">33%</td>
+                        <td id="roadseg_crosswalk_presence_score" class="roadseg_data"></td>
+                        <td id="roadseg_crosswalk_presence_rating" class="roadseg_data"></td>
                     </tr>
                      <tr>
                         <td>Walkway Width</td>
-                        <td id="roadseg_walkway_width_weight">1</td>
+                        <td id="roadseg_walkway_width_percentage">17%</td>
+                        <td id="roadseg_walkway_width_score" class="roadseg_data"></td>
                         <td id="roadseg_walkway_width_rating" class="roadseg_data"></td>
-                        <td id="roadseg_walkway_width_wscore" class="roadseg_data"></td>
                     </tr>                   
                     
                     <tr>
                         <td>Total</td>
-                        <td id="roadseg_cmm_total_weight">6</td>
+                        <td id="roadseg_cmm_total_percentage">100%</td>
+                        <td id="roadseg_cmm_total_score" class="roadseg_data"></td>
                         <td id="roadseg_cmm_total_rating" class="roadseg_data"></td>
-                        <td id="roadseg_cmm_total_wscore" class="roadseg_data"></td>
                     </tr>
                 </tbody>
             </table> 
@@ -363,13 +366,17 @@
                 <thead>
                     <tr>
                         <td class="location_table_detail_header">Performance Measure</td>
+                        <td class="location_table_detail_header">Percentage</td>
+                        <td class="location_table_detail_header">Score<br>(out of 3.0)</td>
                         <td class="location_table_detail_header">Rating</td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Pedestrian Volumes</td>
-                        <td id="intersection_ped_volumes" class="intersection_data"></td>
+                        <td id="intersection_ped_volumes_percentage" class="intersection_data">100</td>
+                        <td id="intersection_ped_volumes_score" class="intersection_data"></td>
+                        <td id="intersection_ped_volumes_rating" class="intersection_data"></td>
                     </tr>
                 </tbody>
             </table>                   
@@ -377,34 +384,33 @@
                 <thead>
                     <tr>
                         <td class="location_table_detail_header">Performance Measure</td>
-                        <td class="location_table_detail_header">Weight</td>
+                        <td class="location_table_detail_header">Percentage</td>
+                        <td class="location_table_detail_header">Score<br>(out of 3.0)</td>
                         <td class="location_table_detail_header">Rating</td>
-                        <td class="location_table_detail_header">Weighted Score</td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Pedestrian Volumes</td>
-                        <td id="roadseg_ped_volumes_weight">1</td>
+                        <td id="roadseg_ped_volumes_percentage">50%</td>
+                        <td id="roadseg_ped_volumes_score" class="roadseg_data"></td>
                         <td id="roadseg_ped_volumes_rating" class="roadseg_data"></td>
-                        <td id="roadseg_ped_volumes_wscore" class="roadseg_data"></td>
                     </tr>
                     <tr>
                         <td>Ajdacent Bicycle Accommodations</td>
-                        <td id="roadseg_adj_bike_accommodations_weight">1</td>
-                        <td id="roadseg_adj_bike_accommodations_rating" class="roadseg_data"></td>
-                        <td id="roadseg_adj_bike_accommodations_wscore" class="roadseg_data"></td>                        
+                        <td id="roadseg_adj_bike_accommodations_percentage">50%</td>
+                        <td id="roadseg_adj_bike_accommodations_score" class="roadseg_data"></td>
+                        <td id="roadseg_adj_bike_accommodations_rating" class="roadseg_data"></td>                        
                     </tr>  
                     <tr>
                         <td>Total</td>
-                        <td id="roadseg_econ_total_weight">2</td>
-                        <td id="roadseg_econ_total_rating" class="roadseg_data"></td>
-                        <td id="roadseg_econ_total_wscore" class="roadseg_data"></td>                        
+                        <td id="roadseg_econ_total_percentage">100%</td>
+                        <td id="roadseg_econ_total_score" class="roadseg_data"></td>
+                        <td id="roadseg_econ_total_rating" class="roadseg_data"></td>                        
                     </tr>                   
                 </tbody>
             </table> 
-               
-                                  
+                                              
             <h3 class="table_pseudo_caption">Transportation Equity Priority</h3>
             <table id="te_table" class="location_data_table intersection_data_table roadseg_data_table">
                 <thead>
@@ -415,20 +421,23 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Environmental Justice Zone?</td>
-                        <td id="te_ej_zone" class="intersection_data roadseg_data"></td>
+                        <td>Low Income Population >= 32.32%</td>
+                        <td id="low_income_pop" class="intersection_data roadseg_data"></td>
                     </tr>
+                        <td>Minority Population >= 28.19%</td>
+                        <td id="minority_pop" class="intersection_data roadseg_data"></td>
+                    </tr>   
                     <tr>
-                        <td>School or college within one-quarter mile?</td>
-                        <td id="school_quarter_mile" class="intersection_data roadseg_data"></td>
-                    </tr>
-                    <tr>
-                        <td>More than 8.9% of population older than 75 years?</td>
+                        <td>6.69%+ of Population > 75 Years of Age</td>
                        <td id="over_75" class="intersection_data roadseg_data"></td>                     
                     </tr>
                     <tr>
-                        <td>More than 27.5% of households do not own a vehicle?</td>
+                        <td>16.15% of Households w/o a vehicle?</td>
                         <td id="zero_vehicle_hhs" class="intersection_data roaseg_data"></td>
+                    </tr>                                  
+                    <tr>
+                        <td>School or college within one-quarter mile?</td>
+                        <td id="school_quarter_mile" class="intersection_data roadseg_data"></td>
                     </tr>
                 </tbody>
             </table>              
