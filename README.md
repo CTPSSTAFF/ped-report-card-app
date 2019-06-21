@@ -22,5 +22,5 @@ Dependencies on external libraries:
 * jquery.event.drag  version 2.2
 * jquery.event.drop version 2.2
 * SlickGrid version 2.4.1
-* underscore.js 
+* underscore.js version 1.9.1
 * turf.js version 1.9.1
