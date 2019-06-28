@@ -498,7 +498,7 @@ $(document).ready(function() {
             populateScoreAndRating('Pedestrian_Volumes', 'intersection_ped_volumes', 2);
         } else {
             // Roadseg - Pedestrian Volumes
-            $('#roadseg_ped_volumes_percentage').html('100%');
+            $('#roadseg_ped_volumes_percentage').html('50%');
             populateScoreAndRating('Pedestrian_Volumes', 'roadseg_ped_volumes', 0);
             // Roadseg - Adjacent Bicycle Accommodations
             populateScoreAndRating('Adjacent_Bicycle_Accommodations', 'roadseg_adj_bike_accommodations', 0);
