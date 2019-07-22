@@ -378,7 +378,7 @@ $(document).ready(function() {
             tmpStr += (props['Municipality_2'] != 'N/A') ? ' and ' + props['Municipality_2'] : '';
             tmpStr += ', MA';
             // featureKind == 'Point' ==> intersection
-            $('#intersection_location').html(tmpStr);
+            $('#detail_page_caption').html(tmpStr);
             $('.roadseg_data_table').hide();
             $('.intersection_data_table').show();
         } else {
@@ -389,7 +389,7 @@ $(document).ready(function() {
             tmpStr += props['Location_Description'] + ' - ' + props['Municipality'];
             tmpStr += (props['Municipality_2'] != 'N/A') ? ' and ' + props['Municipality_2'] : '';
             tmpStr += ', MA';        
-            $('#roadseg_location').html(tmpStr);
+            $('#detail_page_caption').html(tmpStr);
             $('.intersection_data_table').hide();
             $('.roadseg_data_table').show();
         }
