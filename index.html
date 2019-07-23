@@ -13,6 +13,7 @@
 <script src="libs/StyledMarker.js"></script>
 <!-- 'Maplable' add-in from Google Maps V3 Utility Library: -->
 <script src="libs/maplabel.js"></script>
+<script src="libs/ctpsGoogleMapsUtils.js"></script>
 <!-- <script src="libs/jquery-2.2.4.js"></script> -->
 <script src="libs/jquery-2.2.4.min.js"></script>
 <!-- The following two libs are required by Slick Grid -->
@@ -33,7 +34,7 @@
 <h1 class="pagetitle">Pedestrian Report Card Application - Main Page</h1>
 <div id="wrapper">
     <div id="map_wrapper">
-        <div id="map_options_div" role="presentation">
+        <div id="map_options_div_1" role="presentation">
             <input type="checkbox" id="low_income_toggle" class="layer_toggle" name="low_income_toggle" value="low_income_toggle"> 
             <label for="low_income_toggle">Low-income TAZes &nbsp;&nbsp;</label>
             
@@ -53,6 +54,16 @@
             <input type="button" id="about_button" value="About"/>
             <input type="button" id="help_button" value="Help"/>
         </div>
+        <div id="map_options_div_2" role="presentaiton">
+            Symbolize map by report card score for:
+            <select id="select_symbology" class="app_select_box">
+                <option value="default" selected>Select evaluation criterion...</option>
+                <option value="safety">Safety</option>
+                <option value="sys_preservation">System Preservation</option>
+                <option value="cmm">Capacity Management and Mobility</option>
+                <option value="economic_vitality">Economic Vitality</option>
+            </select>
+        </div>
         <div id="map" role="presentation">
         </div>
 
@@ -63,8 +74,8 @@
             <span>
                 <img src="img/darkorange-marker.png">Intersection&nbsp;&nbsp;
                 <svg id="legend_svg_0" class="legend_svg_line"><line id="svg_line_in_legend_0" x1="0" y1="50" x2="100" y2="50" stroke="#ff8c00" stroke-width="6"></line></svg>&nbsp;&nbsp;Roadway Segment&nbsp;&nbsp;
-                <svg id="legend_svg_1" class="legend_svg_line"><line id="svg_line_in_legend_1" x1="0" y1="50" x2="100" y2="50" stroke="#00a674" stroke-width="8"></line></svg>&nbsp;&nbsp;Boston Region MPO Boundary&nbsp;&nbsp;
-                <svg id="legend_svg_2" class="legend_svg_line"><line id="svg_line_in_legend_2" x1="0" y1="50" x2="100" y2="50" stroke="brown" stroke-width="1.5"></line></svg>&nbsp;&nbsp;MAPC Subregion Boundary&nbsp;&nbsp;
+                <svg id="legend_svg_1" class="legend_svg_line"><line id="svg_line_in_legend_1" x1="0" y1="50" x2="100" y2="50" stroke="#000080" stroke-width="4.5"></line></svg>&nbsp;&nbsp;Boston Region MPO Boundary&nbsp;&nbsp;
+                <svg id="legend_svg_2" class="legend_svg_line"><line id="svg_line_in_legend_2" x1="0" y1="50" x2="100" y2="50" stroke="#000080" stroke-width="1.5"></line></svg>&nbsp;&nbsp;MAPC Subregion Boundary&nbsp;&nbsp;
             </span>
             <br/> 
             <span>

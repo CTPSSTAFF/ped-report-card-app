@@ -49,7 +49,7 @@
 #addressForm {
     margin-bottom: 10px;
 }
-#map_options_div {
+#map_options_div_1,#map_options_div_2 {
     margin-bottom: 10px;
 }
 #map {
@@ -62,7 +62,7 @@
     height: content;
 }
 
-#intersection_location_table #roadseg_location_table {
+#intersection_location_table,#roadseg_location_table {
     padding-top: 10px;
 }
 /* Single-line 1px border around table cells */

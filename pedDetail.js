@@ -1,6 +1,6 @@
 // Pedestrian Report Card Application - location detail page
 // Author:  Ben Krepp
-// Date:    May, June 2019
+// Date:    May, June, July 2019
 //
 // General Comments
 // ================
@@ -11,8 +11,10 @@
 var map = {};    
 
 // Color codes for drawaing boundaries of MPO and MAPC subregions
-var subregionBoundaryColor = 'brown';
-var mpoBoundaryColor = '#00a674'; // "Medium Spring Green"
+var subregionBoundaryColor = '#000080';
+var mpoBoundaryColor = '#000080'; 
+// Color code for rendering scored location (intersection or road segment)
+var defaultLocationColor = '#0070ff';
 
 // Global "database" of point, line, and polygon features read from GeoJSON data sources
 // Point features - intersection locations
@@ -59,12 +61,23 @@ var subregionCentroids = {
     'TRIC'      :  { name:  'TRIC',     lng: -71.20413265, lat:	42.16445925 },
     'TRIC/SWAP' :  { name:  'TRIC/SWAP',lng: -71.28420378, lat:	42.2366124  }
 }; 
-// Array of labels rendered using V3 Utility Library
+// Array of labels rendered using GoogleMaps V3 Utility Library
 var mapLabels = [];
 
-$(document).ready(function() { 
+$(document).ready(function() {
+    // Arm event handlers for buttons
+    $('#about_button').click(function(e) {
+        var url = 'About.html'
+        window.open(url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes')
+    });
+    $('#help_button').click(function(e) {
+        var url = 'Help.html'
+        window.open(url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes')
+    }); 
+/*
     // Enable jQueryUI tabs
-    //  $('#tabs_div').tabs({ heightStyle : 'content' });
+    $('#tabs_div').tabs({ 'heightStyle' : 'content', 'active' : 0 });
+*/
     
     // Utility function to return the value of the parameter named 'sParam' from the window's URL
     function getURLParameter(sParam) {
@@ -172,7 +185,7 @@ $(document).ready(function() {
         }
         // Draw MPO boundary on Google Map - this FC consists of a single feature
         var lineFeature = data.mpo_boundary.features[0];
-        drawPolylineFeature(lineFeature, map, { strokeColor : mpoBoundaryColor, strokeOpacity : 0.7, strokeWeight: 8 });     
+        drawPolylineFeature(lineFeature, map, { strokeColor : mpoBoundaryColor, strokeOpacity : 0.7, strokeWeight: 4.5 });     
 
     // Label the centroids of the MAPC subregions using the MapLabel class from the Google Maps v3 Utility Library
     var mapLabel, latlng;
@@ -280,7 +293,7 @@ $(document).ready(function() {
         function mapLocation(feature) {
             var gmPolyline = {},  aFeatCoords = [], point = {}, aAllPoints = [], bbox = [], googleBounds = {}, loc = {}, marker = {};
             var i, j, aCoord;
-            var colour = '#ff8c00'; // Really, a 'const'
+            var colour = defaultLocationColor; // Really, a 'const'
             var featureKind = feature.geometry['type'];
             if (featureKind === 'Point') {
                 console.log('Rendering Point feature with location ID  ' + feature.properties['Location_ID']);

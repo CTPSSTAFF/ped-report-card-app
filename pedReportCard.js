@@ -1,6 +1,6 @@
 // Pedestrian Report Card Application - main page
 // Author:  Ben Krepp
-// Date:    December 2018, and May-June 2019
+// Date:    December 2018, and May-July 2019
 //
 // Data sources: All data used in this app is loaded from GeoJSON files
 //
@@ -36,9 +36,17 @@ var aMarkers = [];
 var allGmPolylines = [];
 // infoWindow 'popup' for line features
 var infoWindow = null;
+
 // Color codes for drawaing boundaries of MPO and MAPC subregions
-var subregionBoundaryColor = 'brown';
-var mpoBoundaryColor = '#00a674'; // "Medium Spring Green"
+var subregionBoundaryColor = '#000080'; // was:  'brown'
+var mpoBoundaryColor = '#000080'; // '#0070ff' ("Dodger Blue") '#00a674' ("Medium Spring Green")
+
+// Color palette for scored locations:
+var colorPalette = {    'default'   : '#0070ff',  // '00a9e6' // '#c500ff' // '#0070ff'
+                        'good'      : '#38a800',
+                        'fair'      : '#ff7f00', 
+                        'poor'      : '#d60047'
+};
 
 // Global "database" of point, line, and polygon features read from GeoJSON data sources
 // Point features - intersection locations
@@ -117,6 +125,44 @@ var mapLabels = [];
 
 // Hack to enable Google Map to be rendered when relevant tab is exposed for the first time only. Yeech.
 var searchTabExposed = false;
+
+// On-click event hander for markers (for intersections) and polylines (for road segments)
+function onClickHandler(e) {
+    var clickLocation = e.latLng;
+    if (!infoWindow) {
+        infoWindow = new google.maps.InfoWindow();
+    }
+    var feature = this.CTPSprops.feature;
+    var geomType = feature.geometry.type;
+    var props = feature.properties;
+    
+    // For road segment features (i.e., geomType is 'MultiLineString' or 'LineString'), the 'Location' (i.e., road name)
+    // should appear before the 'Location_Description' (i.e., the start- and end-locations of the road segment.
+    var loc_desc = '';
+    var heading = '';
+    if (geomType == 'MultiLineString' || geomType == 'LineString') {
+        heading = props['Location'] + '<br/>';
+    }
+    loc_desc = props['Location_Description'] + ' - ' + props['Municipality'];
+    var src_abstract_prop = props['Source_Abstract_Link'];
+    var src_pdf_prop = props['Source_PDF'];
+    var mpo_calendar_pdf_prop = props['MPO_Calendar_Source_PDF'];
+    var src_abstract_blurb = (src_abstract_prop != null) ? '<p><a href="' + src_abstract_prop + '"' + ' target="_blank">Source abstract</a></p>' : '';
+    var src_pdf_blurb = (src_pdf_prop != null) ? '<p><a href="' + src_pdf_prop + '"' + ' target="_blank">Source PDF</a></p>' : '';
+    var mpo_calendar_blurb = (mpo_calendar_pdf_prop) != null ? '<p><a href="' + mpo_calendar_pdf_prop + '"' + ' target="_blank">MPO CalendarSource PDF</a></p>' : '';
+    var content = '<div id="info">';
+    content += geomType == 'Point' ? '<h4>Intersection Location</h4>' : '<h4>Roadway Segment Location</h4>';
+    content += '<p>' + heading + '</p>';
+    var loc_desc_with_url = '<a href="pedDetail.html?loc_id=' + props['Id'] + '" target="_blank">' + loc_desc + '</a></p>';
+    content += '<p>' + loc_desc_with_url + '</p>';
+    content += src_abstract_blurb;
+    content += src_pdf_blurb;
+    content += mpo_calendar_blurb;
+    content += ' </div>';
+    infoWindow.setContent(content);     
+    infoWindow.setPosition(clickLocation);
+    infoWindow.open(map);      
+} // onClickHandler()
 
 $(document).ready(function() {
     // Arm event handlers for buttons
@@ -309,12 +355,12 @@ function initializeMap(data) {
     var i, lineFeature;
     for (i = 0; i < data.mapc_subregions.features.length; i++) {
         lineFeature = data.mapc_subregions.features[i];
-        drawPolylineFeature(lineFeature, map, { strokeColor : subregionBoundaryColor, strokeOpacity : 1.0, strokeWeight: 1.5 });
+        ctpsGoogleMapsUtils.drawPolylineFeature(lineFeature, map, { strokeColor : subregionBoundaryColor, strokeOpacity : 1.0, strokeWeight: 1.5 }, false);
     }
     
     // Draw MPO boundary on Google Map - this FC consists of a single feature
     var lineFeature = data.mpo_boundary.features[0];
-    drawPolylineFeature(lineFeature, map, { strokeColor : mpoBoundaryColor, strokeOpacity : 0.7, strokeWeight: 8 });
+    ctpsGoogleMapsUtils.drawPolylineFeature(lineFeature, map, { strokeColor : mpoBoundaryColor, strokeOpacity : 0.7, strokeWeight: 4.5 }, false);
     
     // Label the centroids of the MAPC subregions using the MapLabel class from the Google Maps v3 Utility Library
     var mapLabel, latlng;
@@ -375,6 +421,11 @@ function initializeMap(data) {
     
   
     // Add point data (intersections for which there is report card data) to the GoogleMap
+    // Note that the following call both adds the point data to the map and sets its default symbology.
+    // See header comments for function "setPointSymbology" for gorey details.
+    setPointSymbology(data.points.features, 'default');
+
+/*    
     var pointFeatures = data.points.features;
     var pointFeature;
     var marker;
@@ -393,8 +444,10 @@ function initializeMap(data) {
         google.maps.event.addListener(marker, 'click', onClickHandler);
         aMarkers.push(marker); 
     } // for loop over pointFeatures 
+*/
 
-    // Add line data (road segments for which there is report card data) to the GoogleMap
+
+    // Add line data (road segments for which there is report card data) to the GoogleMap, using default symbolization
     var lineFeatures = data.lines.features;
     var lineFeature, geomType; 
     var aFeatCoords = [], tmp = {}, point, aAllPoints = [], gmPolyline = {};
@@ -416,7 +469,7 @@ function initializeMap(data) {
                 } // for k in aFeatCoords[j]
                 gmPolyline = new google.maps.Polyline({ path            : aAllPoints,
                                                         map             : map,
-                                                        strokeColor     : '#ff8c00',
+                                                        strokeColor     : colorPalette['default'], // '#ff8c00',
                                                         strokeOpacity   : 1.0,
                                                         strokeWeight    : 6 });                                       
                 gmPolylines4Feature.push(gmPolyline);                                       
@@ -432,7 +485,7 @@ function initializeMap(data) {
             }
             gmPolyline = new google.maps.Polyline({ path            : aAllPoints,
                                                     map             : map,
-                                                    strokeColor     : '#ff8c00',
+                                                    strokeColor     : colorPalette['default'], // '#ff8c00',
                                                     strokeOpacity   : 1.0,
                                                     strokeWeight    : 6 });    
             gmPolylines4Feature.push(gmPolyline);
@@ -442,12 +495,22 @@ function initializeMap(data) {
         // Here we "attach" the relevant GIS feature to each GM Polyline, and set the on-click
         // event handler to each GM Polyline to behave identically.
         // Decorate each GoogleMaps Polyline feature for the GIS feature with CTPS attribute for the feature
+        // AND: Add each GoogleMaps polyline feature to the global store of all GoogleMaps polylines in the data
         for (j = 0; j < gmPolylines4Feature.length; j++) {
             gmPolylines4Feature[j].CTPSprops = {};
             gmPolylines4Feature[j].CTPSprops.feature = lineFeature;
 			google.maps.event.addListener(gmPolylines4Feature[j], 'click', onClickHandler);
+            // Add GM polyline to our global store of these, so their symbolization can be changed...
+            allGmPolylines.push(gmPolylines4Feature[j]);
 		} // For loop over GM Polyline features for the i-th GIS feature ("lineFeature")
     } // for loop over line features
+    
+    // Arm event handler to change map symbology
+    $('#select_symbology').change(function(e) {
+        var symbology = $("#select_symbology option:selected").attr('value'); 
+        setPointSymbology(data.points.features, symbology);
+        setLineSymbology(allGmPolylines, symbology);
+    });
     
     // Add toggle-able overlay layers to the GoogleMap - AFTER the base map has loaded
     // The JSON payload for these is large and delays map rendering at app start up
@@ -479,45 +542,7 @@ function initializeMap(data) {
                 DATA.overlays[lyr.name].setMap(map);           
             });
      }); // Logic to add map overlay layers
-        
-    // On-click event hander for markers (for intersections) and polylines (for road segments)
-    function onClickHandler(e) {
-        var clickLocation = e.latLng;
-        if (!infoWindow) {
-            infoWindow = new google.maps.InfoWindow();
-        }
-        var feature = this.CTPSprops.feature;
-        var geomType = feature.geometry.type;
-        var props = feature.properties;
-        
-        // For road segment features (i.e., geomType is 'MultiLineString' or 'LineString'), the 'Location' (i.e., road name)
-        // should appear before the 'Location_Description' (i.e., the start- and end-locations of the road segment.
-        var loc_desc = '';
-        var heading = '';
-        if (geomType == 'MultiLineString' || geomType == 'LineString') {
-            heading = props['Location'] + '<br/>';
-        }
-        loc_desc = props['Location_Description'] + ' - ' + props['Municipality'];
-        var src_abstract_prop = props['Source_Abstract_Link'];
-        var src_pdf_prop = props['Source_PDF'];
-        var mpo_calendar_pdf_prop = props['MPO_Calendar_Source_PDF'];
-        var src_abstract_blurb = (src_abstract_prop != null) ? '<p><a href="' + src_abstract_prop + '"' + ' target="_blank">Source abstract</a></p>' : '';
-        var src_pdf_blurb = (src_pdf_prop != null) ? '<p><a href="' + src_pdf_prop + '"' + ' target="_blank">Source PDF</a></p>' : '';
-        var mpo_calendar_blurb = (mpo_calendar_pdf_prop) != null ? '<p><a href="' + mpo_calendar_pdf_prop + '"' + ' target="_blank">MPO CalendarSource PDF</a></p>' : '';
-        var content = '<div id="info">';
-        content += geomType == 'Point' ? '<h4>Intersection Location</h4>' : '<h4>Roadway Segment Location</h4>';
-        content += '<p>' + heading + '</p>';
-        var loc_desc_with_url = '<a href="pedDetail.html?loc_id=' + props['Id'] + '" target="_blank">' + loc_desc + '</a></p>';
-        content += '<p>' + loc_desc_with_url + '</p>';
-        content += src_abstract_blurb;
-        content += src_pdf_blurb;
-        content += mpo_calendar_blurb;
-        content += ' </div>';
-        infoWindow.setContent(content);     
-        infoWindow.setPosition(clickLocation);
-        infoWindow.open(map);      
-    } // onClickHandler()
-    
+          
     // on-change handler for map overlay layer selection checkboxes
     // Toggle visibility of indicated overlay layer
     $('.layer_toggle').change(function(e) {
@@ -530,6 +555,100 @@ function initializeMap(data) {
     });
 } // initializeMap()
 
+function getPropForSymbology(symbology) {
+    var retval;
+    switch (symbology) {
+    case 'safety':
+        retval = 'Safety_Notes';
+        break;
+    case 'sys_preservation':
+        retval = 'System_Preservation_Notes';
+        break;
+    case 'cmm':
+        retval = 'Capacity_Management_and_Mobility_Notes';
+        break;
+    case 'economic_vitality':
+        retval = 'Economic_Vitality_Notes';
+        break;
+    default:
+        retval = null;
+        break;
+    }    
+    return retval;
+} // getPropForSymbology()
+
+function valueToColor(value) {
+    var retval;
+    switch (value) {
+    case 'Good':
+        retval = colorPalette['good'];
+        break;
+    case 'Fair':
+        retval = colorPalette['fair'];
+        break;
+    case 'Poor':
+        retval = colorPalette['poor'];
+        break;
+    default:
+        retval = colorPalette['default'];
+    }
+    return retval;
+} // valueToColor()
+
+// setPointSymbology
+//
+// Point features are indicated on the map by GoogleMaps 'marker' objects.
+// One would like to simply change the color of these when the selected symbology changes, but programmatically
+// changing the color of a GoogleMaps 'marker' object after one has been created doesn't seem to be possible.
+// Consequently, we have to resort to re-creating the markers each time the symbolization changes. Ugh.
+function setPointSymbology(pointFeatures, symbology) {
+    var pointFeature, marker;
+    var propToUse = getPropForSymbology(symbology);
+    
+    if (aMarkers.length !== 0) {
+        aMarkers.forEach(function(marker) { marker.setMap(null); });
+        while (aMarkers.length > 0) { aMarkers.pop(); }
+    }
+    aMarkers = [];
+    var i, j, k, propValue, color; 
+    for (i = 0; i < pointFeatures.length; i++) {
+        pointFeature = pointFeatures[i];
+        if (propToUse !== null) {
+            propValue = pointFeature.properties[propToUse];
+            color = valueToColor(propValue);
+        } else {
+            color = colorPalette['default'];
+        }     
+        marker = new StyledMarker({
+                        styleIcon   : new StyledIcon(StyledIconTypes.MARKER,{ 'color' : color }),
+                        position    : new google.maps.LatLng(pointFeature.geometry.coordinates[1], 
+                                                             pointFeature.geometry.coordinates[0]),
+                        map         : map
+                    });
+        marker.CTPSprops = {};
+        marker.CTPSprops.feature = pointFeature;     
+        google.maps.event.addListener(marker, 'click', onClickHandler);
+        aMarkers.push(marker); 
+    } // for loop over pointFeatures     
+} // setPointSybology()
+
+// setLineSymbology
+//
+function setLineSymbology(polylines, symbology) {
+    var propToUse = getPropForSymbology(symbology);
+    allGmPolylines.forEach(function(polyline) {
+        var propValue, color;
+        if (propToUse !== null) {
+            propValue = polyline.CTPSprops.feature.properties[propToUse];
+            color = valueToColor(propValue);
+        } else {
+            color = colorPalette['default'];
+        } 
+        polyline.setOptions({ 'strokeColor' : color });
+    });    
+} // setLineSymbology()
+
+/*
 
 // *** Temp home of utility function
 function drawPolylineFeature(lineFeature, gMap, style) {
@@ -570,3 +689,5 @@ function drawPolylineFeature(lineFeature, gMap, style) {
         return;
     }
 } //drawPolylineFeature()
+
+*/

@@ -11,10 +11,11 @@
 <script src="//maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBDKncJRheezxvvmheB8JLH4Dk7EHfdZEk"></script>
 <!-- 'StyledMarker' add-in from Google Maps V3 Utility Library. See:  https://github.com/googlemaps/v3-utility-library -->
 <script src="libs/StyledMarker.js"></script>
-<!-- 'Maplable' add-in from Google Maps V3 Utility Library: -->
+<!-- 'Maplabel' add-in from Google Maps V3 Utility Library: -->
 <script src="libs/maplabel.js"></script>
 <!-- <script src="libs/jquery-2.2.4.js"></script> -->
 <script src="libs/jquery-2.2.4.min.js"></script>
+<script src="libs/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script src="libs/turf.min.js"></script>
 <script src="libs/underscore-min.js"></script>
 </head>
@@ -57,8 +58,8 @@
             <span>
                 <img src="img/darkorange-marker.png">Intersection&nbsp;&nbsp;
                 <svg id="legend_svg_0" class="legend_svg_line"><line id="svg_line_in_legend_0" x1="0" y1="50" x2="100" y2="50" stroke="#ff8c00" stroke-width="6"></line></svg>&nbsp;&nbsp;Roadway Segment&nbsp;&nbsp;
-                <svg id="legend_svg_1" class="legend_svg_line"><line id="svg_line_in_legend_1" x1="0" y1="50" x2="100" y2="50" stroke="#00a674" stroke-width="8"></line></svg>&nbsp;&nbsp;Boston Region MPO Boundary&nbsp;&nbsp;
-                <svg id="legend_svg_2" class="legend_svg_line"><line id="svg_line_in_legend_2" x1="0" y1="50" x2="100" y2="50" stroke="brown" stroke-width="1.5"></line></svg>&nbsp;&nbsp;MAPC Subregion Boundary&nbsp;&nbsp;
+                <svg id="legend_svg_1" class="legend_svg_line"><line id="svg_line_in_legend_1" x1="0" y1="50" x2="100" y2="50" stroke="#000080" stroke-width="4.5"></line></svg>&nbsp;&nbsp;Boston Region MPO Boundary&nbsp;&nbsp;
+                <svg id="legend_svg_2" class="legend_svg_line"><line id="svg_line_in_legend_2" x1="0" y1="50" x2="100" y2="50" stroke="#000080" stroke-width="1.5"></line></svg>&nbsp;&nbsp;MAPC Subregion Boundary&nbsp;&nbsp;
             </span>
             <br/> 
             <span>
@@ -400,7 +401,43 @@
                         <td id="school_quarter_mile" class="intersection_data roadseg_data"></td>
                     </tr>
                 </tbody>
-            </table>              
+            </table>      
+<!--
+            <div id="tabs_div">
+                <ul>
+                    <li><a href="#tab-1">Summary</a></li>
+                    <li><a href="#tab-2">Transportation Equity</a></li>
+                    <li><a href="#tab-3">Safety</a></li>
+                    <li><a href="#tab-4">System Preservation</a></li>
+                    <li><a href="#tab-5">Capacity Management and Mobility</a></li>
+                    <li><a href="#tab-6">Economic Vitality</a></li>
+                    <li><a href="#tab-7">Transportation Equity Priority</a></li>
+                </ul>
+                
+                <div id="tab-1">
+                    Dummy content for Summary tab.
+                </div>
+                <div id="tab-2">
+                    Dummy content for Transportation Equity tab.
+                </div>
+                <div id="tab-3">
+                    Dummy content for Safety tab.
+                </div>
+                <div id="tab-4">
+                    Dummy content for System Preservation tab.
+                </div>
+                <div id="tab-5">
+                    Dummy content for Capacity Management and Mobility tab.
+                </div>
+                <div id="tab-6">
+                    Dummy content for Economic Vitality tab.
+                </div>
+                <div id="tab-7">
+                    Dummy content for Transportation Equity Priority tab.
+                </div>               
+            </div> 
+-- tabs_div -->
+           
         </div> <!-- output_div -->  
     </div> <!-- map_wrapper -->    
 </div>  <!-- wrapper -->
