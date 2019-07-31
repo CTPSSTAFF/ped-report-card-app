@@ -15,12 +15,13 @@ Data sources:
 All data used in this app is loaded from GeoJSON files
 
 Dependencies on external libraries:  
-* GoogleMaps API version 3
-* GoogleMaps Utility libraries: styledMarker, maplabel
-* jQuery version 2.2.4
-* jQueryUI version 1.12.1
-* jquery.event.drag  version 2.2
-* jquery.event.drop version 2.2
-* SlickGrid version 2.4.1
-* underscore.js version 1.9.1
-* turf.js version 1.9.1
+* GoogleMaps API version 3 (see https://developers.google.com/maps/documentation/javascript/tutorial)
+* GoogleMaps Utility libraries (see https://github.com/googlemaps/v3-utility-library)
+* jQuery version 2.2.4 (see https://jquery.com/)
+* jQueryUI version 1.12.1 (see https://jqueryui.com/)
+* jquery.event.drag  version 2.2 (see http://threedubmedia.com/code/event/drag)
+* jquery.event.drop version 2.2 (see http://threedubmedia.com/code/event/drop)
+* SlickGrid version 2.4.1 (see http://slickgrid.net/)
+* underscore.js version 1.9.1 (see https://underscorejs.org/)
+* turf.js version 1.9.1 (see https://turfjs.org/)
+* ctpsGoogleMapsUtils.js version 3.0 (see https://github.com/bkrepp-ctps/ctpsGoogleMapsUtils)
