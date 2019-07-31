@@ -54,15 +54,63 @@ var colorPalette = {    'default'   : '#0070ff',  // '00a9e6' // '#c500ff' // '#
 // Polygon features - overlay layers
 var DATA = { 'points'   : null, 
              'lines'    : null,
-             'overlays' : { 'low_income' : null,
+             'overlays' : { 'te_priority': null,
+                            'low_income' : null,
                             'minority'   : null,
                             'elderly'    : null,
                             'zvhh'       : null,
                             'school_buf' : null
              }
 }; // DATA {}
+
 // N.B. overlays are not visible when page loads
-var overlayStyles = {   'low_income'    : { fillColor: '#66c2a5', fillOpacity: 0.5, strokeColor : '#66c2a5', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
+var style_te_priority = {   'invisible' : function(feature) {
+                                                var priorityLevel = feature.getProperty('PriorityLe');
+                                                var color;
+                                                switch (priorityLevel) {
+                                                case 'High':
+                                                    color = '#c2005b';
+                                                    break;
+                                                case 'Moderate':
+                                                    color = '#ff7070';
+                                                    break;
+                                                case 'Low':
+                                                    color = '#ffbdbe';
+                                                    break;
+                                                default:
+                                                    color = 'white';
+                                                    break;
+                                                }
+                                                var StyleOptions = {
+                                                    fillColor: color, fillOpacity: 0.5, strokeColor : color, strokeOpacity: 0.5, strokeWeight: 1.0, visible: false 
+                                                };
+                                                return StyleOptions;
+                                          },
+                            'visible'   : function(feature) {
+                                                var priorityLevel = feature.getProperty('PriorityLe');
+                                                var color;
+                                                switch (priorityLevel) {
+                                                case 'High':
+                                                    color = '#c2005b';
+                                                    break;
+                                                case 'Moderate':
+                                                    color = '#ff7070';
+                                                    break;
+                                                case 'Low':
+                                                    color = '#ffbdbe';
+                                                    break;
+                                                default:
+                                                    color = 'white';
+                                                    break;
+                                                }
+                                                var StyleOptions = {
+                                                    fillColor: color, fillOpacity: 0.5, strokeColor : color, strokeOpacity: 0.5, strokeWeight: 1.0, visible: true 
+                                                };
+                                                return StyleOptions;
+                                          }
+};
+var overlayStyles = {   'te_priority'   :  style_te_priority['invisible'],
+                        'low_income'    : { fillColor: '#66c2a5', fillOpacity: 0.5, strokeColor : '#66c2a5', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
                         'minority'      : { fillColor: '#fc8d62', fillOpacity: 0.5, strokeColor : '#fc8d62', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
                         'elderly'       : { fillColor: '#8da0cb', fillOpacity: 0.5, strokeColor : '#8da0cb', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
                         'zvhh'          : { fillColor: '#e78ac3', fillOpacity: 0.5, strokeColor : '#e78ac3', strokeOpacity: 0.5, strokeWeight: 1.0, visible: false },
@@ -72,6 +120,7 @@ var overlayStyles = {   'low_income'    : { fillColor: '#66c2a5', fillOpacity: 0
 
 var pointsURL = 'app_data/intersections_fc.geojson';
 var linesURL  = 'app_data/roadseg_fc.geojson';  
+var te_priorityURL = 'app_data/te_priority.geojson';
 var low_incomeURL = 'app_data/low_income_TAZ.geojson';
 var minorityURL = 'app_data/minority_TAZ.geojson';
 var elderlyURL = 'app_data/elderly_TAZ.geojson';
@@ -514,12 +563,14 @@ function initializeMap(data) {
     
     // Add toggle-able overlay layers to the GoogleMap - AFTER the base map has loaded
     // The JSON payload for these is large and delays map rendering at app start up
-    $.when(getJson(low_incomeURL),
+    $.when(getJson(te_priorityURL),
+           getJson(low_incomeURL),
            getJson(minorityURL),
            getJson(elderlyURL),
            getJson(zvhhURL),
            getJson(schoolURL)
-    ).done(function(low_income,
+    ).done(function(te_priority,
+                    low_income,
                     minority,
                     elderly,
                     zvhh,
@@ -529,7 +580,8 @@ function initializeMap(data) {
             alert("One or more requests to load JSON data for map overlays failed. Exiting application.");
             return;   
         }
-        [{ data  : low_income,   name : 'low_income' },
+        [{ data  : te_priority,  name : 'te_priority'},
+         { data  : low_income,   name : 'low_income' },
          { data  : minority,     name : 'minority'   },
          { data  : elderly,      name : 'elderly'    }, 
          { data  : zvhh,         name : 'zvhh'       },
@@ -548,10 +600,21 @@ function initializeMap(data) {
     $('.layer_toggle').change(function(e) {
         var target_id = e.target.id;
         var layer_name = target_id.replace('_toggle','');
-        var state = $('#' + target_id).prop('checked');        
-        var style = DATA.overlays[layer_name].getStyle();
-        style.visible = state;
-        DATA.overlays[layer_name].setStyle(style);
+        var state = $('#' + target_id).prop('checked');  
+        var style;
+        if (layer_name !== 'te_priority') {
+            style = DATA.overlays[layer_name].getStyle();
+            style.visible = state;
+            DATA.overlays[layer_name].setStyle(style);
+        } else {
+            // The te_priority layer is styled feature-by-feature via a function...
+            if (state === true) {
+                style = style_te_priority['visible'];
+            } else {
+                style = style_te_priority['invisible'];
+            }
+            DATA.overlays[layer_name].setStyle(style);
+        }
     });
 } // initializeMap()
 
