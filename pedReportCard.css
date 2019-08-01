@@ -46,9 +46,6 @@
     margin-right: 5%;
     height: 100%;
 }
-#addressForm {
-    margin-bottom: 10px;
-}
 #map_options_div_1,#map_options_div_2 {
     margin-bottom: 10px;
 }
@@ -56,7 +53,6 @@
     height: 100%;
     border: 4px solid #B87F32; 
 }
-
 #output_div {
     width:  1000px;
     height: content;
