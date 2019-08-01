@@ -51,9 +51,164 @@
             <input type="button" id="about_button" value="About"/>
             <input type="button" id="help_button" value="Help"/>
         </div>
+        
         <div id="map" role="presentation">
         </div>
+        
+        <div id="legend" role="presentation">    
+            <table style="border:none">
+                <tr>
+                    <td class="legend_table_td_col_1">
+                        Scored Locations:
+                    </td>
+                    <td class="legend_table_td">
+                        <img src="img/blue-marker.png">
+                    </td>
+                    <td class="legend_table_td">
+                        Intersection
+                    </td> 
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_1" class="legend_svg_line"><line id="svg_line_in_legend_1" x1="0" y1="30" x2="100" y2="30" stroke="#0070ff" stroke-width="6"></line></svg>
+                    </td>
+                    <td class="legend_table_td">
+                        Roadway Segment
+                    </td>
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_2" class="legend_svg_line"><line id="svg_line_in_legend_2" x1="0" y1="30" x2="100" y2="30" stroke="#000080" stroke-width="4.5"></line></svg>
+                    </td>                    
+                    <td class="legend_table_td">
+                        Boston Region MPO Boundary
+                    </td>  
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_3" class="legend_svg_line"><line id="svg_line_in_legend_3" x1="0" y1="30" x2="100" y2="30" stroke="#000080" stroke-width="1.5"></line></svg>
+                    </td>
+                    <td class="legend_table_td">
+                        MAPC Subregion Boundary
+                    </td>
+                </tr>     
+            </table>
+            <table>
+                <tr>
+                    <td class="legend_table_td_col_1">
+                        Grading Category Scores:
+                    </td>
+                    <td class="legend_table_td">
+                        <img src="img/green-marker.png">
+                    </td>
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_4" class="legend_svg_line"><line id="svg_line_in_legend_4" x1="0" y1="30" x2="100" y2="30" stroke="#38a800" stroke-width="6"></line></svg>
+                    </td>                
+                    <td class="legend_table_td">
+                        Good
+                    </td>  
+                    <td class="legend_table_td">
+                        <img src="img/orange-marker.png"> 
+                    </td>  
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_5" class="legend_svg_line"><line id="svg_line_in_legend_5" x1="0" y1="30" x2="100" y2="30" stroke="#ff7f00" stroke-width="6"></line></svg>
+                    </td>  
+                    <td class="legend_table_td">
+                        Fair
+                    </td>  
+                    <td class="legend_table_td">
+                         <img src="img/red-marker.png">
+                    </td>  
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_6" class="legend_svg_line"><line id="svg_line_in_legend_6" x1="0" y1="30" x2="100" y2="30" stroke="#d60047" stroke-width="6"></line></svg>
+                    </td>  
+                    <td class="legend_table_td">
+                        Poor
+                    </td>                      
+                </tr>
+            <table>
+            <table>
+                <tr>
+                    <td class="legend_table_td_col_1">
+                        Transportation Equity Priority:
+                    </td>
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_7" class="legend_svg">
+                            <rect id="svg_rect_in_legend_7" x="0" y="5" width="25" height="25" fill="#c2005b" fill-opacity="1.0">
+                            </rect>
+                        </svg>                   
+                    </td>
+                    <td class="legend_table_td">
+                        High
+                    </td>
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_8" class="legend_svg">
+                            <rect id="svg_rect_in_legend_8" x="0" y="5" width="25" height="25" fill="#ff7070" fill-opacity="1.0">
+                            </rect>
+                        </svg>                    
+                    </td>
+                    <td class="legend_table_td">
+                        Moderate
+                    </td>
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_9" class="legend_svg">
+                            <rect id="svg_rect_in_legend_9" x="0" y="5" width="25" height="25" fill="#ffbdbe" fill-opacity="1.0">
+                            </rect>
+                        </svg>                    
+                    </td>
+                    <td class="legend_table_td">
+                        Poor
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td class="legend_table_td_col_1">
+                        Transportation Equity Layers:
+                    </td>
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_10" class="legend_svg">
+                            <rect id="svg_rect_in_legend_10" x="0" y="5" width="25" height="25" fill="#66c2a5" fill-opacity="0.5">
+                            </rect>
+                        </svg>                        
+                    </td>                   
+                    <td class="legend_table_td">
+                        Low-income TAZes
+                    </td>    
+                    <td class="legend_table_td">
+                         <svg id="legend_svg_11" class="legend_svg">
+                            <rect id="svg_rect_in_legend_2" x="0" y="5" width="25" height="25" fill="#fc8d62" fill-opacity="0.5">
+                            </rect>
+                        </svg>                        
+                    </td> 
+                    <td class="legend_table_td">
+                        Minority TAZes
+                    </td> 
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_12" class="legend_svg">
+                            <rect id="svg_rect_in_legend_12" x="0" y="5" width="25" height="25" fill="#8da0cb" fill-opacity="0.5">
+                            </rect>
+                        </svg>                        
+                    </td> 
+                    <td class="legend_table_td">
+                        Elderly TAZes
+                    </td> 
+                    <td class="legend_table_td">
+                         <svg id="legend_svg_13" class="legend_svg">
+                            <rect id="svg_rect_in_legend_13" x="0" y="5" width="25" height="25" fill="#e78ac3" fill-opacity="0.5">
+                            </rect>
+                        </svg>                       
+                    </td> 
+                    <td class="legend_table_td">
+                        Zero-vehicle Household TAZes
+                    </td> 
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_14" class="legend_svg">
+                            <rect id="svg_rect_in_legend_14" x="0" y="5" width="25" height="25" fill="#a6d854" fill-opacity="0.5">
+                            </rect>
+                        </svg>                        
+                    </td> 
+                    <td class="legend_table_td">
+                        Quarter-mile buffer around schools and colleges
+                    </td>                     
+                </tr>
+            </table>
 
+<!--
         <div id="legend" role="presentation">
             <table style="border:none">
                 <tr>
@@ -154,7 +309,8 @@
                     </td>
                 </tr>
             </table>
-        </div> <!-- legend -->
+        </div> 
+-->
       
         <div id="output_div" class="output_div_class" role="presentation" aria-hidden="true">                    
             <h3 class="table_pseudo_caption">Summary</h3>         
