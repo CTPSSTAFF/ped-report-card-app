@@ -119,6 +119,8 @@ td.roadseg_data {
     min-height: 250px;
 }
 */
+
+/* Rules for legend(s) */
 .legend_caption {
     font-size: 18px;
     margin-top: 5px;
@@ -134,40 +136,25 @@ td.roadseg_data {
     width: 30px;
 }
 .legend_svg_line {
-    height: 53px;
+    height: 30px;
     width: 100px;
 }
-/* Rules for pseudo-table in legend */
-.legend_pseudo_table_row {
-    display:table-row;
+.legend_table_td {
+    font-size: 14px;
+    font-weight: bold;
+    padding-right: 15px;
+    vertical-align: bottom;
+    border-style: hidden!important;
 }
-.legend_pseudo_table_cell {
-    display:table-cell;    
+.legend_table_td_col_1 {
+    width: 205px;
+    font-size: 14px;
+    font-weight: bold;
+    padding-right: 15px;
+    vertical-align: bottom;
+    border-style: hidden!important;
 }
-.legend_pseudo_column_1 {
-    width: 30px;
-    height: 35px;
-}
-.legend_pseudo_column_2 {
-    width: 45px;
-    height: 35px;
-}
-.legend_pseudo_column_3 {
-    width: 110px;
-    height: 35px;
-}
-.legend_pseudo_column_4 {
-    width: 50px;
-    height: 35px;
-}
-.legend_pseudo_column_5 {
-    wdith: 35px;
-    height: 35px;
-}
-.legend_pseudo_column_6 {
-    width: 75px;
-    height: 35px;
-}
+
 
 /* Rules added with introduction of Slick Grid control */
 #location_list_div {

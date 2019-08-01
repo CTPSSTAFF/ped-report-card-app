@@ -54,7 +54,7 @@
             <label for="school_buf_toggle">Quarter-mile buffer around schools and colleges &nbsp;&nbsp;</label>      
         </div>
         <div id="map_options_div_2" role="presentaiton">
-            Symbolize map by report card score for:
+            Symbolize scored locations by report card score for:
             <select id="select_symbology" class="app_select_box">
                 <option value="default" selected>Select evaluation criterion...</option>
                 <option value="safety">Safety</option>
@@ -66,134 +66,112 @@
             <input type="button" id="about_button" value="About"/>
             <input type="button" id="help_button" value="Help"/> 
         </div>
-        <div id="map_options_div_3" role="presentation">
-      
-        </div>
         
         <div id="map" role="presentation">
         </div>
 
-        <div id="legend" role="presentation">
-            <h2 class="legend_caption">Legend</h2>
-            <div>
-                <span>
-                    <img src="img/blue-marker.png">Intersection&nbsp;&nbsp;
-                    <svg id="legend_svg_1" class="legend_svg_line"><line id="svg_line_in_legend_1" x1="0" y1="50" x2="100" y2="50" stroke="#0070ff" stroke-width="6"></line></svg>&nbsp;&nbsp;Roadway Segment&nbsp;&nbsp;
-                    <svg id="legend_svg_2" class="legend_svg_line"><line id="svg_line_in_legend_2" x1="0" y1="50" x2="100" y2="50" stroke="#000080" stroke-width="4.5"></line></svg>&nbsp;&nbsp;Boston Region MPO Boundary&nbsp;&nbsp;
-                    <svg id="legend_svg_3" class="legend_svg_line"><line id="svg_line_in_legend_3" x1="0" y1="50" x2="100" y2="50" stroke="#000080" stroke-width="1.5"></line></svg>&nbsp;&nbsp;MAPC Subregion Boundary&nbsp;&nbsp;
-                </span>
-            </div>
-            
-            <h2 class="legend_caption">Grading Category Scores</h2>
-            
-            <div> <!-- row 1 -->
-                <div class="legend_pseudo_table_row">   
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_1">
+        <div id="legend" role="presentation">    
+            <table style="border:none">
+                <tr>
+                    <td class="legend_table_td_col_1">
+                        Scored Locations:
+                    </td>
+                    <td class="legend_table_td">
+                        <img src="img/blue-marker.png">
+                    </td>
+                    <td class="legend_table_td">
+                        Intersection
+                    </td> 
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_1" class="legend_svg_line"><line id="svg_line_in_legend_1" x1="0" y1="30" x2="100" y2="30" stroke="#0070ff" stroke-width="6"></line></svg>
+                    </td>
+                    <td class="legend_table_td">
+                        Roadway Segment
+                    </td>
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_2" class="legend_svg_line"><line id="svg_line_in_legend_2" x1="0" y1="30" x2="100" y2="30" stroke="#000080" stroke-width="4.5"></line></svg>
+                    </td>                    
+                    <td class="legend_table_td">
+                        Boston Region MPO Boundary
+                    </td>  
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_3" class="legend_svg_line"><line id="svg_line_in_legend_3" x1="0" y1="30" x2="100" y2="30" stroke="#000080" stroke-width="1.5"></line></svg>
+                    </td>
+                    <td class="legend_table_td">
+                        MAPC Subregion Boundary
+                    </td>
+                </tr>     
+            </table>
+            <table>
+                <tr>
+                    <td class="legend_table_td_col_1">
+                        Grading Category Scores:
+                    </td>
+                    <td class="legend_table_td">
                         <img src="img/green-marker.png">
-                    </div>
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_2">
+                    </td>
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_4" class="legend_svg_line"><line id="svg_line_in_legend_4" x1="0" y1="30" x2="100" y2="30" stroke="#38a800" stroke-width="6"></line></svg>
+                    </td>                
+                    <td class="legend_table_td">
                         Good
-                    </div>
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_3">
-                        <svg id="legend_svg_4" class="legend_svg_line"><line id="svg_line_in_legend_4" x1="0" y1="50" x2="100" y2="50" stroke="#38a800" stroke-width="6"></line></svg>
-                    </div>
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_4">
-                        Good
-                    </div> 
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_5">                  
+                    </td>  
+                    <td class="legend_table_td">
+                        <img src="img/orange-marker.png"> 
+                    </td>  
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_6" class="legend_svg_line"><line id="svg_line_in_legend_5" x1="0" y1="30" x2="100" y2="30" stroke="#ff7f00" stroke-width="6"></line></svg>
+                    </td>  
+                    <td class="legend_table_td">
+                        Fair
+                    </td>  
+                    <td class="legend_table_td">
+                         <img src="img/red-marker.png">
+                    </td>  
+                    <td class="legend_table_td">
+                        <svg id="legend_svg_8" class="legend_svg_line"><line id="svg_line_in_legend_6" x1="0" y1="30" x2="100" y2="30" stroke="#d60047" stroke-width="6"></line></svg>
+                    </td>  
+                    <td class="legend_table_td">
+                        Poor
+                    </td>                      
+                </tr>
+            <table>
+            <table>
+                <tr>
+                    <td class="legend_table_td_col_1">
+                        Transportation Equity Priority:
+                    </td>
+                    <td class="legend_table_td">
                         <svg id="legend_svg_5" class="legend_svg">
                             <rect id="svg_rect_in_legend_1" x="0" y="5" width="25" height="25" fill="#c2005b" fill-opacity="1.0">
                             </rect>
-                        </svg>                     
-                    </div>
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_6">
+                        </svg>                   
+                    </td>
+                    <td class="legend_table_td">
                         High
-                    </div>
-                </div> <!-- row 1 -->
-
-            <div> <!-- row 2 -->
-                <div class="legend_pseudo_table_row">   
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_1">
-                        <img src="img/orange-marker.png">                    
-                    </div>
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_2">
-                        Fair
-                    </div>
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_3">
-                         <svg id="legend_svg_6" class="legend_svg_line"><line id="svg_line_in_legend_5" x1="0" y1="50" x2="100" y2="50" stroke="#ff7f00" stroke-width="6"></line></svg>
-                    </div>
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_4">
-                        Fair
-                    </div> 
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_5">                  
+                    </td>
+                    <td class="legend_table_td">
                         <svg id="legend_svg_7" class="legend_svg">
                             <rect id="svg_rect_in_legend_2" x="0" y="5" width="25" height="25" fill="#ff7070" fill-opacity="1.0">
                             </rect>
-                        </svg>                     
-                    </div>
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_6">
+                        </svg>                    
+                    </td>
+                    <td class="legend_table_td">
                         Moderate
-                    </div>
-                </div> <!-- row 2 -->
-
-            <div> <!-- row 3 -->
-                <div class="legend_pseudo_table_row">   
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_1">
-                        <img src="img/red-marker.png">
-                    </div>
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_2">
-                        Poor
-                    </div>
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_3">
-                         <svg id="legend_svg_8" class="legend_svg_line"><line id="svg_line_in_legend_6" x1="0" y1="50" x2="100" y2="50" stroke="#d60047" stroke-width="6"></line></svg>
-                    </div>
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_4">
-                        Poor
-                    </div> 
-                    <div class="legend_pseudo_table_cell legedn_pseudo_column_5">                  
+                    </td>
+                    <td class="legend_table_td">
                         <svg id="legend_svg_9" class="legend_svg">
                             <rect id="svg_rect_in_legend_3" x="0" y="5" width="25" height="25" fill="#ffbdbe" fill-opacity="1.0">
                             </rect>
-                        </svg>                     
-                    </div>
-                    <div class="legend_pseudo_table_cell legend_pseudo_column_6">
-                        Low
-                    </div>
-                </div> <!-- row 3 -->
-            </div>
-            
-            
-            <h2 class="legend_caption">Transportation Equity Layers</h2>                  
-            <div> 
-                <span>
-                     <svg id="legend_svg_10" class="legend_svg">
-                        <rect id="svg_rect_in_legend_4" x="0" y="5" width="25" height="25" fill="#66c2a5" fill-opacity="0.5">
-                        </rect>
-                    </svg>&nbsp;&nbsp;Low-income TAZes&nbsp;&nbsp; 
-     
-                     <svg id="legend_svg_11" class="legend_svg">
-                        <rect id="svg_rect_in_legend_5" x="0" y="5" width="25" height="25" fill="#fc8d62" fill-opacity="0.5">
-                        </rect>
-                    </svg>&nbsp;&nbsp;Minority TAZes&nbsp;&nbsp;                
-                    
-          
-                    <svg id="legend_svg_12" class="legend_svg">
-                        <rect id="svg_rect_in_legend_6" x="0" y="5" width="25" height="25" fill="#8da0cb" fill-opacity="0.5">
-                        </rect>
-                    </svg>&nbsp;&nbsp;Elderly TAZes&nbsp;&nbsp;  
-                    
-                    <svg id="legend_svg_13" class="legend_svg">
-                        <rect id="svg_rect_in_legend_7" x="0" y="5" width="25" height="25" fill="#e78ac3" fill-opacity="0.5">
-                        </rect>
-                    </svg>&nbsp;&nbsp;Zero-vehicle Household TAZes&nbsp;&nbsp;    
-                    <svg id="legend_svg_14" class="legend_svg">
-                        <rect id="svg_rect_in_legend_8" x="0" y="5" width="25" height="25" fill="#a6d854" fill-opacity="0.5">
-                        </rect>
-                    </svg>&nbsp;&nbsp;Quarter-mile buffer around schools and colleges&nbsp;&nbsp;
-                </span>
-            </div>
+                        </svg>                    
+                    </td>
+                    <td class="legend_table_td">
+                        Poor
+                    </td>
+                </tr>
+            </table>
         </div>
-    
+
         <!-- Since there is currently no way to query for recport card locations other than using the mouse on the map,
              the accessible output simply lists the report card data for all intersections (6) and road segments (ca. 20)
         -->
