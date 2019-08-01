@@ -33,6 +33,11 @@
 }
 /* End of stuff for "branding" */
 
+#detail_page_caption {
+    font-size: 28px;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
 #wrapper {
     width: 100%;
     height: 600px;
@@ -50,7 +55,11 @@
     height: 100%;
     border: 4px solid #B87F32; 
 }
-#legend_caption {
+
+
+/* Rules for legend(s) */
+.legend_caption {
+    font-size: 18px;
     margin-top: 5px;
     margin-bottom: 5px;
 }
@@ -64,8 +73,23 @@
     width: 30px;
 }
 .legend_svg_line {
-    height: 53px;
+    height: 30px;
     width: 100px;
+}
+.legend_table_td {
+    font-size: 14px;
+    font-weight: bold;
+    padding-right: 15px;
+    vertical-align: bottom;
+    border-style: hidden!important;
+}
+.legend_table_td_col_1 {
+    width: 205px;
+    font-size: 14px;
+    font-weight: bold;
+    padding-right: 15px;
+    vertical-align: bottom;
+    border-style: hidden!important;
 }
 
 #output_div {
