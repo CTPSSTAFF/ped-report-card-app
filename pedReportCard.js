@@ -1,6 +1,6 @@
 // Pedestrian Report Card Application - main page
 // Author:  Ben Krepp
-// Date:    December 2018, and May-July 2019
+// Date:    December 2018, and May-August 2019
 //
 // Data sources: All data used in this app is loaded from GeoJSON files
 //
