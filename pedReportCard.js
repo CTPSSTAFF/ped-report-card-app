@@ -221,11 +221,7 @@ $(document).ready(function() {
     $('#about_button').click(function(e) {
         var url = 'About.html'
         window.open(url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes')
-    });
-    $('#help_button').click(function(e) {
-        var url = 'Help.html'
-        window.open(url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes')
-    });    
+    });   
     
     // *** When the window resizes, resize the header row in the SlickGrid
     //     N.B. This is an unabashed hack!
