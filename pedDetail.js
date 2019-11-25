@@ -119,6 +119,9 @@ $(document).ready(function() {
         var url = 'About.html'
         window.open(url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes')
     }); 
+    $('#comment_button').click(function(){
+		window.open('http://www.ctps.org/contact','_blank');      
+	});
 /*
     // Enable jQueryUI tabs
     $('#tabs_div').tabs({ 'heightStyle' : 'content', 'active' : 0 });
@@ -193,7 +196,8 @@ $(document).ready(function() {
             streetViewControl: false,
             zoomControlOptions: {'style': 'SMALL'},
             scaleControl: true,
-            overviewMapControl: false
+            overviewMapControl: false,
+            mapTypeId: 'terrain'
         };   
         map = new google.maps.Map(document.getElementById("map"), mapOptions);    
 
