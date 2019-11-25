@@ -44,7 +44,7 @@ var mpoBoundaryColor = '#000080'; // '#0070ff' ("Dodger Blue") '#00a674' ("Mediu
 // Color palette for scored locations:
 var colorPalette = {    'default'   : '#0070ff',  // '00a9e6' // '#c500ff' // '#0070ff'
                         'good'      : '#38a800',
-                        'fair'      : '#ff7f00', 
+                        'fair'      : '#ffc04d', // '#ff7f00', 
                         'poor'      : '#d60047'
 };
 
@@ -221,7 +221,10 @@ $(document).ready(function() {
     $('#about_button').click(function(e) {
         var url = 'About.html'
         window.open(url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes')
-    });   
+    });  
+	$('#comment_button').click(function(){
+		window.open('http://www.ctps.org/contact','_blank');      
+	});    
     
     // *** When the window resizes, resize the header row in the SlickGrid
     //     N.B. This is an unabashed hack!
@@ -365,7 +368,8 @@ function initializeMap(data) {
 		streetViewControl: false,
 		zoomControlOptions: {'style': 'SMALL'},
 		scaleControl: true,
-		overviewMapControl: false
+		overviewMapControl: false,
+        mapTypeId: 'terrain'
 	};
     
 	map = new google.maps.Map(document.getElementById("map"), mapOptions);
