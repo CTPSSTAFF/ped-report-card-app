@@ -1,4 +1,4 @@
-// Pedestrian Report Card Application - main page
+// Pedestrian Report Card Application - main page 
 // Author:  Ben Krepp
 // Date:    December 2018, and May-August 2019
 //
