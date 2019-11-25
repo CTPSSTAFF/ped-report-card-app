@@ -19,8 +19,8 @@ Dependencies on external libraries:
 * GoogleMaps Utility libraries (see https://github.com/googlemaps/v3-utility-library)
 * jQuery version 2.2.4 (see https://jquery.com/)
 * jQueryUI version 1.12.1 (see https://jqueryui.com/)
-* jquery.event.drag  version 2.2 (see http://threedubmedia.com/code/event/drag)
-* jquery.event.drop version 2.2 (see http://threedubmedia.com/code/event/drop)
+* jquery.event.drag  version 2.2 (see http://threedubmedia.com/code/event/drag) - required by SlickGrid, q.v.
+* jquery.event.drop version 2.2 (see http://threedubmedia.com/code/event/drop)  - required by SlickGrid, q.v.
 * SlickGrid version 2.4.1 (see http://slickgrid.net/)
 * underscore.js version 1.9.1 (see https://underscorejs.org/)
 * turf.js version 1.9.1 (see https://turfjs.org/)
