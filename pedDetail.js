@@ -443,11 +443,13 @@ $(document).ready(function() {
         var props = feature.properties; 
         
         // Clear out any previous data about intersections or roadsegs
-        $('.intersection_data').html('');
+        $('.sig_intersection_data').html('');
+        $('.unsig_intersection_data').html('');
         $('.roadseg_data').html('');
         
-        // Location: intersection OR road segment
+        // Location: signalized intersection, unsignalized intersection OR road segment
         var tmpStr;
+        var intersectionType = '';
         if (featureKind == 'Point') {
             tmpStr = props['Location_Description'] + ' - ' + props['Municipality'];
             tmpStr += (props['Municipality_2'] != 'N/A') ? ' and ' + props['Municipality_2'] : '';
@@ -455,7 +457,17 @@ $(document).ready(function() {
             // featureKind == 'Point' ==> intersection
             $('#detail_page_caption').html(tmpStr);
             $('.roadseg_data_table').hide();
-            $('.intersection_data_table').show();
+            
+            // Distinguish between signalized and un-signalized intersections
+            intersectionType = props['Intersection_Type'];
+            if (intersectionType == 'Signalized') {
+                $('.unsig_intersection_data_table').hide();
+                $('.sig_intersection_data_table').show();
+            } else {
+                // Assume unsignalized
+                $('.sig_intersection_data_table').hide();
+                $('.unsig_intersection_data_table').show();   
+            } // inner if
         } else {
             // featureKind == LineString || MultiLineString ==> road segment
             // Note: for road segs we display the 'Location' (i.e., road name) before
@@ -465,7 +477,8 @@ $(document).ready(function() {
             tmpStr += (props['Municipality_2'] != 'N/A') ? ' and ' + props['Municipality_2'] : '';
             tmpStr += ', MA';        
             $('#detail_page_caption').html(tmpStr);
-            $('.intersection_data_table').hide();
+            $('.sig_intersection_data_table').hide();
+            $('.unsig_intersection_data_table').hide();
             $('.roadseg_data_table').show();
         }
         
@@ -512,18 +525,32 @@ $(document).ready(function() {
         //
         var weight, rating, weightedScore;
         //
-        // Safety detail table - DIFFERENT structure for intersections and roadsegs!
+        // Safety detail table - DIFFERENT structure for signalized intersections, un-signalized intersections, and roadsegs!
         if (featureKind == 'Point') {
-            // Intersection - Sufficient Crossing Time 
-            populateScoreAndRating('Sufficient_Crossing_Time_Index', 'intersection_suff_xing_time', 0);
-            // Intersection - Pedestrian Crashes
-            populateScoreAndRating('Pedestrian_Crashes', 'intersection_ped_crashes', 0);
-            // Intersection - Pedestrian Signal Presence
-            populateScoreAndRating('Pedestrian_Signal_Presence', 'intersection_ped_sig_presence', 0);
-            // Intersection - Vehicle Travel Speed
-            populateScoreAndRating('Average_Vehicle_Travel_Speed', 'intersection_veh_travel_speed', 0);
-            // Intersection - Safety Total
-            populateScoreAndRating('Safety', 'intersection_safety_total', 2);
+            // Distinguish between signalized and un-signalized intersections
+            if (intersectionType == 'Signalized') {          
+                // Signalized Intersection - Sufficient Crossing Time 
+                populateScoreAndRating('Sufficient_Crossing_Time_Index', 'sig_intersection_suff_xing_time', 0);
+                // Signalized  Intersection - Pedestrian Crashes
+                populateScoreAndRating('Pedestrian_Crashes', 'sig_intersection_ped_crashes', 0);
+                // Signalized Intersection - Pedestrian Signal Presence
+                populateScoreAndRating('Pedestrian_Signal_Presence', 'sig_intersection_ped_sig_presence', 0);
+                // Signalized Intersection - Vehicle Travel Speed
+                populateScoreAndRating('Vehicle_Travel_Speed', 'sig_intersection_veh_travel_speed', 0); // was: 'Average_Vehicle_Travel_Speed'
+                // Signalized Intersection - Safety Total
+                populateScoreAndRating('Safety', 'sig_intersection_safety_total', 2);
+            } else {
+                // Unsignalized Intersection - Lanes of Traffic
+                populateScoreAndRating('Lanes_of_Traffic', 'unsig_intersection_lanes_traffic', 0);
+                // Unsignalized  Intersection - Pedestrian Crashes
+                populateScoreAndRating('Pedestrian_Crashes', 'unsig_intersection_ped_crashes', 0);  
+                // Unsignalized Intersection - Crossing Distance
+                populateScoreAndRating('Crossing_Distance', 'unsig_intersection_crossing_distance', 0);                
+                // Unignalized Intersection - Vehicle Travel Speed
+                populateScoreAndRating('Vehicle_Travel_Speed', 'unsig_intersection_veh_travel_speed', 0);                
+                // Unsignalized Intersection - Safety Total
+                populateScoreAndRating('Safety', 'unsig_intersection_safety_total', 2);               
+            } // inner if           
         } else {
             // Roadseg - Pedestrian Crashes
             populateScoreAndRating('Pedestrian_Crashes', 'roadseg_ped_crashes', 0);
@@ -535,30 +562,44 @@ $(document).ready(function() {
             populateScoreAndRating('Safety', 'roadseg_safety_total', 2);    
         }
         
-        // System Preservation detail table - SAME structure for intersections and roadsegs
+        // System Preservation detail table - SAME structure for signalized intersections, un-signalized intersections, and roadsegs
         $('#sidewalk_condition_percentage').html('100%');
         populateScoreAndRating('Sidewalk_Condition', 'sidewalk_condition', 2);
 
           
-        // Capacity Management and Mobility detail table - DIFFERENT structure for intersections and roadsegs!
+        // Capacity Management and Mobility detail table - DIFFERENT structure for signalized intersections, un-signalized intersections, and roadsegs!
         if (featureKind == 'Point') {   
-            // Intersection - Pedestrian Delay
-            populateScoreAndRating('Pedestrian_Delay', 'intersection_pedestrian_delay', 0);
-            // Intersection - Sidewalk Presence
-            populateScoreAndRating('Sidewalk_Presence', 'intersection_sidewalk_presence', 0);
-            // Intersection - Curb Ramp Presence
-            populateScoreAndRating('Curb_Ramp_Presence', 'intersection_curb_ramp_presence', 0);
-            // Intersection - Crosswalk Presence
-            // NOTE: Difference between property name in JSON and 'display name' - was this an oversight?
-            populateScoreAndRating('Crossing_Opportunities', 'intersection_crosswalk_presence', 0);
-            // Intesection - Capacity Management and Mobility Total
-            // *** TBD: open question here
-            populateScoreAndRating('Capacity_Management_and_Mobility', 'intersection_cmm_total', 2);
+            // Distinguish between signalized and un-signalized intersections
+            if (intersectionType == 'Signalized') {           
+                // Signalized Intersection - Pedestrian Delay
+                populateScoreAndRating('Pedestrian_Delay', 'sig_intersection_pedestrian_delay', 0);
+                // Signalized Intersection - Sidewalk Presence
+                populateScoreAndRating('Sidewalk_Presence', 'sig_intersection_sidewalk_presence', 0);
+                // Signalized Intersection - Curb Ramp Presence
+                populateScoreAndRating('Curb_Ramp_Presence', 'sig_intersection_curb_ramp_presence', 0);
+                // Signalized Intersection - Crosswalk Presence
+                // NOTE: Difference between property name in JSON and 'display name' - was this an oversight?
+                populateScoreAndRating('Crosswalk_Presence', 'sig_intersection_crosswalk_presence', 0);
+                // Signalized Intesection - Capacity Management and Mobility Total
+                // *** TBD: open question here
+                populateScoreAndRating('Capacity_Management_and_Mobility', 'sig_intersection_cmm_total', 2);
+            } else {
+                // Unignalized Intersection - Sidewalk Presence
+                populateScoreAndRating('Sidewalk_Presence', 'unsig_intersection_sidewalk_presence', 0);
+                // Unignalized Intersection - Curb Ramp Presence
+                populateScoreAndRating('Curb_Ramp_Presence', 'unsig_intersection_curb_ramp_presence', 0);
+                // Unignalized Intersection - Crosswalk Presence
+                // NOTE: Difference between property name in JSON and 'display name' - was this an oversight?
+                populateScoreAndRating('Crosswalk_Presence', 'unsig_intersection_crosswalk_presence', 0);
+                // Unignalized Intesection - Capacity Management and Mobility Total
+                // *** TBD: open question here
+                populateScoreAndRating('Capacity_Management_and_Mobility', 'unsig_intersection_cmm_total', 2);                              
+            } // inner if          
         } else {
             // Roadseg - Sidewalk Presence
             populateScoreAndRating('Sidewalk_Presence', 'roadseg_sidewalk_presence', 0);
             // Roadseg - Crosswalk Presence
-            // NOTE: Difference between property name in JSON and 'display name' - was this an oversight?
+            // NOTE: Difference between property name in roadsegs FC vs. intersections FC
             populateScoreAndRating('Crossing_Opportunities', 'roadseg_crosswalk_presence', 0);
             // Roadseg - Walkway Width
             populateScoreAndRating('Walkway_Width', 'roadseg_walkway_width', 0);
@@ -566,11 +607,24 @@ $(document).ready(function() {
             populateScoreAndRating('Capacity_Management_and_Mobility', 'roadseg_cmm_total', 2);
         }
        
-        // Economic Vitality detail table -  - DIFFERENT structure for intersections and roadsegs!  
+        // Economic Vitality detail table -  DIFFERENT structure for signalized intersections, un-signalized intersections, and roadsegs! 
         if (featureKind == 'Point') {
-            // Intersection - Pedestrian Volumes
-             $('#intersection_ped_volumes_percentage').html('100%');
-            populateScoreAndRating('Pedestrian_Volumes', 'intersection_ped_volumes', 2);
+            // Distinguish between signalized and un-signalized intersections
+            if (intersectionType == 'Signalized') {
+                // Signalized Intersection - Pedestrian Volumes
+                $('#sig_intersection_ped_volumes_percentage').html('100%');
+                populateScoreAndRating('Pedestrian_Volumes', 'sig_intersection_ped_volumes', 2);
+            } else {
+                // Unsignalized Intersection - Pedestrian Volumes
+                $('#unsig_intersection_ped_volumes_percentage').html('70%');
+                populateScoreAndRating('Pedestrian_Volumes', 'unsig_intersection_ped_volumes', 2);  
+                // Unsignalized Intersection - Raised Crosswalk Presence
+                $('#unsig_intersection_raised_crosswalk_percentage').html('30%');
+                populateScoreAndRating('Raised_Crosswalk_Presence', 'unsig_intersection_raised_crosswalk', 2);
+                // Note: This category has TWO performance measures for un-signalized intersections; hence, it also has a "total".
+                // Unsignalized Intersection - Economic Vitality Total
+                populateScoreAndRating('Economic_Vitality', 'unsig_intersection_total', 2);               
+            } // inner if 
         } else {
             // Roadseg - Pedestrian Volumes
             $('#roadseg_ped_volumes_percentage').html('50%');
@@ -581,7 +635,7 @@ $(document).ready(function() {
             populateScoreAndRating('Economic_Vitality', 'roadseg_econ_total', 2);
         }
         
-        // Transportation Equity detail table - SAME structure for intersections and roadsegs
+        // Transportation Equity detail table - SAME structure for signalized intersections, un-signalized intersections, and roadsegs
         //
         $('#low_income_pop').html(props['Low_Income'] != null ? props['Low_Income'] : '');       
         $('#minority_pop').html(props['Minority'] != null ? props['Minority'] : '');

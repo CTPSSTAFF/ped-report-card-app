@@ -96,7 +96,7 @@
     height: content;
 }
 
-#intersection_location_table #roadseg_location_table {
+#sig_intersection_location_table #unsig_intersection_location_table #roadseg_location_table {
     padding-top: 10px;
 }
 /* Single-line 1px border around table cells */
@@ -115,7 +115,9 @@ table, th, td {
 }
 .location_data_table {
 }
-.intersection_data_table {   
+.sig_intersection_data_table {   
+}
+.unsig_intersection_data_table {   
 }
 .roadseg_data_table {
 }
@@ -132,7 +134,10 @@ table, th, td {
     font-weight: bold;
 }
 
-td.intersection_data {
+td.sig_intersection_data {
+    min-width: 25px;
+}
+td.unsig_intersection_data {
     min-width: 25px;
 }
 td.roadseg_data {
@@ -148,6 +153,3 @@ td.roadseg_data {
 .ui-widget {
     font-size:80% !important;
 }
-
-
-

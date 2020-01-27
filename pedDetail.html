@@ -362,8 +362,9 @@
                 </tr>
             </table>
                          
-            <h3 class="table_pseudo_caption">Safety</h3>           
-            <table id="intersection_safety_table" class="location_data_table intersection_data_table">
+            <h3 class="table_pseudo_caption">Safety</h3>  
+            <!-- Safety table: signalized intersections -->
+            <table id="sig_intersection_safety_table" class="location_data_table sig_intersection_data_table">
                 <thead>
                     <tr>
                         <td class="location_table_detail_header">Performance Measure</td>
@@ -375,36 +376,80 @@
                 <tbody>
                     <tr>
                         <td>Sufficient Crossing Time (Index)</td>
-                        <td id="intersection_suff_xing_time_percentage">38%</td>
-                        <td id="intersection_suff_xing_time_score" class="intersection_data"></td>
-                        <td id="intersection_suff_xing_time_rating" class="intersection_data"></td>
+                        <td id="sig_intersection_suff_xing_time_percentage">38%</td>
+                        <td id="sig_intersection_suff_xing_time_score" class="sig_intersection_data"></td>
+                        <td id="sig_intersection_suff_xing_time_rating" class="sig_intersection_data"></td>
                     <tr>
                         <td>Pedestrian Crashes</td>
-                        <td id="intersection_ped_crashes_percentage">38%</td>                        
-                        <td id="intersection_ped_crashes_score" class="intersection_data"></td>
-                        <td id="intersection_ped_crashes_rating" class="intersection_data"></td>
+                        <td id="sig_intersection_ped_crashes_percentage">38%</td>                        
+                        <td id="sig_intersection_ped_crashes_score" class="sig_intersection_data"></td>
+                        <td id="sig_intersection_ped_crashes_rating" class="sig_intersection_data"></td>
                     </tr>
                     <tr>
                         <td>Pedestrian Signal Presence</td>
-                        <td id="intersection_ped_sig_presence_percentage">13%</td>
-                        <td id="intersection_ped_sig_presence_score" class="intersection_data"></td>
-                        <td id="intersection_ped_sig_presence_rating" class="intersection_data"></td>
+                        <td id="sig_intersection_ped_sig_presence_percentage">13%</td>
+                        <td id="sig_intersection_ped_sig_presence_score" class="sig_intersection_data"></td>
+                        <td id="sig_intersection_ped_sig_presence_rating" class="sig_intersection_data"></td>
                     </tr>
                     <tr>
                         <td>Vehicle Travel Speed</td>
-                        <td id="intersection_veh_travel_speed_percentage">13%</td>
-                        <td id="intersection_veh_travel_speed_score" class="intersection_data"></td>
-                        <td id="intersection_veh_travel_speed_rating" class="intersection_data"></td>
+                        <td id="sig_intersection_veh_travel_speed_percentage">13%</td>
+                        <td id="sig_intersection_veh_travel_speed_score" class="sig_intersection_data"></td>
+                        <td id="sig_intersection_veh_travel_speed_rating" class="sig_intersection_data"></td>
                     </tr>
                     <tr>
                         <td>Total</td>
-                        <td id="intersection_safety_total_percentage">100%</td>
-                        <td id="intersection_safety_total_score" class="intersection_data"></td>
-                        <td id="intersection_safety_total_rating" class="intersection_data"></td>                        
+                        <td id="sig_intersection_safety_total_percentage">100%</td>
+                        <td id="sig_intersection_safety_total_score" class="sig_intersection_data"></td>
+                        <td id="sig_intersection_safety_total_rating" class="sig_intersection_data"></td>                        
                     </tr>
                 </tbody>
             </table>
-                    
+ 
+            <!-- Safety table: UNsignalized intersections -->
+            <table id="unsig_intersection_safety_table" class="location_data_table unsig_intersection_data_table">
+                <thead>
+                    <tr>
+                        <td class="location_table_detail_header">Performance Measure</td>
+                        <td class="location_table_detail_header">Percentage</td>
+                        <td class="location_table_detail_header">Score<br>(out of 3.0)</td>
+                        <td class="location_table_detail_header">Rating</td>
+                    </tr>   
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Lanes of Traffic</td>
+                        <td id="unsig_intersection_lanes_traffic_percentage_percentage">38%</td>
+                        <td id="unsig_intersection_lanes_traffic_score" class="unsig_intersection_data"></td>
+                        <td id="unsig_intersection_lanes_traffic_rating" class="unsig_intersection_data"></td>
+                    <tr>
+                        <td>Pedestrian Crashes</td>
+                        <td id="unsig_intersection_ped_crashes_percentage">38%</td>                        
+                        <td id="unsig_intersection_ped_crashes_score" class="unsig_intersection_data"></td>
+                        <td id="unsig_intersection_ped_crashes_rating" class="unsig_intersection_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Crossing Distance</td>
+                        <td id="unsig_intersection_crossing_distance_percentage">13%</td>
+                        <td id="unsig_intersection_crossing_distance_score" class="unsig_intersection_data"></td>
+                        <td id="unsig_intersection_crossing_distance_rating" class="unsig_intersection_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Vehicle Travel Speed</td>
+                        <td id="unsig_intersection_veh_travel_speed_percentage">13%</td>
+                        <td id="unsig_intersection_veh_travel_speed_score" class="unsig_intersection_data"></td>
+                        <td id="unsig_intersection_veh_travel_speed_rating" class="unsig_intersection_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td id="unsig_intersection_safety_total_percentage">100%</td>
+                        <td id="unsig_intersection_safety_total_score" class="unsig_intersection_data"></td>
+                        <td id="unsig_intersection_safety_total_rating" class="unsig_intersection_data"></td>                        
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Safety table: roadway segment -->
             <table id="roadseg_safety_table" class="location_data_table roadseg_data_table">
                 <thead>
                     <tr>
@@ -443,7 +488,7 @@
             </table> 
                                 
             <h3 class="table_pseudo_caption">System Preservation</h3>
-            <table id="system_preservation_table" class="location_data_table intersection_data_table roadseg_data_table">
+            <table id="system_preservation_table" class="location_data_table sig_intersection_data_table unsig_intersection_data_table roadseg_data_table">
                 <thead>
                      <tr>
                         <td class="location_table_detail_header">Performance Measure</td>
@@ -455,15 +500,18 @@
                 <tbody>
                     <tr>
                         <td>Sidewalk Condition</td>
-                        <td id="sidewalk_condition_percentage" class="intersection_data roadseg_data">100%</td>
-                        <td id="sidewalk_condition_score" class="intersection_data roadseg_data"></td>
-                        <td id="sidewalk_condition_rating" class="intersection_data roadseg_data"></td>
+                        <td id="sidewalk_condition_percentage" class="sig_intersection_data unsig_intersection_data roadseg_data">100%</td>
+                        <td id="sidewalk_condition_score" class="intersection_data unsig_intersection_data roadseg_data"></td>
+                        <td id="sidewalk_condition_rating" class="intersection_data unsig_intersection_data roadseg_data"></td>
                     </tr>
                 </tbody>
             </table>
+            
+            
                                
-            <h3 class="table_pseudo_caption">Capacity Management and Mobility</h3>            
-            <table id="intersection_cmm_table" class="location_data_table intersection_data_table">
+            <h3 class="table_pseudo_caption">Capacity Management and Mobility</h3>  
+            <!-- Capacity Management and Mobility: signalized intersection table -->
+            <table id="sig_intersection_cmm_table" class="location_data_table sig_intersection_data_table">
                 <thead>
                     <tr>
                         <td class="location_table_detail_header">Performance Measure</td>
@@ -475,37 +523,76 @@
                 <tbody>                 
                     <tr>
                         <td>Pedestrian Delay</td>
-                        <td id="intersection_pedestrian_delay_percentage">43%</td>   
-                        <td id="intersection_pedestrian_delay_score" class="intersection_data"></td>
-                        <td id="intersection_pedestrian_delay_rating" class="intersection_data"></td>
+                        <td id="sig_intersection_pedestrian_delay_percentage">43%</td>   
+                        <td id="sig_intersection_pedestrian_delay_score" class="sig_intersection_data"></td>
+                        <td id="sig_intersection_pedestrian_delay_rating" class="sig_intersection_data"></td>
                     </tr>
                     <tr>
                         <td>Sidewalk Presence</td>
-                        <td id="intersection_sidewalk_presence_percentage">29%</td>
-                        <td id="intersection_sidewalk_presence_score" class="intersection_data"></td>
-                        <td id="intersection_sidewalk_presence_rating" class="intersection_data"></td>
+                        <td id="sig_intersection_sidewalk_presence_percentage">29%</td>
+                        <td id="sig_intersection_sidewalk_presence_score" class="sig_intersection_data"></td>
+                        <td id="sig_intersection_sidewalk_presence_rating" class="sig_intersection_data"></td>
                     </tr>
                     <tr>
                         <td>Curb Ramp Presence</td>
-                        <td id="intersection_curb_ramp_presence_percentage">14%</td>
-                        <td id="intersection_curb_ramp_presence_score" class="intersection_data"></td>
-                        <td id="intersection_curb_ramp_presence_rating" class="intersection_data"></td>
+                        <td id="sig_intersection_curb_ramp_presence_percentage">14%</td>
+                        <td id="sig_intersection_curb_ramp_presence_score" class="sig_intersection_data"></td>
+                        <td id="sig_intersection_curb_ramp_presence_rating" class="sig_intersection_data"></td>
                     </tr> 
                     <tr>
                         <td>Crosswalk Presence</td>
-                        <td id="intersection_crosswalk_presence_percentage" >14%</td>
-                        <td id="intersection_crosswalk_presence_score" class="intersection_data"></td>
-                        <td id="intersection_crosswalk_presence_rating" class="intersection_data"></td>
+                        <td id="sig_intersection_crosswalk_presence_percentage" >14%</td>
+                        <td id="sig_intersection_crosswalk_presence_score" class="sig_intersection_data"></td>
+                        <td id="sig_intersection_crosswalk_presence_rating" class="sig_intersection_data"></td>
                     </tr>
                     <tr>
                         <td>Total</td>
-                        <td id="intersection_cmm_total_percentage">100%</td>
-                        <td id="intersection_cmm_total_score" class="intersection_data"></td>
-                        <td id="intersection_cmm_total_rating" class="intersection_data"></td>
+                        <td id="sig_intersection_cmm_total_percentage">100%</td>
+                        <td id="sig_intersection_cmm_total_score" class="sig_intersection_data"></td>
+                        <td id="sig_intersection_cmm_total_rating" class="sig_intersection_data"></td>
                     </tr>
                 </tbody>
             </table>
-                    
+ 
+            <!-- Capacity Management and Mobility: UNsignalized intersection table -->
+            <table id="unsig_intersection_cmm_table" class="location_data_table unsig_intersection_data_table">
+                <thead>
+                    <tr>
+                        <td class="location_table_detail_header">Performance Measure</td>
+                        <td class="location_table_detail_header">Percentage</td>
+                        <td class="location_table_detail_header">Score<br>(out of 3.0)</td>
+                        <td class="location_table_detail_header">Rating</td>
+                    <tr>
+                </thead>
+                <tbody>                 
+                    <tr>
+                        <td>Sidewalk Presence</td>
+                        <td id="unsig_intersection_sidewalk_presence_percentage">34%</td>
+                        <td id="unsig_intersection_sidewalk_presence_score" class="unsig_intersection_data"></td>
+                        <td id="unsig_intersection_sidewalk_presence_rating" class="unsig_intersection_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Curb Ramp Presence</td>
+                        <td id="unsig_intersection_curb_ramp_presence_percentage">33%</td>
+                        <td id="unsig_intersection_curb_ramp_presence_score" class="unsig_intersection_data"></td>
+                        <td id="unsig_intersection_curb_ramp_presence_rating" class="unsig_intersection_data"></td>
+                    </tr> 
+                    <tr>
+                        <td>Crosswalk Presence</td>
+                        <td id="unsig_intersection_crosswalk_presence_percentage" >33%</td>
+                        <td id="unsig_intersection_crosswalk_presence_score" class="unsig_intersection_data"></td>
+                        <td id="unsig_intersection_crosswalk_presence_rating" class="unsig_intersection_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td id="unsig_intersection_cmm_total_percentage">100%</td>
+                        <td id="unsig_intersection_cmm_total_score" class="unsig_intersection_data"></td>
+                        <td id="unsig_intersection_cmm_total_rating" class="unsig_intersection_data"></td>
+                    </tr>
+                </tbody>
+            </table>
+   
+            <!-- Capacity Management and Mobility: roadway segment table -->       
             <table id="roadseg_cmm_table" class="location_data_table roadseg_data_table">
                 <thead>
                     <tr>
@@ -544,8 +631,9 @@
                 </tbody>
             </table> 
                     
-            <h3 class="table_pseudo_caption">Economic Vitality</h3>          
-            <table id="intersection_economic_vitality_table" class="location_data_table intersection_data_table">
+            <h3 class="table_pseudo_caption">Economic Vitality</h3>  
+            <!-- Economic vitality table: signalized intersections -->
+            <table id="sig_intersection_economic_vitality_table" class="location_data_table sig_intersection_data_table">
                 <thead>
                     <tr>
                         <td class="location_table_detail_header">Performance Measure</td>
@@ -557,13 +645,48 @@
                 <tbody>
                     <tr>
                         <td>Pedestrian Volumes</td>
-                        <td id="intersection_ped_volumes_percentage" class="intersection_data">100</td>
-                        <td id="intersection_ped_volumes_score" class="intersection_data"></td>
-                        <td id="intersection_ped_volumes_rating" class="intersection_data"></td>
+                        <td id="sig_intersection_ped_volumes_percentage" class="sig_intersection_data">100%</td>
+                        <td id="sig_intersection_ped_volumes_score" class="sig_intersection_data"></td>
+                        <td id="sig_intersection_ped_volumes_rating" class="sig_intersection_data"></td>
                     </tr>
                 </tbody>
-            </table>                   
-             <table id="roadseg_economic_vitality_table" class="location_data_table roadseg_data_table">
+            </table>  
+
+
+
+            <!-- Economic vitality table: UNsignalized intersections -->
+            <table id="unsig_intersection_economic_vitality_table" class="location_data_table unsig_intersection_data_table">
+                <thead>
+                    <tr>
+                        <td class="location_table_detail_header">Performance Measure</td>
+                        <td class="location_table_detail_header">Percentage</td>
+                        <td class="location_table_detail_header">Score<br>(out of 3.0)</td>
+                        <td class="location_table_detail_header">Rating</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Pedestrian Volumes</td>
+                        <td id="unsig_intersection_ped_volumes_percentage" class="unsig_intersection_data">70%</td>
+                        <td id="unsig_intersection_ped_volumes_score" class="unsig_intersection_data"></td>
+                        <td id="unsig_intersection_ped_volumes_rating" class="unsig_intersection_data"></td>
+                    </tr>
+                    <tr>
+                        <td>Raised Crosswalk Presence</td>
+                        <td id="unsig_intersection_raised_crosswalk_percentage" class="unsig_intersection_data">30%</td>
+                        <td id="unsig_intersection_raised_crosswalk_score" class="unsig_intersection_data"></td>
+                        <td id="unsig_intersection_raised_crosswalk_rating" class="unsig_intersection_data"></td>
+                    </tr>                    
+                        <td>Total</td>
+                        <td id="unsig_intersection_total_percentage">100%</td>
+                        <td id="unsig_intersection_total_score" class="unsig_intersection_data"></td>
+                        <td id="unsig_intersection_total_rating" class="unsig_intersection_data"></td>
+                    </tr>                   
+                </tbody>              
+            </table>  
+                       
+            <!-- Economic vitality table: roadway segments -->
+            <table id="roadseg_economic_vitality_table" class="location_data_table roadseg_data_table">
                 <thead>
                     <tr>
                         <td class="location_table_detail_header">Performance Measure</td>
@@ -595,7 +718,7 @@
             </table> 
                                               
             <h3 class="table_pseudo_caption">Transportation Equity Priority</h3>
-            <table id="te_table" class="location_data_table intersection_data_table roadseg_data_table">
+            <table id="te_table" class="location_data_table sig_intersection_data_table unsig_intersection_data_table roadseg_data_table">
                 <thead>
                     <tr>
                         <td class="location_table_detail_header">Area Condition</td>
@@ -605,22 +728,22 @@
                 <tbody>
                     <tr>
                         <td>Low Income Population >= 32.32%</td>
-                        <td id="low_income_pop" class="intersection_data roadseg_data"></td>
+                        <td id="low_income_pop" class="sig_intersection_data unsig_intersection_data roadseg_data"></td>
                     </tr>
                         <td>Minority Population >= 28.19%</td>
-                        <td id="minority_pop" class="intersection_data roadseg_data"></td>
+                        <td id="minority_pop" class="sig_intersection_data unsig_intersection_data roadseg_data"></td>
                     </tr>   
                     <tr>
                         <td>6.69%+ of Population > 75 Years of Age</td>
-                       <td id="over_75" class="intersection_data roadseg_data"></td>                     
+                       <td id="over_75" class="sig_intersection_data unsig_intersection_data roadseg_data"></td>                     
                     </tr>
                     <tr>
                         <td>16.15% of Households w/o a vehicle?</td>
-                        <td id="zero_vehicle_hhs" class="intersection_data roaseg_data"></td>
+                        <td id="zero_vehicle_hhs" class="sig_intersection_data unsig_intersection_data roaseg_data"></td>
                     </tr>                                  
                     <tr>
                         <td>School or college within one-quarter mile?</td>
-                        <td id="school_quarter_mile" class="intersection_data roadseg_data"></td>
+                        <td id="school_quarter_mile" class="sig_intersection_data unsig_intersection_data roadseg_data"></td>
                     </tr>
                 </tbody>
             </table>      
