@@ -500,7 +500,7 @@ $(document).ready(function() {
             $('#te_high_priority').html(htmlCheck);
         } else if (propVal === 'Moderate Priority') {
             $('#te_moderate_priority').html(htmlCheck);
-        } else if (propVal === 'Not a Priority Area') {
+        } else if (propVal === 'Low Priority') {
             $('#te_not_priority').html(htmlCheck);
         } else {
            // Leave all 3 cells blank
