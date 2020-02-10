@@ -50,7 +50,13 @@
     margin-bottom: 10px;
 }
 #map {
-    height: 100%;
+    /* height: 100%; */
+    /* This div MUST have a non-zero height in order for Google Maps to render into it.
+       The tab-div containing this div is concealed on start-up of this app. At that
+       time it, will have a height of ZERO because 100% of nothing is zero. 
+       Consequently, the tab-div containing this div is exposed, the map will fail to render.
+    */
+    height: 600px;
     border: 4px solid #B87F32; 
 }
 #output_div {

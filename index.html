@@ -33,208 +33,309 @@
 </div>
 <h1 class="pagetitle">PRCA Interactive Database - Main Page</h1>
 <div id="wrapper">
-    <div id="map_wrapper">
-        <div id="map_options_div_1" role="presentation">
-            <input type="checkbox" id="te_priority_toggle" class="layer_toggle" name="te_priority_toggle" value="te_priority_toggle"> 
-            <label for="te_priority_toggle">Transportation Equity Priority &nbsp;&nbsp;</label>       
+    <div class="tabs" id="tabs_div">
+        <ul>
+            <li><a href="#background_tab">Background</a></li>
+            <li><a href="#search_tab">Search for Projects</a></li>
+        </ul>
         
-            <input type="checkbox" id="low_income_toggle" class="layer_toggle" name="low_income_toggle" value="low_income_toggle"> 
-            <label for="low_income_toggle">Low-income TAZs &nbsp;&nbsp;</label>
-            
-            <input type="checkbox" id="minority_toggle" class="layer_toggle" name="minority_toggle" value="minority_toggle">           
-            <label for="minority_toggle">Minority TAZs &nbsp;&nbsp;</label>
+        <div class="tabbody" id="background_tab">
 
-            <input type="checkbox" id="elderly_toggle" class="layer_toggle" name="elderly_toggle" value="elderly_toggle">            
-            <label for="elderly_toggle">Elderly TAZs &nbsp;&nbsp;</label>
+            <h3>Overview</h3>
+                <p>
+                The Pedestrian Report Card Assessment (PRCA) tool allows users to rate the quality of the pedestrian environment along route segments and at intersections
+                 throughout the Boston region’s network of roadways, sidewalks, and shared-use paths.
+                 The PRCA was developed to support the Boston Region Metropolitan Planning Organization’s (MPO) objectives of increasing the number of pedestrian trips
+                 and improving the safety of pedestrians throughout the Boston region. 
+                 Pedestrian trips are influenced by pedestrians’ perceived safety and comfort while traveling to a destination. 
+                 In order to increase the number of pedestrian trips, it is important to address safety and comfort concerns. 
+                 The PRCA provides a methodology for assessing conditions for pedestrians along route segments and at intersections throughout the Boston region’s pedestrian network. 
+                 Locations with high quality pedestrian environments receive “good” scores, while “poor” scores are given for elements that contribute to a sense of danger or a lack of comfort for pedestrians.
+                </p>
+                <p>
+                For more information about the development of the PRCA, please refer to 
+                the <a href="/data/pdf/studies/bikeped/pedestrian_level_of_service.pdf" 
+                       target="_blank" title="Opens in a new window">2017 Pedestrian Level of Service memorandum</a>.
+                </p>
+                <p>
+                For more information about this project, please refer to 
+                the <a href ="/data/pdf/programs/bike_ped/prca_app/2019-11-21_PRCA_Interactive_Database.pdf"  
+                       target="_blank" title="Opens in a new window">2019 PRCA Interactive Database memorandum</a>.
+                </p>
 
-            <input type="checkbox" id="zvhh_toggle" class="layer_toggle" name="zvhh_toggle" value="zvhh_toggle">            
-            <label for="zvhh_toggle">Zero-vehicle Households TAZs &nbsp;&nbsp;</label>
- 
-            <input type="checkbox" id="school_buf_toggle" class="layer_toggle" name="school_buf_toggle" value="school_buf_toggle"> 
-            <label for="school_buf_toggle">Quarter-mile buffer around schools and colleges &nbsp;&nbsp;</label>      
-        </div>
-        <div id="map_options_div_2" role="presentaiton">
-            Symbolize scored locations by report card score for:
-            <select id="select_symbology" class="app_select_box">
-                <option value="default" selected>Select evaluation criterion...</option>
-                <option value="safety">Safety</option>
-                <option value="sys_preservation">System Preservation</option>
-                <option value="cmm">Capacity Management and Mobility</option>
-                <option value="economic_vitality">Economic Vitality</option>
-            </select>
-            <input type="button" id="reset_button" value="Reset Map"/>
-            <input type="button" id="about_button" value="About"/>
-            <input type="button" id="comment_button" value="Submit a Comment" alt="links to comment page">
-        </div>
+                <h3>About the PRCA Interactive Database</h3>
+                <p>
+                The PRCA Interactive Database provides roadway segment and intersection-level information for every location graded using the PRCA in the Boston region. 
+                The application opens with a map showing all graded locations in the Boston Region MPO. 
+                Users can select intersections and roadway segments from the regional view or from the table listing the graded PRCA locations below the map. 
+                Selecting a location opens a new page that features a map showing the selected intersection or roadway segment above the location’s PRCA grades. 
+                The results display the location’s overall ratings for each grading category, state the location’s transportation equity priority level, 
+                and share the performance measure scoring for each grading category.
+                </p>
+                <p>
+                On the regional view map, users can click on a drop-down menu to reveal specific scores for each grading category at all graded intersection and roadway segment locations. 
+                On the regional view map and on the maps on each page for the individual graded locations, users can toggle on and off layers for the five transportation equity factors. 
+                A sixth toggle, which allows users to view the transportation equity priority level layer, illustrates the level of priority for safe and comfortable pedestrian facilities 
+                throughout the Boston region, calculated by the number of transportation equity conditions present at each location.
+                </p>
+
+                <h3>Grade an Intersection or Roadway Segment</h3>
+                <p>
+                The Boston Region MPO encourages the public to download blank intersection and roadway segment PRCAs to grade locations for pedestrian safety and comfort. 
+                Interested contributors may refer to the “How to Score” manual for instructions. The PRCA “Notes” pages provide space to document the specific conditions 
+                at the intersections and roadway segments. Please send scanned copies of graded PRCAs and their associated “Notes” pages to Casey Claude at <a href="mailto:cclaude@ctps.org">cclaude@ctps.org</a>.
+                </p>
+
+                <h3>PRCA Grading Resources:</h3>
+                <ul>
+                <li><a href="/data/pdf/programs/bike_ped/prca_app/BLANK_Pedestrian_Report_Card_Roadway_Segment.pdf"
+                       target="_blank" title="Opens in a new window">Roadway Segment PRCA</a></li>
+                <li><a href="/data/pdf/programs/bike_ped/prca_app/BLANK_Pedestrian_Report_Card_Signalized_Intersection.pdf"
+                       target="_blank" title="Opens in a new window">Signalized Intersection PRCA</a></li>
+                <li><a href="/data/pdf/programs/bike_ped/prca_app/BLANK_Pedestrian_Report_Card_Non_Signalized_Intersection.pdf"
+                      target="_blank" title="Opens in a new window" >Non-Signalized Intersection PRCA</a></li>
+                <li><a href="/data/pdf/programs/bike_ped/prca_app/How_to_Score_PRCAs_Roadway_Segments.pdf"
+                       target="_blank" title="Opens in a new window">How to Score PRCAs manual: Roadway Segments</a></li>
+                <li><a href="/data/pdf/programs/bike_ped/prca_app/How_to_Score_PRCAs_Signalized_Intersections.pdf"
+                       target="_blank" title="Opens in a new window">How to Score PRCAs manual: Signalized Intersections</a></li>
+                <li><a href="/data/pdf/programs/bike_ped/prca_app/How_to_Score_PRCAs_Non_Signalized_Intersections.pdf"
+                       target="_blank" title="Opens in a new window">How to Score PRCAs manual: Non-Signalized Intersections</a></li>
+                <li><a href="/data/pdf/programs/bike_ped/prca_app/BLANK_Pedestrian_Report_Card_Notes_Page_Roadway_Segment.pdf"
+                       target="_blank" title="Opens in a new window">Notes Page: Roadway Segment PRCA</a></li>
+                <li><a href="/data/pdf/programs/bike_ped/prca_app/BLANK_Pedestrian_Report_Card_Notes_Page_Signalized_Intersection.pdf"
+                       target="_blank" title="Opens in a new window">Notes Page: Signalized Intersection PRCA</a></li>
+                <li><a href="/data/pdf/programs/bike_ped/prca_app/BLANK_Pedestrian_Report_Card_Notes_Page_Non_Signalized_Intersection.pdf"
+                       target="_blank" title="Opens in a new window">Notes Page: Non-Signalized Intersection PRCA</a></li>
+                </ul>
+
+                <h3>PRCA Grading Modifications</h3>
+                <p>
+                The intersections and roadway segments graded prior to the PRCA Interactive Database’s fall 2019 release use the methodology developed in the 2017 Pedestrian Level of Service project. 
+                Changes to the grading methodology, which includes the addition of a PRCA for non-signalized intersections and the expansion of the PRCA scoring scale to include zero for locations 
+                where a performance measure is missing, are documented in the 2019 PRCA Interactive Database project technical document.
+                </p>
+
+                <h3>References and Other Resources</h3>
+                <ul>
+                <li><a href="/data/pdf/studies/bikeped/pedestrian_level_of_service.pdf" 
+                       target="_blank" title="Opens in a new window">2017 Pedestrian Level of Service project</a></li>
+                <li><a href="/data/pdf/programs/bike_ped/prca_app/2019-11-21_PRCA_Interactive_Database.pdf" 
+                       target="_blank" title="Opens in a new window">2019 PRCA Interactive Database project</a></li>
+                </ul>
+
+                <h3>Contact Us</h3>
+                <p>
+                For more information about the PRCA tool or the information presented in the database, please contact Casey Claude, 
+                Bicycle and Pedestrian Program Manager and MPO staff, at <a href="mailto:cclaude@ctps.org">cclaude@ctps.org</a>.
+                </p>
+
+        </div> <!-- background_tab -->
         
-        <div id="map" role="presentation">
-        </div>
+        <div class=tabbody id="search_tab">
 
-        <div id="legend" role="presentation">    
-            <table style="border:none">
-                <tr>
-                    <td class="legend_table_td_col_1">
-                        Scored Locations:
-                    </td>
-                    <td class="legend_table_td">
-                        <img src="img/blue-marker.png">
-                    </td>
-                    <td class="legend_table_td">
-                        Intersection
-                    </td> 
-                    <td class="legend_table_td">
-                        <svg id="legend_svg_1" class="legend_svg_line"><line id="svg_line_in_legend_1" x1="0" y1="30" x2="100" y2="30" stroke="#0070ff" stroke-width="6"></line></svg>
-                    </td>
-                    <td class="legend_table_td">
-                        Roadway Segment
-                    </td>
-                    <td class="legend_table_td">
-                        <svg id="legend_svg_2" class="legend_svg_line"><line id="svg_line_in_legend_2" x1="0" y1="30" x2="100" y2="30" stroke="#000080" stroke-width="4.5"></line></svg>
-                    </td>                    
-                    <td class="legend_table_td">
-                        Boston Region MPO Boundary
-                    </td>  
-                    <td class="legend_table_td">
-                        <svg id="legend_svg_3" class="legend_svg_line"><line id="svg_line_in_legend_3" x1="0" y1="30" x2="100" y2="30" stroke="#000080" stroke-width="1.5"></line></svg>
-                    </td>
-                    <td class="legend_table_td">
-                        MAPC Subregion Boundary
-                    </td>
-                </tr>     
-            </table>
-            <table>
-                <tr>
-                    <td class="legend_table_td_col_1">
-                        Grading Category Scores:
-                    </td>
-                    <td class="legend_table_td">
-                        <img src="img/green-marker.png">
-                    </td>
-                    <td class="legend_table_td">
-                        <svg id="legend_svg_4" class="legend_svg_line"><line id="svg_line_in_legend_4" x1="0" y1="30" x2="100" y2="30" stroke="#38a800" stroke-width="6"></line></svg>
-                    </td>                
-                    <td class="legend_table_td">
-                        Good
-                    </td>  
-                    <td class="legend_table_td">
-                        <img src="img/yellow-marker.png"> 
-                    </td>  
-                    <td class="legend_table_td">
-                        <svg id="legend_svg_5" class="legend_svg_line"><line id="svg_line_in_legend_5" x1="0" y1="30" x2="100" y2="30" stroke="#ffc04d" stroke-width="6"></line></svg>
-                    </td>  
-                    <td class="legend_table_td">
-                        Fair
-                    </td>  
-                    <td class="legend_table_td">
-                         <img src="img/red-marker.png">
-                    </td>  
-                    <td class="legend_table_td">
-                        <svg id="legend_svg_6" class="legend_svg_line"><line id="svg_line_in_legend_6" x1="0" y1="30" x2="100" y2="30" stroke="#d60047" stroke-width="6"></line></svg>
-                    </td>  
-                    <td class="legend_table_td">
-                        Poor
-                    </td>                      
-                </tr>
-            <table>
-            <table>
-                <tr>
-                    <td class="legend_table_td_col_1">
-                        Transportation Equity Priority:
-                    </td>
-                    <td class="legend_table_td">
-                        <svg id="legend_svg_7" class="legend_svg">
-                            <rect id="svg_rect_in_legend_7" x="0" y="5" width="25" height="25" fill="#c2005b" fill-opacity="1.0">
-                            </rect>
-                        </svg>                   
-                    </td>
-                    <td class="legend_table_td">
-                        High
-                    </td>
-                    <td class="legend_table_td">
-                        <svg id="legend_svg_8" class="legend_svg">
-                            <rect id="svg_rect_in_legend_8" x="0" y="5" width="25" height="25" fill="#ff7070" fill-opacity="1.0">
-                            </rect>
-                        </svg>                    
-                    </td>
-                    <td class="legend_table_td">
-                        Moderate
-                    </td>
-                    <td class="legend_table_td">
-                        <svg id="legend_svg_9" class="legend_svg">
-                            <rect id="svg_rect_in_legend_9" x="0" y="5" width="25" height="25" fill="#ffbdbe" fill-opacity="1.0">
-                            </rect>
-                        </svg>                    
-                    </td>
-                    <td class="legend_table_td">
-                        Poor
-                    </td>
-                </tr>
-            </table>
-            <table>
-                <tr>
-                    <td class="legend_table_td_col_1">
-                        Transportation Equity Layers:
-                    </td>
-                    <td class="legend_table_td">
-                        <svg id="legend_svg_10" class="legend_svg">
-                            <rect id="svg_rect_in_legend_10" x="0" y="5" width="25" height="25" fill="#66c2a5" fill-opacity="0.5">
-                            </rect>
-                        </svg>                        
-                    </td>                   
-                    <td class="legend_table_td">
-                        Low-income TAZs
-                    </td>    
-                    <td class="legend_table_td">
-                         <svg id="legend_svg_11" class="legend_svg">
-                            <rect id="svg_rect_in_legend_2" x="0" y="5" width="25" height="25" fill="#fc8d62" fill-opacity="0.5">
-                            </rect>
-                        </svg>                        
-                    </td> 
-                    <td class="legend_table_td">
-                        Minority TAZs
-                    </td> 
-                    <td class="legend_table_td">
-                        <svg id="legend_svg_12" class="legend_svg">
-                            <rect id="svg_rect_in_legend_12" x="0" y="5" width="25" height="25" fill="#8da0cb" fill-opacity="0.5">
-                            </rect>
-                        </svg>                        
-                    </td> 
-                    <td class="legend_table_td">
-                        Elderly TAZs
-                    </td> 
-                    <td class="legend_table_td">
-                         <svg id="legend_svg_13" class="legend_svg">
-                            <rect id="svg_rect_in_legend_13" x="0" y="5" width="25" height="25" fill="#e78ac3" fill-opacity="0.5">
-                            </rect>
-                        </svg>                       
-                    </td> 
-                    <td class="legend_table_td">
-                        Zero-vehicle Household TAZs
-                    </td> 
-                    <td class="legend_table_td">
-                        <svg id="legend_svg_14" class="legend_svg">
-                            <rect id="svg_rect_in_legend_14" x="0" y="5" width="25" height="25" fill="#a6d854" fill-opacity="0.5">
-                            </rect>
-                        </svg>                        
-                    </td> 
-                    <td class="legend_table_td">
-                        Quarter-mile buffer around schools and colleges
-                    </td>                     
-                </tr>
-            </table>      
-        </div>
+            <div id="map_wrapper">
+                <div id="map_options_div_1" role="presentation">
+                    <input type="checkbox" id="te_priority_toggle" class="layer_toggle" name="te_priority_toggle" value="te_priority_toggle"> 
+                    <label for="te_priority_toggle">Transportation Equity Priority &nbsp;&nbsp;</label>       
+                
+                    <input type="checkbox" id="low_income_toggle" class="layer_toggle" name="low_income_toggle" value="low_income_toggle"> 
+                    <label for="low_income_toggle">Low-income TAZs &nbsp;&nbsp;</label>
+                    
+                    <input type="checkbox" id="minority_toggle" class="layer_toggle" name="minority_toggle" value="minority_toggle">           
+                    <label for="minority_toggle">Minority TAZs &nbsp;&nbsp;</label>
 
-        <!-- Since there is currently no way to query for recport card locations other than using the mouse on the map,
-             the accessible output simply lists the report card data for all intersections (6) and road segments (ca. 20)
-        -->
-        <div id="output_div_accessible"  class="element-invisible">
-        </div> <!-- output_div_accessible -->
- 
-      
-        <div id="location_list_contents" role="presentation" aria-hidden="true">
-        </div>
-        
-    </div> <!-- map_wrapper -->
+                    <input type="checkbox" id="elderly_toggle" class="layer_toggle" name="elderly_toggle" value="elderly_toggle">            
+                    <label for="elderly_toggle">Elderly TAZs &nbsp;&nbsp;</label>
+
+                    <input type="checkbox" id="zvhh_toggle" class="layer_toggle" name="zvhh_toggle" value="zvhh_toggle">            
+                    <label for="zvhh_toggle">Zero-vehicle Households TAZs &nbsp;&nbsp;</label>
+         
+                    <input type="checkbox" id="school_buf_toggle" class="layer_toggle" name="school_buf_toggle" value="school_buf_toggle"> 
+                    <label for="school_buf_toggle">Quarter-mile buffer around schools and colleges &nbsp;&nbsp;</label>      
+                </div>
+                <div id="map_options_div_2" role="presentaiton">
+                    Symbolize scored locations by report card score for:
+                    <select id="select_symbology" class="app_select_box">
+                        <option value="default" selected>Select evaluation criterion...</option>
+                        <option value="safety">Safety</option>
+                        <option value="sys_preservation">System Preservation</option>
+                        <option value="cmm">Capacity Management and Mobility</option>
+                        <option value="economic_vitality">Economic Vitality</option>
+                    </select>
+                    <input type="button" id="reset_button" value="Reset Map"/>
+                    <!-- <input type="button" id="about_button" value="About"/> -->
+                    <input type="button" id="comment_button" value="Submit a Comment" alt="links to comment page">
+                </div>
+                
+                <div id="map" role="presentation">
+                </div>
+
+                <div id="legend" role="presentation">    
+                    <table style="border:none">
+                        <tr>
+                            <td class="legend_table_td_col_1">
+                                Scored Locations:
+                            </td>
+                            <td class="legend_table_td">
+                                <img src="img/blue-marker.png">
+                            </td>
+                            <td class="legend_table_td">
+                                Intersection
+                            </td> 
+                            <td class="legend_table_td">
+                                <svg id="legend_svg_1" class="legend_svg_line"><line id="svg_line_in_legend_1" x1="0" y1="30" x2="100" y2="30" stroke="#0070ff" stroke-width="6"></line></svg>
+                            </td>
+                            <td class="legend_table_td">
+                                Roadway Segment
+                            </td>
+                            <td class="legend_table_td">
+                                <svg id="legend_svg_2" class="legend_svg_line"><line id="svg_line_in_legend_2" x1="0" y1="30" x2="100" y2="30" stroke="#000080" stroke-width="4.5"></line></svg>
+                            </td>                    
+                            <td class="legend_table_td">
+                                Boston Region MPO Boundary
+                            </td>  
+                            <td class="legend_table_td">
+                                <svg id="legend_svg_3" class="legend_svg_line"><line id="svg_line_in_legend_3" x1="0" y1="30" x2="100" y2="30" stroke="#000080" stroke-width="1.5"></line></svg>
+                            </td>
+                            <td class="legend_table_td">
+                                MAPC Subregion Boundary
+                            </td>
+                        </tr>     
+                    </table>
+                    <table>
+                        <tr>
+                            <td class="legend_table_td_col_1">
+                                Grading Category Scores:
+                            </td>
+                            <td class="legend_table_td">
+                                <img src="img/green-marker.png">
+                            </td>
+                            <td class="legend_table_td">
+                                <svg id="legend_svg_4" class="legend_svg_line"><line id="svg_line_in_legend_4" x1="0" y1="30" x2="100" y2="30" stroke="#38a800" stroke-width="6"></line></svg>
+                            </td>                
+                            <td class="legend_table_td">
+                                Good
+                            </td>  
+                            <td class="legend_table_td">
+                                <img src="img/yellow-marker.png"> 
+                            </td>  
+                            <td class="legend_table_td">
+                                <svg id="legend_svg_5" class="legend_svg_line"><line id="svg_line_in_legend_5" x1="0" y1="30" x2="100" y2="30" stroke="#ffc04d" stroke-width="6"></line></svg>
+                            </td>  
+                            <td class="legend_table_td">
+                                Fair
+                            </td>  
+                            <td class="legend_table_td">
+                                 <img src="img/red-marker.png">
+                            </td>  
+                            <td class="legend_table_td">
+                                <svg id="legend_svg_6" class="legend_svg_line"><line id="svg_line_in_legend_6" x1="0" y1="30" x2="100" y2="30" stroke="#d60047" stroke-width="6"></line></svg>
+                            </td>  
+                            <td class="legend_table_td">
+                                Poor
+                            </td>                      
+                        </tr>
+                    <table>
+                    <table>
+                        <tr>
+                            <td class="legend_table_td_col_1">
+                                Transportation Equity Priority:
+                            </td>
+                            <td class="legend_table_td">
+                                <svg id="legend_svg_7" class="legend_svg">
+                                    <rect id="svg_rect_in_legend_7" x="0" y="5" width="25" height="25" fill="#c2005b" fill-opacity="1.0">
+                                    </rect>
+                                </svg>                   
+                            </td>
+                            <td class="legend_table_td">
+                                High
+                            </td>
+                            <td class="legend_table_td">
+                                <svg id="legend_svg_8" class="legend_svg">
+                                    <rect id="svg_rect_in_legend_8" x="0" y="5" width="25" height="25" fill="#ff7070" fill-opacity="1.0">
+                                    </rect>
+                                </svg>                    
+                            </td>
+                            <td class="legend_table_td">
+                                Moderate
+                            </td>
+                            <td class="legend_table_td">
+                                <svg id="legend_svg_9" class="legend_svg">
+                                    <rect id="svg_rect_in_legend_9" x="0" y="5" width="25" height="25" fill="#ffbdbe" fill-opacity="1.0">
+                                    </rect>
+                                </svg>                    
+                            </td>
+                            <td class="legend_table_td">
+                                Poor
+                            </td>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <td class="legend_table_td_col_1">
+                                Transportation Equity Layers:
+                            </td>
+                            <td class="legend_table_td">
+                                <svg id="legend_svg_10" class="legend_svg">
+                                    <rect id="svg_rect_in_legend_10" x="0" y="5" width="25" height="25" fill="#66c2a5" fill-opacity="0.5">
+                                    </rect>
+                                </svg>                        
+                            </td>                   
+                            <td class="legend_table_td">
+                                Low-income TAZs
+                            </td>    
+                            <td class="legend_table_td">
+                                 <svg id="legend_svg_11" class="legend_svg">
+                                    <rect id="svg_rect_in_legend_2" x="0" y="5" width="25" height="25" fill="#fc8d62" fill-opacity="0.5">
+                                    </rect>
+                                </svg>                        
+                            </td> 
+                            <td class="legend_table_td">
+                                Minority TAZs
+                            </td> 
+                            <td class="legend_table_td">
+                                <svg id="legend_svg_12" class="legend_svg">
+                                    <rect id="svg_rect_in_legend_12" x="0" y="5" width="25" height="25" fill="#8da0cb" fill-opacity="0.5">
+                                    </rect>
+                                </svg>                        
+                            </td> 
+                            <td class="legend_table_td">
+                                Elderly TAZs
+                            </td> 
+                            <td class="legend_table_td">
+                                 <svg id="legend_svg_13" class="legend_svg">
+                                    <rect id="svg_rect_in_legend_13" x="0" y="5" width="25" height="25" fill="#e78ac3" fill-opacity="0.5">
+                                    </rect>
+                                </svg>                       
+                            </td> 
+                            <td class="legend_table_td">
+                                Zero-vehicle Household TAZs
+                            </td> 
+                            <td class="legend_table_td">
+                                <svg id="legend_svg_14" class="legend_svg">
+                                    <rect id="svg_rect_in_legend_14" x="0" y="5" width="25" height="25" fill="#a6d854" fill-opacity="0.5">
+                                    </rect>
+                                </svg>                        
+                            </td> 
+                            <td class="legend_table_td">
+                                Quarter-mile buffer around schools and colleges
+                            </td>                     
+                        </tr>
+                    </table>      
+                </div>
+
+                <!-- Since there is currently no way to query for recport card locations other than using the mouse on the map,
+                     the accessible output simply lists the report card data for all intersections (6) and road segments (ca. 20)
+                -->
+                <div id="output_div_accessible"  class="element-invisible">
+                </div> <!-- output_div_accessible -->
+         
+              
+                <div id="location_list_contents" role="presentation" aria-hidden="true">
+                </div>               
+            </div> <!-- map_wrapper -->           
+        </div> <!-- search_tab -->
+    </div> <!-- tabs_div -->          
 </div> 
 
 <script src="pedReportCard.js"></script>

@@ -172,9 +172,6 @@ var subregionCentroids = {
 // Array of labels rendered using V3 Utility Library
 var mapLabels = [];
 
-// Hack to enable Google Map to be rendered when relevant tab is exposed for the first time only. Yeech.
-var searchTabExposed = false;
-
 // On-click event hander for markers (for intersections) and polylines (for road segments)
 function onClickHandler(e) {
     var clickLocation = e.latLng;
@@ -213,6 +210,9 @@ function onClickHandler(e) {
     infoWindow.open(map);      
 } // onClickHandler()
 
+// Hack to enable Google Map to be rendered when relevant tab is exposed for the first time only. Yeech.
+var searchTabExposed = false;
+
 $(document).ready(function() {
     // Arm event handlers for buttons
     $('#reset_button').click(function(e) {
@@ -226,6 +226,27 @@ $(document).ready(function() {
 		window.open('http://www.ctps.org/contact','_blank');      
 	});    
     
+  
+    $('#tabs_div').tabs({
+        heightStyle : 'content',
+        activate    : function(event, ui) {
+            if (ui.newTab.index() == 1 && searchTabExposed == false) {
+                // Expose the following call IF we decide to nest the map within the 'search' tab
+                initializeMap();
+                searchTabExposed = true;
+                // *** Clean up the SlickGrid's header row
+                //     N.B. This is an unabashed hack!
+                //     Also see window.resize() handler, below
+                var sg_colhdrs = $('.ui-state-default.slick-header-column');
+                var i, totalLength = 0;
+                for (i = 0; i < sg_colhdrs.length; i++) {
+                    totalLength += sg_colhdrs[i].clientWidth;
+                }
+                $('div.slick-pane.slick-pane-header.slick-pane-left').width(totalLength);
+            }
+        }
+    });
+    
     // *** When the window resizes, resize the header row in the SlickGrid
     //     N.B. This is an unabashed hack!
     //     Also see the jQueryUI tabs constructor, abobve
@@ -238,28 +259,6 @@ $(document).ready(function() {
         }
         $('div.slick-pane.slick-pane-header.slick-pane-left').width(totalLength);      
     });
- 
-/* 
-    $('#tabs_div').tabs({
-        heightStyle : 'content',
-        activate    : function(event, ui) {
-            if (ui.newTab.index() == 1 && searchTabExposed == false) {
-                // *** TBD *** Expose the following call IF we decide to nest the map within the 'search' tab
-                // initializeMap();
-                searchTabExposed = true;
-                // *** Clean up the SlickGrid's header row
-                //     N.B. This is an unabashed hack!
-                //     Also see window.resize() handler, below
-                var sg_colhdrs = $('.ui-state-default.slick-header-column');
-                var i, totalLength = 0;
-                for (i = 0; i < sg_colhdrs.length; i++) {
-                    totalLength += sg_colhdrs[i].clientWidth;
-                }
-               $('div.slick-pane.slick-pane-header.slick-pane-left').width(totalLength);
-            }
-        }
-    });
-*/
     
     // Initialize the machinery for the Slick Grid
     //
