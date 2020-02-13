@@ -28,8 +28,24 @@
 //    turf.js version 1.9.1
 //
 
-// Global Google Maps map object
+// Google Maps map object
 var map = {};
+var regionCenterLat = 42.345111165; 
+var regionCenterLng = -71.124736685; 
+var initialZoom = 10; 
+// Google Maps map options object  
+var mapOptions = {
+    center: new google.maps.LatLng(regionCenterLat, regionCenterLng),
+    zoom: initialZoom,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    mapTypeControlOptions: {'style': google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+    panControl: false,
+    streetViewControl: false,
+    zoomControlOptions: {'style': 'SMALL'},
+    scaleControl: true,
+    overviewMapControl: false,
+    mapTypeId: 'terrain'
+};
 // All Google Maps markers on the map
 var aMarkers = [];
 // All Google Maps polyline features on the map
@@ -216,50 +232,14 @@ var searchTabExposed = false;
 $(document).ready(function() {
     // Arm event handlers for buttons
     $('#reset_button').click(function(e) {
-        location.reload();
-    });
-    $('#about_button').click(function(e) {
-        var url = 'About.html'
-        window.open(url,'popUpWindow','height=700,width=800,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes')
+        map.setCenter(new google.maps.LatLng(regionCenterLat, regionCenterLng));
+        map.setZoom(initialZoom);
+        map.setMapTypeId('terrain');
     });  
 	$('#comment_button').click(function(){
 		window.open('http://www.ctps.org/contact','_blank');      
 	});    
-    
   
-    $('#tabs_div').tabs({
-        heightStyle : 'content',
-        activate    : function(event, ui) {
-            if (ui.newTab.index() == 1 && searchTabExposed == false) {
-                // Expose the following call IF we decide to nest the map within the 'search' tab
-                initializeMap();
-                searchTabExposed = true;
-                // *** Clean up the SlickGrid's header row
-                //     N.B. This is an unabashed hack!
-                //     Also see window.resize() handler, below
-                var sg_colhdrs = $('.ui-state-default.slick-header-column');
-                var i, totalLength = 0;
-                for (i = 0; i < sg_colhdrs.length; i++) {
-                    totalLength += sg_colhdrs[i].clientWidth;
-                }
-                $('div.slick-pane.slick-pane-header.slick-pane-left').width(totalLength);
-            }
-        }
-    });
-    
-    // *** When the window resizes, resize the header row in the SlickGrid
-    //     N.B. This is an unabashed hack!
-    //     Also see the jQueryUI tabs constructor, abobve
-    $(window).resize(function(e) {
-        grid.resizeCanvas();
-        var sg_colhdrs = $('.ui-state-default.slick-header-column');
-        var i, totalLength = 0;
-        for (i = 0; i < sg_colhdrs.length; i++) {
-            totalLength += sg_colhdrs[i].clientWidth;
-        }
-        $('div.slick-pane.slick-pane-header.slick-pane-left').width(totalLength);      
-    });
-    
     // Initialize the machinery for the Slick Grid
     //
     dataView = new Slick.Data.DataView();
@@ -302,11 +282,46 @@ $(document).ready(function() {
         DATA.points = JSON.parse(points[0]);
         DATA.lines = JSON.parse(lines[0]);
         DATA.mpo_boundary = JSON.parse(mpo_boundary[0]);
-        DATA.mapc_subregions = JSON.parse(mapc_subregions[0]);
-        initializeMap(DATA);
+        DATA.mapc_subregions = JSON.parse(mapc_subregions[0]);       
         initializeGrid(DATA);
-    });       
-});	
+        
+        // Once the data has been loaded, we initialize the tabs UI control.
+        // We do NOT initialize the Google Map until the tab containing it 
+        // is exposed for the first time.      
+        $('#tabs_div').tabs({
+            heightStyle : 'content',
+            activate    : function(event, ui) {
+                if (ui.newTab.index() == 1 && searchTabExposed == false) {
+                    // Expose the following call IF we decide to nest the map within the 'search' tab
+                    initializeMap(DATA);
+                    searchTabExposed = true;
+                    // *** Clean up the SlickGrid's header row
+                    //     N.B. This is an unabashed hack!
+                    //     Also see window.resize() handler, below
+                    var sg_colhdrs = $('.ui-state-default.slick-header-column');
+                    var i, totalLength = 0;
+                    for (i = 0; i < sg_colhdrs.length; i++) {
+                        totalLength += sg_colhdrs[i].clientWidth;
+                    }
+                    $('div.slick-pane.slick-pane-header.slick-pane-left').width(totalLength);
+                }
+            }
+        });
+        
+        // *** When the window resizes, resize the header row in the SlickGrid
+        //     N.B. This is an unabashed hack!
+        //     Also see the jQueryUI tabs constructor, abobve
+        $(window).resize(function(e) {
+            grid.resizeCanvas();
+            var sg_colhdrs = $('.ui-state-default.slick-header-column');
+            var i, totalLength = 0;
+            for (i = 0; i < sg_colhdrs.length; i++) {
+                totalLength += sg_colhdrs[i].clientWidth;
+            }
+            $('div.slick-pane.slick-pane-header.slick-pane-left').width(totalLength);      
+        });           
+    }); // load of data has completed   
+});	// document ready event handler
 
 // initGrid - populate SlickGrid with data for scored locations
 // For the first version of the app, we display ALL scored locations
@@ -351,26 +366,7 @@ function initializeGrid(data) {
     dataView.setItems(aData); // This call populates the SlickGrid
 } // initializeGrid()
 
-function initializeMap(data) {
-    var regionCenterLat = 42.345111165; 
-	var regionCenterLng = -71.124736685;
-    var zoomLev = 10;
-	var lat = regionCenterLat;
-	var lng = regionCenterLng;
-    
-	var mapOptions = {
-		center: new google.maps.LatLng(lat, lng),
-		zoom: zoomLev,
-		mapTypeId: google.maps.MapTypeId.ROADMAP,
-		mapTypeControlOptions: {'style': google.maps.MapTypeControlStyle.DROPDOWN_MENU},
-		panControl: false,
-		streetViewControl: false,
-		zoomControlOptions: {'style': 'SMALL'},
-		scaleControl: true,
-		overviewMapControl: false,
-        mapTypeId: 'terrain'
-	};
-    
+function initializeMap(data) {   
 	map = new google.maps.Map(document.getElementById("map"), mapOptions);
     google.maps.event.addListener(map, "bounds_changed", function boundsChangedHandler(e) { } );
     
@@ -396,7 +392,7 @@ function initializeMap(data) {
     // box is undefined (!!). Thus calling map.getBounds on a newly created map
     // will raise an error. We are compelled to force a "bounds_changed" event to fire.
     // Larry and Sergey: How did you let this one through the cracks??
-    map.setCenter(new google.maps.LatLng(lat + 0.000000001, lng + 0.000000001));
+    map.setCenter(new google.maps.LatLng(regionCenterLat + 0.000000001, regionCenterLng + 0.000000001));
     
     // Add static (non-toggle-able) overlay layers to Google Map
     // Draw MAPC subregions on Google Map - note: this FC consists of MULTIPLE features

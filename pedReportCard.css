@@ -114,7 +114,7 @@ td.roadseg_data {
 
 /* Throttle the jQueryUI font size back a bit */
 .ui-widget {
-    font-size:80% !important;
+    font-size:90% !important;
 }
 /*
 .tabbody {
