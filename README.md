@@ -25,3 +25,8 @@ Dependencies on external libraries:
 * underscore.js version 1.9.1 (see https://underscorejs.org/)
 * turf.js version 1.9.1 (see https://turfjs.org/)
 * ctpsGoogleMapsUtils.js version 3.0 (see https://github.com/bkrepp-ctps/ctpsGoogleMapsUtils)
+
+## Colophon
+Author: Ben Krepp (bkrepp@ctps.org)
+Last revision: 23 March 2023
+Location: Cyberspace
